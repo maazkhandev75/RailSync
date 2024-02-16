@@ -16,11 +16,11 @@ RAILSYNC is a web-based railway management system that offers efficient railway 
 - **Backend**: PHP
 - **Database**: Microsoft SQL Server
 - **Authentication**: PHP Sessions
-- **Deployment**: Hosting provider (e.g., local host )
+- **Deployment**: local host 
 
 ## Installation
 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/RAILSYNC.git
+git clone https://github.com/maazkhan75/Railway-Management-System .git
