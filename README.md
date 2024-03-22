@@ -23,4 +23,4 @@ RAILSYNC is a web-based railway management system that offers efficient railway 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/maazkhan75/Railway-Management-System.git
+git clone https://github.com/maazkhan75/RailSync.git
