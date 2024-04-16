@@ -10,7 +10,7 @@
 <body>
      <div class="container mt-5" class="bg-success">
         <h2 class="mb-4">Plan Your Trip</h2>
-        <form id="StationInput" action="/SearchTrain" method="post" >
+        <form id="StationInput" action="SearchTrain" method="post" >
           <div class="row mb-3">
             <label for="From-City" class="col-sm-2 col-form-label">From: </label>
             <div class="col-sm-10">
@@ -32,6 +32,12 @@
                 <% }); %>
 
               </select>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="tripDate" class="col-sm-2 col-form-label" >  Date:</label>
+            <div class="col sm-12">
+              <input id="tripDate" type="datetime-local" name="journeyDate">
             </div>
           </div>
           <div class="row mb-3">
