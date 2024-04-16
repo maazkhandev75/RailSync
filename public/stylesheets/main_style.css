@@ -1,0 +1,195 @@
+body {
+    font-family: 'Roboto Mono', monospace;
+    margin: 0;
+    padding: 0;
+    background-color: #000000; /* Dark background by default */
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    
+    min-height: 100vh;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;  /*for main-axis(horizontal)*/
+    align-items: center;             /*for cross-axis(vertical)*/
+}
+*::selection{
+    color:#e06c00;
+}
+
+#preloader{
+	background:#000 url(../images/loader.gif) no-repeat center center;
+	background-size:2%;
+	height:100vh;
+	width:100%;
+	position:fixed;
+	z-index: 100;
+}
+
+header {
+    background-color: #000000; 
+    color: #fff;
+    /* padding: 10px 0; */
+}
+
+header img.logo {
+    height: 130px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+   
+    color: #000000;
+    text-decoration: none;
+    font-size: 1em;
+    font-family: Comfortaa;;
+    font-weight: 900;
+    border-radius: 20px;
+    padding: 10px 20px;
+    background-color: #e06c00; 
+    transition: background-color 0.3s ease-in;
+}
+
+
+nav ul li a:hover {
+    background-color: #ff9307; 
+}
+
+main {
+    flex: 1; /* Fill remaining space */
+    padding: 20px;
+}
+
+footer {
+    background-color: #111; 
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    margin-right: 0;
+}
+
+
+.intro-paragraph {
+    font-size: 4em; /* Larger font size */
+    font-family: DM Serif Display;
+    color: rgb(255, 255, 255);
+    margin-top: 80px;
+    padding: 20px;
+}
+
+#features{
+	padding:30px 0;
+	margin-bottom: 110px;
+}
+.features-list{
+	display:grid;
+	grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+	grid-gap:40px;
+	margin-top:50px;  
+}
+#features h1{
+	
+	font-size: 3.5em;
+    font-weight: 700;
+	font-family: 'Raleway', sans-serif;
+    color:#ffffff;
+	text-shadow: #707070 3px 4px ;
+    margin-bottom: 0;
+    text-align: center;
+    justify-content: center;
+}
+#features h2{
+	color:#00b3ff;
+	font-family: 'Julius Sans One', sans-serif;
+	margin: 0;
+
+}
+#features p{
+	font-family: 'Ubuntu', sans-serif;
+	line-height: 1.5em;
+}
+.features-list div{
+	background-color:#111111;
+	padding:10px;
+	border-radius:10px;
+	text-align: center;
+	transition:background 0.5s,transform 0.5s;
+    /* height: 50vh; */
+}
+.features-list div i{
+font-size:35px;
+margin: 20px;
+}
+.features-list div:hover{
+	background-color:#222222;
+	transform: translateY(-10px);
+}
+
+
+
+
+
+
+
+/* ------------responsivenes----------*/
+@media (max-width: 1200px) {
+    /* Adjustments for screens up to 1200px wide */
+    .container {
+        width: 90%; /* Reduce container width */
+    }
+}
+
+@media (max-width: 992px) {
+    /* Adjustments for screens up to 992px wide */
+    .container {
+        width: 95%; /* Further reduce container width */
+    }
+}
+
+@media (max-width: 768px) {
+    /* Adjustments for screens up to 768px wide */
+    .container {
+        width: 100%; /* Full width container */
+        padding: 0 20px; /* Add padding to the container */
+    }
+
+    nav ul li {
+        margin-right: 10px; /* Reduce margin between navigation items */
+    }
+
+    nav ul li a {
+        padding: 10px 15px; /* Reduce padding of navigation links */
+    }
+
+    footer {
+        padding: 10px 0; /* Reduce footer padding */
+    }
+
+
+    .intro-paragraph {
+        font-size: 1em; /* Adjust paragraph font size */
+    }
+}
+
+@media (max-width: 576px) {
+    /* Adjustments for screens up to 576px wide */
+    header img.logo {
+        height: 80px; /* Reduce logo size */
+    }
+
+}
