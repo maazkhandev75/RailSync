@@ -31,11 +31,35 @@
         <% Trains.forEach((i)=>{ %>
         <tr>
             <td><%= i.TrainId %></td>
-            <td> T</td>
-            <td><%= i.Station1Id %></td>
+            <%if(i.UPStatus==1){ %>
+            <td>Up</td>
+            <% }else {%>
+            <td>Down</td>
+            <% }%>
+            <td><%= i.DeptStation %></td>
+            <td><%= i.ArrivalStation %></td>
             <td><%= i.Station2Id %></td>
             <td><%= i.DeptTime %></td>
             <td><%= i.ArrivalTime %></td>
+            <td>
+            <table>
+                <tr>
+                    <td>Economy:</td>
+                    <td><%= i.Economy%></td>
+                </tr>
+            
+                <tr>
+                    <td>Bussiness:</td>
+                    <td><%= i.BusinessClass%></td>
+                </tr>
+
+                <tr>
+                    <td>First Class:</td>
+                    <td><%=i.FirstClass%></td>
+                </tr>
+
+            </table>
+        </td>
         </tr>
         <% }); %>
     </table>

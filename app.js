@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+var app = express();
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -7,11 +8,11 @@ var sql=require('mssql');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var SearchTrainRouter = require('./routes/SearchTrain');
 const { Console } = require('console');
 
 
-var app = express();
-//const routes=app.routes();
+
 const sqlConfig = {
   user:'afaqkhaliq_SampleDB',
   password:'afaq123',
@@ -48,8 +49,6 @@ app.get('/home',(req,res)=>{
   const path = "C:/Users/HASSAN/Desktop/DBPrij/NEW FOLDER/main/home.html";
 res.sendFile(path);
 })
- 
-
 app.get('/form', (req, res) => {
   pool.query('SELECT StationName FROM Station')
       .then(result => {
@@ -62,34 +61,10 @@ app.get('/form', (req, res) => {
           res.status(500).send('Internal Server Error');
       });
 });
-
-app.post('/SearchTrain',(req,res)=>{
-  var St1=req.body.fromCity;
-  var St2=req.body.toCity;
-  console.log(St2);
-  const request= new sql.Request(pool);
-  request.input('fromStation',sql.NVarChar,St1);
-  request.input('toStation',sql.NVarChar,St2);
-  request.execute('SearchForTrains',(err,result)=>{
-    if(err){
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-    }
-    else{
-      var isSubmitted=true;
-      var Trains=result.recordset;
-      console.log(Trains);
-      // res.render("TrainResult",{Trains},(err)=>{
-      //   if (err) throw err;
-      // });
-      res.render("TrainResult", { Trains});
-    }
-  })
-});
-
+ 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
+app.use('/SearchTrain',SearchTrainRouter(pool));
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
