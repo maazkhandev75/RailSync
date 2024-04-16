@@ -61,6 +61,19 @@ app.get('/form', (req, res) => {
           res.status(500).send('Internal Server Error');
       });
 });
+
+
+app.get('/admin', (req, res) => {
+  pool.query('SELECT * FROM Train')
+      .then(result => {
+          const Trains = result.recordset;
+          res.render("admin", { Trains });
+      })
+      .catch(err => {
+          console.error(err);
+          res.status(500).send('Internal Server Error');
+      });
+});
  
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
