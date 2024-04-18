@@ -40,8 +40,8 @@
     </table>
 </div>
 <div class="Search-Table">
-    <input class="Input" placeholder="Search Carriage by TrainID">
-    <button class="searchbutton">Search</button>
+    <input class="Input" id="searchCarriage" placeholder="Search Carriage by TrainID">
+    <button class="searchbutton" id="searchCarriageButton">Search</button>
     <h3 class="Heading">Carriage</h3>
     <table class="table-body">
         <tr>
@@ -49,11 +49,7 @@
             <th>TrainID</th>
             <th>Type</th>
         </tr>
-        <tr>
-            <td>123</td>
-            <td>123</td>
-            <td>E</td>
-        </tr>
+
     </table>
 </div>
 <div class="Search-Table">
@@ -76,5 +72,34 @@
         </tr>
     </table>
 </div>
+
 </body>
+<script>
+document.getElementById('searchCarriageButton').addEventListener('click', function() {
+    // Retrieve the value entered in the search input field
+    const searchTerm = document.getElementById('searchCarriage').value;
+    if(searchTerm ==null)
+        return;
+    console.log(searchTerm);
+    // You can also send the search term to your server for further processing if needed
+    fetch('/TD', {
+      method: 'POST',
+      body: JSON.stringify({ searchTerm: searchTerm }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.text())
+    .then(html => {
+        const newTab = window.open();
+        newTab.document.open();
+        newTab.document.write(html);
+        newTab.document.close();
+    })
+    .catch(error => {
+        console.log('gg');
+      console.error('Error:', error);
+    });
+  });
+</script>
 </html>
