@@ -16,32 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Style+Script&display=swap" rel="stylesheet">
 </head>
 <body>
-<div>
-    <h3 class="Heading">Train Data</h3>
-    <table class="table-body">
-        <tr>
-            <th>TrainID</th>
-            <th>UpDownStatus</th>
-            <th>DeptStation</th>
-            <th>ArrivalStation</th>
-        </tr>
-        <% Trains.forEach((i)=>{ %>
-        <tr>
-            <td><%= i.TrainId %></td>
-            <%if(i.UPStatus==1){ %>
-            <td>Up</td>
-            <% }else {%>
-            <td>Down</td>
-            <% }%>
-            <td><%= i.DeptStation %></td>
-            <td><%= i.ArrivalStation %></td>
-        </tr>
-        <% }); %>
-    </table>
-</div>
 <div class="Search-Table">
-    <input class="Input" id="searchCarriage" placeholder="Search Carriage by TrainID">
-    <button class="searchbutton" id="searchCarriageButton">Search</button>
     <h3 class="Heading">Carriage</h3>
     <table class="table-body">
         <tr>
@@ -49,12 +24,16 @@
             <th>TrainID</th>
             <th>Type</th>
         </tr>
-
+        <% Carriage.forEach((i)=>{ %>
+        <tr>
+            <td><%= i.CarriageId %></td>
+            <td><%= i.TrainId %></td>
+            <td><%= i.Type %></td>
+        </tr>
+        <% }); %>
     </table>
 </div>
 <div class="Search-Table">
-    <input class="Input" placeholder="Show Seats by CarriageID">
-    <button class="searchbutton">Search</button>
     <h3 class="Heading">Seat</h3>
     <table class="table-body">
         <tr>
@@ -74,25 +53,6 @@
 </div>
 </body>
 <script>
-document.getElementById('searchCarriageButton').addEventListener('click', function() {
-    // Retrieve the value entered in the search input field
-    const searchTerm = document.getElementById('searchCarriage').value;
-    if(searchTerm ==null)
-        return;
-    console.log(searchTerm);
-    // You can also send the search term to your server for further processing if needed
-    fetch('/TD', {
-      method: 'POST',
-      body: searchTerm
-    })
-    .then(response => response.json())
-    .then(data => {
-      // Handle the response from the server
-    })
-    .catch(error => {
-        console.log('gg');
-      console.error('Error:', error);
-    });
-  });
+
 </script>
 </html>

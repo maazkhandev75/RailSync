@@ -67,31 +67,31 @@ app.get('/loginPg',(req,res)=>{
 res.sendFile(path);
 })
 
-// app.get('/form', (req, res) => {
-//   pool.query('SELECT StationName FROM Station')
-//       .then(result => {
-//           const StationNames = result.recordset;
-//           var isSubmitted=false;
-//           res.render("form", { StationNames ,isSubmitted});
-//       })
-//       .catch(err => {
-//           console.error(err);
-//           res.status(500).send('Internal Server Error');
-//       });
-// });
+app.get('/form', (req, res) => {
+  pool.query('SELECT StationName FROM Station')
+      .then(result => {
+          const StationNames = result.recordset;
+          var isSubmitted=false;
+          res.render("form", { StationNames ,isSubmitted});
+      })
+      .catch(err => {
+          console.error(err);
+          res.status(500).send('Internal Server Error');
+      });
+});
 
 
-// app.get('/admin', (req, res) => {
-//   pool.query('SELECT * FROM Train')
-//       .then(result => {
-//           const Trains = result.recordset;
-//           res.render("admin", { Trains });
-//       })
-//       .catch(err => {
-//           console.error(err);
-//           res.status(500).send('Internal Server Error');
-//       });
-// });
+app.get('/admin', (req, res) => {
+  pool.query('SELECT * FROM Train')
+      .then(result => {
+          const Trains = result.recordset;
+          res.render("admin", { Trains });
+      })
+      .catch(err => {
+          console.error(err);
+          res.status(500).send('Internal Server Error');
+      });
+});
  
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);
