@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <link rel="stylesheet" href="/stylesheets/admin_style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Style+Script&display=swap" rel="stylesheet">
+</head>
+<body>
+<div>
+    <h3 class="Heading">Train Data</h3>
+    <table class="table-body">
+        <tr>
+            <th>TrainID</th>
+            <th>UpDownStatus</th>
+            <th>DeptStation</th>
+            <th>ArrivalStation</th>
+        </tr>
+        <% Trains.forEach((i)=>{ %>
+        <tr>
+            <td><%= i.TrainId %></td>
+            <%if(i.UPStatus==1){ %>
+            <td>Up</td>
+            <% }else {%>
+            <td>Down</td>
+            <% }%>
+            <td><%= i.DeptStation %></td>
+            <td><%= i.ArrivalStation %></td>
+        </tr>
+        <% }); %>
+    </table>
+</div>
+<div class="Search-Table">
+    <input class="Input" placeholder="Search Carriage by TrainID">
+    <button class="searchbutton">Search</button>
+    <h3 class="Heading">Carriage</h3>
+    <table class="table-body">
+        <tr>
+            <th>CarriageID</th>
+            <th>TrainID</th>
+            <th>Type</th>
+        </tr>
+        <tr>
+            <td>123</td>
+            <td>123</td>
+            <td>E</td>
+        </tr>
+    </table>
+</div>
+<div class="Search-Table">
+    <input class="Input" placeholder="Show Seats by CarriageID">
+    <button class="searchbutton">Search</button>
+    <h3 class="Heading">Seat</h3>
+    <table class="table-body">
+        <tr>
+            <th>CarriageID</th>
+            <th>TrainID</th>
+            <th>SeatNo</th>
+            <th>BookingStatus</th>
+
+        </tr>
+        <tr>
+            <td>123</td>
+            <td>123</td>
+            <td>5</td>
+            <td>B</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
