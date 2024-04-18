@@ -18,15 +18,19 @@
 <body>
 <div>
     <h3 class="Heading">Available Trains </h3>
+    <h3 class="Heading"> Non-Stop Trains </h3>
     <table class="table-body">
-        <tr>
-            <th>TrainID</th>
-            <th>UpDownStatus</th>
-            <th>DeptStation</th>
-            <th>ArrivalStation</th>
-            <th>Dept Time</th>
-            <th>Arrival Time</th>
-        </tr>
+        <tr >
+            <div style="display: flex; align-content: space-between ;">
+
+                <th>TrainID</th>
+                <th>UpDownStatus</th>
+                <th>DeptStation</th>
+                <th>ArrivalStation</th>
+                <th>Dept Time</th>
+                <th>Arrival Time</th>
+            </div>
+            </tr>
         
         <% Trains.forEach((i)=>{ %>
         <tr>
@@ -63,6 +67,56 @@
         </tr>
         <% }); %>
     </table>
+    <h3 class="Heading"> Trains with Stops </h3>
+    <table class="table-body">
+        <tr >
+            <div style="display: flex; align-content: space-between ;">
+
+                <th>TrainID</th>
+                <th>UpDownStatus</th>
+                <th>DeptStation</th>
+                <th>ArrivalStation</th>
+                <th>Dept Time</th>
+                <th>Arrival Time</th>
+            </div>
+            </tr>
+        
+        <% TrainsWithStops.forEach((i)=>{ %>
+        <tr>
+            <td><%= i.TrainId %></td>
+            <%if(i.UPStatus==1){ %>
+            <td>Up</td>
+            <% }else {%>
+            <td>Down</td>
+            <% }%>
+            <td><%= i.DeptStation %></td>
+            <td><%= i.ArrivalStation %></td>
+            <td><%= i.Station2Id %></td>
+            <td><%= i.DeptTime %></td>
+            <td><%= i.ArrivalTime %></td>
+            <td>
+            <table>
+                <tr>
+                    <td>Economy:</td>
+                    <td><%= i.Economy%></td>
+                </tr>
+            
+                <tr>
+                    <td>Bussiness:</td>
+                    <td><%= i.BusinessClass%></td>
+                </tr>
+
+                <tr>
+                    <td>First Class:</td>
+                    <td><%=i.FirstClass%></td>
+                </tr>
+
+            </table>
+        </td>
+        </tr>
+        <% }); %>
+    </table>
+
 </div>
 
 </body>
