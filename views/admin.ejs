@@ -72,6 +72,7 @@
         </tr>
     </table>
 </div>
+
 </body>
 <script>
 document.getElementById('searchCarriageButton').addEventListener('click', function() {
@@ -83,11 +84,17 @@ document.getElementById('searchCarriageButton').addEventListener('click', functi
     // You can also send the search term to your server for further processing if needed
     fetch('/TD', {
       method: 'POST',
-      body: searchTerm
+      body: JSON.stringify({ searchTerm: searchTerm }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
     })
-    .then(response => response.json())
-    .then(data => {
-      // Handle the response from the server
+    .then(response => response.text())
+    .then(html => {
+        const newTab = window.open();
+        newTab.document.open();
+        newTab.document.write(html);
+        newTab.document.close();
     })
     .catch(error => {
         console.log('gg');

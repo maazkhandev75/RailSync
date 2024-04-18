@@ -11,6 +11,8 @@ var sql=require('mssql');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var SearchTrainRouter = require('./routes/SearchTrain');
+var SearchCarriage = require('./routes/TD');
+
 const { Console } = require('console');
 
 
@@ -64,7 +66,7 @@ app.get('/loginPg',(req,res)=>{
   res.render('userlogin');
 })
 
-app.get('/SearchTrainform', (req, res) => {
+app.get('/form', (req, res) => {
   pool.query('SELECT StationName FROM Station')
       .then(result => {
           const StationNames = result.recordset;
@@ -93,7 +95,7 @@ app.get('/admin', (req, res) => {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/SearchTrain',SearchTrainRouter(pool));
-// catch 404 and forward to error handler
+app.use('/TD',SearchCarriage(pool));
 app.use(function(req, res, next) {
   next(createError(404));
 });

@@ -5,7 +5,7 @@ var sql=require('mssql');
 module.exports = function(pool) {
     router.post('/',(req,res)=>{
     console.log(req);
-    var TrainID=req.body.searchItem;
+    var TrainID=req.body.searchTerm;
     
     const request= new sql.Request(pool);
     request.input('ID',sql.NVarChar,TrainID);
@@ -16,6 +16,7 @@ module.exports = function(pool) {
       res.status(500).send('Internal Server Error');
       }
       else{
+        var isSubmitted=true;
         var Carriage=result.recordset;
         console.log(Carriage);
         res.render("admin2", { Carriage});
