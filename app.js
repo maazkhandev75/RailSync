@@ -1,4 +1,5 @@
 //importing necessary modules
+const Port=4000;
 var createError = require('http-errors');
 var express = require('express');
 var app = express();
@@ -48,26 +49,22 @@ app.use(express.static(path.join(__dirname, 'public')));  //set up your Express 
 
 // Define a route to render an HTML home page
 app.get('/home',(req,res)=>{
-  const path = "C:/Users/maazk/Downloads/RailSync/main/home.html";
-res.sendFile(path);
+res.render('home');
 })
 
 app.get('/decisionPg',(req,res)=>{
-  const path = "C:/Users/maazk/Downloads/RailSync/main/decision.html";
-res.sendFile(path);
+res.render('decision');
 })
 
 app.get('/signupPg',(req,res)=>{
-  const path = "C:/Users/maazk/Downloads/RailSync/main/signup.html";
-res.sendFile(path);
+res.render('signup.ejs');
 })
 
 app.get('/loginPg',(req,res)=>{
-  const path = "C:/Users/maazk/Downloads/RailSync/main/login.html";
-res.sendFile(path);
+  res.render('userlogin');
 })
 
-app.get('/form', (req, res) => {
+app.get('/SearchTrainform', (req, res) => {
   pool.query('SELECT StationName FROM Station')
       .then(result => {
           const StationNames = result.recordset;
@@ -93,13 +90,13 @@ app.get('/admin', (req, res) => {
       });
 });
  
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
-// app.use('/SearchTrain',SearchTrainRouter(pool));
-// // catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//   next(createError(404));
-// });
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+app.use('/SearchTrain',SearchTrainRouter(pool));
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+});
 
 
 // error handler
@@ -117,10 +114,10 @@ module.exports = app;
 
 
 // Start the server and listen on port 4000   //write localhost:4000/home to start the website
-app.listen(4000,(error)=>{
+app.listen(Port,(error)=>{
   if(error)
       console.log("Error listening");
   else{
-      console.log("Listening Successfully!  "+__dirname);
+      console.log("Listening Successfully! at port" +Port);
   }
 })
