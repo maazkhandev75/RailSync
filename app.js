@@ -43,7 +43,6 @@ pool.connect((err)=>{
   }
 })
 
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -97,12 +96,10 @@ app.get('/admin', (req, res) => {
 });
 
 
-
 app.post('/bookTicketNonStop', (req, res) => {  
   res.render('/home.ejs');
   // res.send(req.body.TrainId);
 });
-
 
 // Use the route
 app.use('/', indexRouter);
@@ -110,6 +107,7 @@ app.use('/users', usersRouter);
 app.use('/signup', signupRouter(pool));   // Pass pool object to signupRouter
 app.use('/login', loginRouter(pool));     // Pass pool object to loginRouter
 app.use('/SearchTrain', SearchTrainRouter(pool));
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -131,7 +129,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-//module.exports = app;
 // Export the app and pool objects
 module.exports = { app, pool };
 
