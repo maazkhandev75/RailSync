@@ -1,16 +1,13 @@
 //importing necessary modules
-const express = require('express');
+const port=4000;
 const createError = require('http-errors');
-const sql=require('mssql');
 const bodyParser = require('body-parser');
+const express = require('express');
+const app = express();
+const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const path = require('path');
-
-// Create an instance of the Express application
-const app = express();
-const port=4000;   //our port
-const { Console } = require('console');
+const sql=require('mssql');
 
 //importing routers
 const signupRouter = require('./routes/signup')
@@ -18,6 +15,8 @@ const loginRouter = require('./routes/login')
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const SearchTrainRouter = require('./routes/SearchTrain');
+const SearchCarriage = require('./routes/TD');
+const { Console } = require('console');
 
 //configuring a connection pool for MSSQL using the mssql module and connecting to the database
 const sqlConfig = {
@@ -70,7 +69,7 @@ app.get('/loginForm',(req,res)=>{
   res.render('login.ejs');
 })
 
-app.get('/form', (req, res) => {
+app.get('/SearchTrainform', (req, res) => {
   pool.query('SELECT StationName FROM Station')
       .then(result => {
           const StationNames = result.recordset;
@@ -97,8 +96,8 @@ app.get('/admin', (req, res) => {
 
 
 app.post('/bookTicketNonStop', (req, res) => {  
-  res.render('/home.ejs');
-  // res.send(req.body.TrainId);
+  console.log("Hello");
+  res.render('login.ejs');
 });
 
 // Use the route
@@ -107,7 +106,7 @@ app.use('/users', usersRouter);
 app.use('/signup', signupRouter(pool));   // Pass pool object to signupRouter
 app.use('/login', loginRouter(pool));     // Pass pool object to loginRouter
 app.use('/SearchTrain', SearchTrainRouter(pool));
-
+app.use('/TD',SearchCarriage(pool));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
