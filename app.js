@@ -10,14 +10,13 @@ const path = require('path');
 // Create an instance of the Express application
 const app = express();
 const port=4000;   //our port
+const { Console } = require('console');
 
 //importing routers
 const signupRouter = require('./routes/signup')
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const SearchTrainRouter = require('./routes/SearchTrain');
-const { Console } = require('console');
-
 
 //configuring a connection pool for MSSQL using the mssql module and connecting to the database
 const sqlConfig = {
@@ -71,7 +70,7 @@ app.get('/loginForm',(req,res)=>{
   res.render('login.ejs');
 })
 
-app.get('/SearchTrainform', (req, res) => {
+app.get('/form', (req, res) => {
   pool.query('SELECT StationName FROM Station')
       .then(result => {
           const StationNames = result.recordset;
@@ -83,7 +82,6 @@ app.get('/SearchTrainform', (req, res) => {
           res.status(500).send('Internal Server Error');
       });
 });
-
 
 app.get('/admin', (req, res) => {
   pool.query('SELECT * FROM Train')
@@ -126,7 +124,6 @@ app.use(function(err, req, res, next) {
 //module.exports = app;
 // Export the app and pool objects
 module.exports = { app, pool };
-
 
 // Start the server and listen on port 4000   //write localhost:4000/home to start the website
 app.listen(port,(error)=>{
