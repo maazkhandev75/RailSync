@@ -1,13 +1,15 @@
 //importing necessary modules
-const port=4000;
 const createError = require('http-errors');
 const bodyParser = require('body-parser');
 const express = require('express');
-const app = express();
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const sql=require('mssql');
+
+// Create an instance of the Express application
+const app = express();
+const port=4000;   //our port
 
 //importing routers
 const signupRouter = require('./routes/signup')
@@ -52,7 +54,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));  //set up your Express server to serve static files from public directory..( thats why we have used absolute paths everywhere then )
 
-// Define a route to render an HTML home page
+// Define a route to render an ejs/html page
 app.get('/home',(req,res)=>{
 res.render('home.ejs');
 })
@@ -100,7 +102,7 @@ app.post('/bookTicketNonStop', (req, res) => {
   res.render('login.ejs');
 });
 
-// Use the route
+// Use the routes
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/signup', signupRouter(pool));   // Pass pool object to signupRouter
