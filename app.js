@@ -14,6 +14,7 @@ const { Console } = require('console');
 
 //importing routers
 const signupRouter = require('./routes/signup')
+const loginRouter = require('./routes/login')
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const SearchTrainRouter = require('./routes/SearchTrain');
@@ -99,6 +100,7 @@ app.get('/admin', (req, res) => {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/signup', signupRouter(pool));   // Pass pool object to signupRouter
+app.use('/login', loginRouter(pool));     // Pass pool object to loginRouter
 app.use('/SearchTrain', SearchTrainRouter(pool));
 
 // catch 404 and forward to error handler
