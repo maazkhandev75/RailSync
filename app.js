@@ -1,18 +1,23 @@
 //importing necessary modules
-const Port=4000;
-var createError = require('http-errors');
-var express = require('express');
-var app = express();
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var sql=require('mssql');
+const express = require('express');
+const createError = require('http-errors');
+const sql=require('mssql');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const path = require('path');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var SearchTrainRouter = require('./routes/SearchTrain');
+// Create an instance of the Express application
+const app = express();
+const port=4000;   //our port
 const { Console } = require('console');
 
+//importing routers
+const signupRouter = require('./routes/signup')
+const loginRouter = require('./routes/login')
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const SearchTrainRouter = require('./routes/SearchTrain');
 
 //configuring a connection pool for MSSQL using the mssql module and connecting to the database
 const sqlConfig = {
@@ -31,9 +36,11 @@ const sqlConfig = {
 }
 const pool = new sql.ConnectionPool(sqlConfig);
 pool.connect((err)=>{
-  if(!err)
-  console.log("Pool Connected");
-  else throw err;
+  if (err) {
+    console.error('Database connection failed:', err);
+  } else {
+    console.log('Database connection successful!');
+  }
 })
 
 
@@ -49,59 +56,69 @@ app.use(express.static(path.join(__dirname, 'public')));  //set up your Express 
 
 // Define a route to render an HTML home page
 app.get('/home',(req,res)=>{
-res.render('home');
+res.render('home.ejs');
 })
 
 app.get('/decisionPg',(req,res)=>{
-res.render('decision');
+res.render('decision.ejs');
 })
 
-app.get('/signupPg',(req,res)=>{
+app.get('/signupForm',(req,res)=>{
 res.render('signup.ejs');
 })
 
-app.get('/loginPg',(req,res)=>{
-  res.render('userlogin');
+app.get('/loginForm',(req,res)=>{
+  res.render('login.ejs');
 })
 
-app.get('/SearchTrainform', (req, res) => {
+app.get('/form', (req, res) => {
   pool.query('SELECT StationName FROM Station')
       .then(result => {
           const StationNames = result.recordset;
           var isSubmitted=false;
-          res.render("form", { StationNames ,isSubmitted});
+          res.render("form.ejs", { StationNames ,isSubmitted});
       })
       .catch(err => {
           console.error(err);
           res.status(500).send('Internal Server Error');
       });
 });
-
 
 app.get('/admin', (req, res) => {
   pool.query('SELECT * FROM Train')
       .then(result => {
           const Trains = result.recordset;
-          res.render("admin", { Trains });
+          res.render("admin.ejs", { Trains });
       })
       .catch(err => {
           console.error(err);
           res.status(500).send('Internal Server Error');
       });
 });
+
+
+
 app.post('/bookTicketNonStop', (req, res) => {  
-  res.render('/home');
+  res.render('/home.ejs');
   // res.send(req.body.TrainId);
 });
 
+
+// Use the route
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/SearchTrain',SearchTrainRouter(pool));
+app.use('/signup', signupRouter(pool));   // Pass pool object to signupRouter
+app.use('/login', loginRouter(pool));     // Pass pool object to loginRouter
+app.use('/SearchTrain', SearchTrainRouter(pool));
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
+// Configure middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -114,14 +131,15 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
-
+//module.exports = app;
+// Export the app and pool objects
+module.exports = { app, pool };
 
 // Start the server and listen on port 4000   //write localhost:4000/home to start the website
-app.listen(Port,(error)=>{
+app.listen(port,(error)=>{
   if(error)
       console.log("Error listening");
   else{
-      console.log("Listening Successfully! at port" +Port);
+    console.log(`Server is listening on port - ${port}`);
   }
 })

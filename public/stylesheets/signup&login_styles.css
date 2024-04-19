@@ -10,6 +10,23 @@ body{
 	color:#000;
 	background-color: #c97323;
 }
+
+.alert {
+    color: #000000;
+    background-color: #333333;
+    border-color: #000000;
+	font-weight: 900;
+	font-family: 'Raleway';
+}
+
+.alert-success {
+    background-color: #09bd00;
+}
+
+.alert-danger {
+    background-color: #9d0500;
+}
+
 .container_topLvl{
 display: flex;
 flex-direction: column;

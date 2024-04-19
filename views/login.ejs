@@ -11,17 +11,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/stylesheets/signup&login_styles.css">
-    <title>SignUp Form</title>
+    <title>LogIn Form</title>
 </head>
 <body>
-	<!-- if the user signup successfully -->
+	<!-- if the user logged in successfully -->
     <% if (typeof successMessage !== 'undefined') { %>
     <div class="alert alert-success" role="alert">
         <%= successMessage %>
     </div>
     <% } %>
 
-	<!-- if the user already exits -->
+	<!-- if the user not found  -->
 	<% if (typeof errorMessage !== 'undefined') { %>
 	<div class="alert alert-danger" role="alert">
 		<%= errorMessage %>
@@ -29,12 +29,12 @@
 	<% } %>
 
 
-    <h2 class="display-4 heading">Sign Up</h2>
+    <h2 class="display-4 heading">Log In</h2>
 
     <div class="container_topLvl">
         <div class="main">
             <div class="container-fluid mt-1">
-                <form action="/signup" method="POST">
+                <form action="/login" method="POST">
                     <div class="row">
                         <div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
                             <label for="username" class="form-label sub_heading">UserName:</label>
