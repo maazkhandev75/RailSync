@@ -2,27 +2,13 @@ const express = require('express');
 const router=express.Router();
 var sql=require('mssql');
 
- 
-// const reqFilter =(req,resp,next)=>{
-//    if(!req){
-//      alert("Please Select A Date!");
-//    }
-//   { 
-//     console.log("in middele ware");
-//     next();
-//   }
-// }
 module.exports = function(pool) {
   
- // router.use(reqFilter);
     router.post('/',(req,res)=>{
     var St1=req.body.fromCity;
     var St2=req.body.toCity;
     var tripDate=req.body.journeyDate;
-    if(!journeyDate) {
-      alert("Please Select A date");
-    return 0;
-   }
+    
     const request= new sql.Request(pool);
     request.input('SearchDate',sql.DateTime,tripDate);
     request.input('fromStation',sql.NVarChar,St1);
@@ -38,7 +24,7 @@ module.exports = function(pool) {
          Trains=result.recordset;
         console.log(Trains);
       }
-    })
+    });
     
     const CTErequest= new sql.Request(pool);
     CTErequest.input('SearchDate',sql.DateTime,tripDate);
@@ -50,10 +36,19 @@ module.exports = function(pool) {
       res.status(500).send('Internal Server Error');
       }
       else{
-        var TrainsWithStops=result.recordset;
+         TrainsWithStops=result.recordset;
         console.log(TrainsWithStops);
       }
       
+      for (let i = 0; i < Trains.length; i++) {
+        
+        for(let j=0;j<TrainsWithStops.length;j++){
+          if(Trains[i].TrainId==TrainsWithStops[j].TrainId){
+            delete TrainsWithStops[j];
+          }
+        }
+      }
+
       res.render("TrainResult", { Trains,TrainsWithStops});
     })
   });

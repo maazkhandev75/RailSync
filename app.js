@@ -89,7 +89,11 @@ app.get('/admin', (req, res) => {
           res.status(500).send('Internal Server Error');
       });
 });
- 
+app.post('/bookTicketNonStop', (req, res) => {  
+  res.render('/home');
+  // res.send(req.body.TrainId);
+});
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/SearchTrain',SearchTrainRouter(pool));
