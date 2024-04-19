@@ -96,7 +96,15 @@ app.get('/admin', (req, res) => {
       });
 });
 
-// Use the routes
+
+
+app.post('/bookTicketNonStop', (req, res) => {  
+  res.render('/home.ejs');
+  // res.send(req.body.TrainId);
+});
+
+
+// Use the route
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/signup', signupRouter(pool));   // Pass pool object to signupRouter
