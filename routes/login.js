@@ -5,14 +5,14 @@ const sql = require('mssql');
 // Route handler for user signup
 module.exports = (pool) => {
   router.post('/', async (req, res) => {
-    const { username, password } = req.body;
+    const { cnic, password } = req.body;
 
     try {
       // Call the stored procedure to authenticate the user
       const result = await pool.request()
-        .input('UserName', sql.NVarChar(255), username)
+        .input('CNIC', sql.NVarChar(255), cnic)
         .input('Password', sql.NVarChar(255), password)
-        .execute('authenticateUser');
+        .execute('AuthenticateUser');
 
       if (result.returnValue === 0) {
         // User account found, render the login form with a success message

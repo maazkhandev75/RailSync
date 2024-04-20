@@ -47,11 +47,14 @@ flex-direction: column;
 	margin: 1em 4em ; 
 }
 
-.heading{
-	margin: 0.5em 1em;
-	color:#00b3ff;
+.topHeading{
+	padding: 0.2em 0em 0.1em 0em;
+	text-align: center;
 }
 
+.heading{
+	color:#00b3ff;
+}
 .sub_heading{
 	color:#de6b00;
 	font-size: 1em;
