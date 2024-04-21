@@ -27,6 +27,12 @@ body{
     background-color: #9d0500;
 }
 
+/* Darken the background color of input fields filled by Chrome autofill */
+input:-webkit-autofill {
+    /* color: rgb(213, 0, 0) important; Change the text color to ensure visibility */
+    -webkit-box-shadow: 0 0 0px 1000px #656565 inset !important; /* Change the shadow color to match your dark theme */
+}
+
 .container_topLvl{
 display: flex;
 flex-direction: column;
@@ -116,7 +122,7 @@ input[type='checkbox']:checked:after {
 	font-size:1em;
 	font-weight: 600;
 	margin-bottom: 0em;
-	background-color: grey;
+	background-color: rgb(108, 108, 108);
 	border: 2px solid rgb(0, 0, 0);
 	border-radius: 10px;
 	color: #000;
