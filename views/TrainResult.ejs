@@ -159,36 +159,58 @@
 <div>
     <h3 class="Heading">Available Trains </h3>
     <label class="Heading" for="NonStopTrainsTable">Non-Stop Trains</label>
+    <form action="/bookTicketNonStop"  method="POST" id="NonStopTrainForm">
     <table class="table-body" id="NonStopTrainsTable">
+        
         <tr>
             <th>TrainID</th>
             <th>UpDownStatus</th>
-            <th>DeptStation</th>
-            <th>ArrivalStation</th>
-            <th>Dept Time</th>
+                <th>DeptStation</th>
+                <th>ArrivalStation</th>
+                <th>Dept Time</th>
             <th>Arrival Time</th>
             <th>Actions</th>
         </tr>
-       
+        
         <% Trains.forEach((i) => { %>
             <tr>
+              <td>  <input type="radio" name="selectedTrainID" value="<%= i.TrainId %>"> </td>
                 <td><%= i.TrainId %></td>
                 <% if(i.UPStatus == 1) { %>
                     <td>Up</td>
                 <% } else { %>
                     <td>Down</td>
-                <% } %>
-                <td><%= i.DeptStation %></td>
-                <td><%= i.ArrivalStation %></td>
+                    <% } %>
+                    <td><%= i.DeptStation %></td>
+                    <td><%= i.ArrivalStation %></td>
                 <td><%= i.Station2Id %></td>
                 <td><%= i.DeptTime %></td>
                 <td><%= i.ArrivalTime %></td>
                 <td>
-                    <button class="searchbutton" onclick="bookTicket('<%= i.TrainId %>','0')">Book Ticket</button>
+                    <table>
+                        <tr>
+                            <td>Economy:</td>
+                            <td><%= i.Economy%></td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Bussiness:</td>
+                            <td><%= i.BusinessClass%></td>
+                        </tr>
+        
+                        <tr>
+                            <td>First Class:</td>
+                            <td><%=i.FirstClass%></td>
+                        </tr>
+        
+                    </table>
                 </td>
             </tr>
-        <% }); %>
-    </table>
+            <% }); %>
+            
+        </table>
+    </form>
+    <button class="searchbutton" onclick="bookTicket()"> Book Ticket</button>
     <h3 class="Heading">Trains with Stops</h3>
     <table class="table-body">
         <tr>
@@ -219,18 +241,9 @@
 </div>
 
 <script>
-    function bookTicket(bookTrainId, bookTrackId) {
-        fetch('/bookTicketNonStop', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ TrainId: bookTrainId }),
-        })
-        .catch(err => {
-            console.log(err);
-        });
-    }
+    function bookTicket() {
+        document.getElementById('NonStopTrainForm').submit();
+          }
 </script>
 
 </body>

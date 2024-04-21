@@ -96,10 +96,12 @@ app.get('/admin', (req, res) => {
       });
 });
 
-
+app.get('/Ticket',(req,res)=>{
+  res.render('Ticket');
+});
 app.post('/bookTicketNonStop', (req, res) => {  
-  console.log("Hello");
-  res.render('login.ejs');
+  console.log(req.body);
+  res.render('Ticket');
 });
 
 // Use the routes
