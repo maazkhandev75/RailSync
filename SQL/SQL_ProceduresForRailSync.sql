@@ -25,7 +25,35 @@ BEGIN
 	SELECT 'User created successfully!' AS message;
 END
 
---testing--
+--------PROCEDURE FOR LOGIN FUNCTIONALITY-------
+
+CREATE PROCEDURE AuthenticateUser 
+	@CNIC nvarchar(255),
+	@Password nvarchar(255)
+AS 
+BEGIN	
+	SET NOCOUNT ON;
+
+	-- Check if the CNIC and password combination exists
+	IF EXISTS (SELECT 1 FROM [User] WHERE  CNIC = @CNIC AND  Password = @Password)
+	BEGIN
+		-- User account found, return a success message
+		 SELECT 'User account found!' AS message, ID, UserName FROM [User] WHERE CNIC = @CNIC;
+	END
+	ELSE
+	BEGIN
+		-- Return error message
+		RAISERROR ('User account not found!', 16, 1);
+		RETURN -1;
+	END
+
+END
+
+
+
+
+--************************** (TESTING AREA) **************************
+
 CreateUser 'maazkhan75','3520297089087','password1965','03204553255'
 
 drop proc CreateUser
@@ -40,32 +68,4 @@ GO
 
 truncate table [User]  --we have to remove one by one 
 
-
---******************************************************************************************************************************************--
-
---------PROCEDURE FOR LOGIN FUNCTIONALITY-------
-
-CREATE PROCEDURE AuthenticateUser 
-	@CNIC nvarchar(255),
-	@Password nvarchar(255)
-AS 
-BEGIN	
-	SET NOCOUNT ON;
-
-	-- Check if the CNIC and password combination exists
-	IF EXISTS (SELECT 1 FROM [User] WHERE  CNIC = @CNIC AND  Password = @Password)
-	BEGIN
-		-- User account found, return a success message
-		SELECT 'User account found!' AS message;
-	END
-	ELSE
-	BEGIN
-		-- Return error message
-		RAISERROR ('User account not found!', 16, 1);
-		RETURN -1;
-	END
-
-END
-
---testing
 drop proc AuthenticateUser
