@@ -22,12 +22,13 @@ body {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #989898;
+    background: #6d6d6d;
+    border-radius: 40px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: rgb(6, 153, 221);
+    background: rgb(221, 124, 6);
 }
 
 
@@ -35,9 +36,10 @@ body {
     width: 80%;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;  /*for main-axis(horizontal)*/
-    align-items: center;             /*for cross-axis(vertical)*/
+    justify-content: space-between;   /*for main-axis(horizontal) */
+    align-items: center;              /*for cross-axis(vertical)*/
 }
+
 *::selection{
     color:#e06c00;
 }
@@ -178,9 +180,44 @@ margin: 20px;
 
 
 
+#about-section{
+    padding:30px 0 0 0;
+	margin-bottom: 10px;
+}
 
 
 
+#about-section h1{
+	
+	font-size: 3.5em;
+    font-weight: 700;
+	font-family: 'Raleway', sans-serif;
+    color:#ffffff;
+	text-shadow: #707070 3px 4px;
+    margin-bottom: 0.5em;
+    text-align: center;
+    justify-content: center;
+}
+#about-section p{
+	font-family: 'Ubuntu', sans-serif;
+    font-size: 15px;
+	line-height: 2em;
+    color: #fff;
+    letter-spacing: 3px;
+}
+
+.about-image-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1.5em;
+}
+
+#about-section img{
+    width: 40%;
+    height: 45vh;
+    border-radius: 10px;
+}
 
 /* ------------responsivenes----------*/
 @media (max-width: 1200px) {
