@@ -16,10 +16,10 @@ module.exports = function(pool) {
       res.status(500).send('Internal Server Error');
       }
       else{
-        var isSubmitted=true;
+
         var Carriage=result.recordset;
-        console.log(Carriage);
-        res.render("admin2", { Carriage});
+        
+        res.json({ Carriage: Carriage });
       }
     })
   });

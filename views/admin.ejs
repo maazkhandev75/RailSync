@@ -40,16 +40,16 @@
     </table>
 </div>
 <div class="Search-Table">
-    <input class="Input" id="searchCarriage" placeholder="Search Carriage by TrainID">
-    <button class="searchbutton" id="searchCarriageButton">Search</button>
+    <input id="searchCarriage" class="Input" placeholder="Show Seats by CarriageID">
+    <button id="searchCarriageButton" class="searchbutton">Search</button>
     <h3 class="Heading">Carriage</h3>
-    <table class="table-body">
+    <table id="seatTable" class="table-body">
         <tr>
             <th>CarriageID</th>
             <th>TrainID</th>
             <th>Type</th>
-        </tr>
 
+        </tr>
     </table>
 </div>
 <div class="Search-Table">
@@ -75,6 +75,33 @@
 
 </body>
 <script>
+
+function updateTable(data) {
+    const table = document.getElementById('seatTable');
+    table.innerHTML = `
+        <tr>
+            <th>CarriageID</th>
+            <th>TrainID</th>
+            <th>Type</th>
+        </tr>
+    `;
+    // Loop through the received data and append rows to the table
+    if (Array.isArray(data.Carriage)) {
+        data.Carriage.forEach(entry => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${entry.CarriageId}</td>
+                <td>${entry.TrainId}</td>
+                <td>${entry.Type}</td>
+            `;
+            table.appendChild(row);
+        });
+    } else {
+        console.error('Unexpected data format:', data);
+    }
+}
+
+
 document.getElementById('searchCarriageButton').addEventListener('click', function() {
     // Retrieve the value entered in the search input field
     const searchTerm = document.getElementById('searchCarriage').value;
@@ -89,12 +116,10 @@ document.getElementById('searchCarriageButton').addEventListener('click', functi
             'Content-Type': 'application/json'
         }
     })
-    .then(response => response.text())
-    .then(html => {
-        const newTab = window.open();
-        newTab.document.open();
-        newTab.document.write(html);
-        newTab.document.close();
+    .then(response => response.json())
+    .then(data => {
+       updateTable(data);
+
     })
     .catch(error => {
         console.log('gg');
