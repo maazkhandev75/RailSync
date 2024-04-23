@@ -1,6 +1,8 @@
-// Simulate a delay of 2 seconds (for mimicring the loading of elements when goes online)
+
+// Simulate a delay of 2 seconds (for mimicring the loading of elements when goes online)  //code to execute after the delay(basically hiding the loader after 2s)
 setTimeout(function() {
-    document.getElementById("preloader").style.display = 'none';  //code to execute after the delay(basically hiding the loader after 2s)
+    document.getElementById("preloader").style.display = 'none';  // hide prelaoder 
+    document.getElementById("content").style.opacity = '1'; // Fade in content
 }, 2000);
 
 //JS for preloder hiding on load of all elements. 
@@ -9,5 +11,3 @@ setTimeout(function() {
 // {
 // document.getElementById("preloader").style.display='none';
 // };
-
-  

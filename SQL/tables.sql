@@ -165,6 +165,16 @@ ALTER TABLE [Train] ADD FOREIGN KEY ([ArrivalStation]) REFERENCES [Station] ([St
 GO
 
 select * from [User]
+select * from [Ticket]
 select * from [Crew]
 select * from [Pilot]
 select * from [Train]
+select * from [Carriage]
+select * from [Fare]
+select * from [Payment]
+select * from [Station]
+select * from [Security]
+select * from [Tracks]
+select * from [Seat]
+select * from [Route]
+

@@ -10,6 +10,29 @@ body{
 	color:#000;
 	background-color: #c97323;
 }
+
+.alert {
+    color: #000000;
+    background-color: #333333;
+    border-color: #000000;
+	font-weight: 900;
+	font-family: 'Raleway';
+}
+
+.alert-success {
+    background-color: #09bd00;
+}
+
+.alert-danger {
+    background-color: #9d0500;
+}
+
+/* Darken the background color of input fields filled by Chrome autofill */
+input:-webkit-autofill {
+    /* color: rgb(213, 0, 0) important; Change the text color to ensure visibility */
+    -webkit-box-shadow: 0 0 0px 1000px #656565 inset !important; /* Change the shadow color to match your dark theme */
+}
+
 .container_topLvl{
 display: flex;
 flex-direction: column;
@@ -25,16 +48,20 @@ flex-direction: column;
 	align-items: center;
 	align-content: center;
 	border:2px solid rgb(173, 173, 173);
-	border-radius: 2em;
+	border-radius: 12px;
 	padding:2em 3em 2em 3em;
 	margin: 1em 4em ; 
+	background:#101010
+}
+
+.topHeading{
+	padding: 0.2em 0em 0.1em 0em;
+	text-align: center;
 }
 
 .heading{
-	margin: 0.5em 1em;
 	color:#00b3ff;
 }
-
 .sub_heading{
 	color:#de6b00;
 	font-size: 1em;
@@ -96,7 +123,7 @@ input[type='checkbox']:checked:after {
 	font-size:1em;
 	font-weight: 600;
 	margin-bottom: 0em;
-	background-color: grey;
+	background-color: rgb(108, 108, 108);
 	border: 2px solid rgb(0, 0, 0);
 	border-radius: 10px;
 	color: #000;
