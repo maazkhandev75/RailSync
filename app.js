@@ -30,7 +30,7 @@ const sqlConfig = {
   pool: {
     max: 10,
     min: 0,
-    idleTimeoutMillis: 30000
+    idleTimeoutMillis: 3000000
   } , options: {
     encrypt: true, // for azure
     trustServerCertificate: true // change to true for local dev / self-signed certs
@@ -132,12 +132,43 @@ app.get('/admin', (req, res) => {
       });
 });
 
-app.get('/Ticket',(req,res)=>{
-  res.render('Ticket');
-});
 app.post('/bookTicketNonStop', (req, res) => {  
   console.log(req.body);
-  res.render('Ticket');
+  const InputTrackId=req.body.TrackID;
+  const request= new sql.Request(pool);
+  request.input('TrainId',sql.NVarChar(30),req.body.selectedTrainID);
+  request.input('TrackId',sql.NVarChar(30),req.body.TrackID);
+  const Class='E';
+  request.input('Class',sql.NVarChar(30),Class);
+  var TicketAvailInfo="";
+  request.execute('BookTicket',(err,result)=>{
+    if(err){
+      console.log(err);
+      res.status(500).send('Internal Server Error');
+    }
+    else{
+        TicketAvailInfo=result.recordset[0];
+        console.log(TicketAvailInfo);
+        if(TicketAvailInfo.length!=0){
+          const TicketInfoReq= new sql.Request(pool);
+      TicketInfoReq.input('FoundCarriage',sql.NVarChar(30),TicketAvailInfo.CarriageId);
+      TicketInfoReq.input('TrainId',sql.NVarChar(30),TicketAvailInfo.TrainId);
+      TicketInfoReq.input('FoundSeat',sql.Int,TicketAvailInfo.SeatNo);
+      TicketInfoReq.input('TrackId',sql.NVarChar(30),InputTrackId);
+      TicketInfoReq.execute('GetTicketInfo',(err,result2)=>{
+        if(err){
+          console.error(err);
+          res.status(500).send('Internel Server Error');
+        }
+        else{
+          console.log("seat details are: ");
+          console.log(result2);
+        }
+        res.render('Ticket');
+      });
+    } 
+  }
+  })
 });
 
 // Use the routes

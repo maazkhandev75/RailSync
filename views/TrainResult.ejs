@@ -175,12 +175,13 @@
         <% Trains.forEach((i) => { %>
             <tr>
               <td>  <input type="radio" name="selectedTrainID" value="<%= i.TrainId %>"> </td>
+                <input type="hidden" name="TrackID" value="<%= i.TrackId %>">
                 <td><%= i.TrainId %></td>
                 <% if(i.UPStatus == 1) { %>
                     <td>Up</td>
                 <% } else { %>
                     <td>Down</td>
-                    <% } %>
+                    <% } %> 
                     <td><%= i.DeptStation %></td>
                     <td><%= i.ArrivalStation %></td>
                 <td><%= i.Station2Id %></td>
