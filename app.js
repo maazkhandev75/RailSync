@@ -2,6 +2,7 @@
 const createError = require('http-errors');
 const bodyParser = require('body-parser');
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -12,6 +13,14 @@ const fs = require('fs');
 const app = express();
 const port=4000;   //our port
 
+// Configure session middleware
+app.use(session({
+  secret: '053eb1bb21545cd881a8e15b6fab7e58be948187fddd5babd64dd2c5e77614b7',
+  resave: false,
+  saveUninitialized: false
+}));
+
+
 //importing routers
 const signupRouter = require('./routes/signup')
 const loginRouter = require('./routes/login')
@@ -19,6 +28,8 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const SearchTrainRouter = require('./routes/SearchTrain');
 const SearchCarriage = require('./routes/TD');
+const sessionRouter = require('./routes/testSession');
+
 //const bookedTicketsRouter = require('./routes/bookedTickets');
 
 const { Console } = require('console');
@@ -259,6 +270,8 @@ app.use('/signup', signupRouter(pool));   // Pass pool object to signupRouter
 app.use('/login', loginRouter(pool));     // Pass pool object to loginRouter
 app.use('/SearchTrain', SearchTrainRouter(pool));
 app.use('/TD',SearchCarriage(pool));
+app.use('/', sessionRouter);    //for testing session
+
 //app.use('/bookedTickets',bookedTicketsRouter(pool));
 
 
