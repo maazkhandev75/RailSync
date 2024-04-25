@@ -46,7 +46,7 @@ pool.connect((err)=>{
 })
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'views'),path.join(__dirname, 'views/ADMIN'),path.join(__dirname, 'views/ADMIN/partials'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
@@ -130,6 +130,22 @@ app.get('/admin', (req, res) => {
           console.error(err);
           res.status(500).send('Internal Server Error');
       });
+});
+
+app.get('/trainData', (req, res) => {
+  pool.query('SELECT * FROM Train')
+      .then(result => {
+          const Trains = result.recordset;
+          res.render("./ADMIN/trainData.ejs", { Trains });
+      })
+      .catch(err => {
+          console.error(err);
+          res.status(500).send('Internal Server Error');
+      });
+});
+
+app.get('/ds', (req, res) => {
+  res.render('./ADMIN/dashboard');
 });
 
 app.post('/bookTicketNonStop', (req, res) => {  

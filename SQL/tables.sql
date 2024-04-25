@@ -10,10 +10,10 @@ GO
 CREATE TABLE [Ticket] (
   [TicketId] nvarchar(255) PRIMARY KEY,
   [UserId] nvarchar(255),
-  [ScheduleId] nvarchar(255),
   [SeatNo] int,
   [StartingStation] nvarchar(255),
-  [EndingStation] nvarchar(255)
+  [EndingStation] nvarchar(255),
+  [date] DATE
 )
 GO
 
@@ -177,4 +177,5 @@ select * from [Security]
 select * from [Tracks]
 select * from [Seat]
 select * from [Route]
+
 
