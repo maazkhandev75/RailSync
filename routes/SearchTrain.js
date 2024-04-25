@@ -37,19 +37,17 @@ module.exports = function(pool) {
       }
       else{
          TrainsWithStops=result.recordset;
-        console.log(TrainsWithStops);
+        console.log(result);
       }
       
-      for (let i = 0; i < Trains.length; i++) {
-        
-        for(let j=0;j<TrainsWithStops.length;j++){
-          if(Trains[i].TrainId==TrainsWithStops[j].TrainId){
-            delete TrainsWithStops[j];
-          }
-        }
-      }
-
-      res.render("TrainResult", { Trains,TrainsWithStops});
+      TrainsWithStops = TrainsWithStops.filter(train => !Trains.some(t => t.TrainId === train.TrainId));
+      if (TrainsWithStops.length > 0){
+       if( TrainsWithStops[0].DeptStation && TrainsWithStops[TrainsWithStops.length - 1].ArrivalStation) 
+        res.render("TrainResult", { Trains, TrainsWithStops });}
+     else {
+        TrainsWithStops = [];
+        res.render("TrainResult", { Trains, TrainsWithStops });
+    }
     })
   });
   return router;

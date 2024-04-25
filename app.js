@@ -151,11 +151,15 @@ app.get('/ds', (req, res) => {
 app.post('/bookTicketNonStop', (req, res) => {  
   console.log(req.body);
   const InputTrackId=req.body.TrackID;
+  var inputClassType=req.body.selectedClass;
+  if(req.body.selectedClass==="Economy") inputClassType="E";
+  else if(req.body.selectedClass==="Bussiness") inputClassType="B";
+  else if(req.body.selectedClass==="First Class") inputClassType="F";
+
   const request= new sql.Request(pool);
   request.input('TrainId',sql.NVarChar(30),req.body.selectedTrainID);
   request.input('TrackId',sql.NVarChar(30),req.body.TrackID);
-  const Class='E';
-  request.input('Class',sql.NVarChar(30),Class);
+  request.input('Class',sql.NVarChar(30),inputClassType);
   var TicketAvailInfo="";
   request.execute('BookTicket',(err,result)=>{
     if(err){
@@ -182,7 +186,7 @@ app.post('/bookTicketNonStop', (req, res) => {
           console.log(result2);
         }
         var TicketInfo=result2.recordset;
-        res.render('Ticket',{TicketInfo});
+        res.render('Ticket',{TicketInfo,inputClassType});
       });
     } 
   }
