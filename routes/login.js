@@ -17,6 +17,10 @@ module.exports = (pool) => {
 
       if (result.returnValue === 0) {
         // User account found, retrieve user details
+
+
+
+        
        const userDetails = {
           userId: result.recordset[0].ID,
           username: result.recordset[0].UserName,
