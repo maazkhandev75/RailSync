@@ -120,6 +120,8 @@ app.get('/loginForm',(req,res)=>{
   res.render('login.ejs');
 })
 
+
+
 app.get('/SearchTrainform', (req, res) => {
   pool.query('SELECT StationName FROM Station')
       .then(result => {
@@ -175,9 +177,10 @@ app.get('/ds', (req, res) => {
   res.render('./ADMIN/dashboard.ejs');
 });
 
-app.get('/userDash', (req, res) => {
-  res.render('./USER/dashboard.ejs');
-});
+app.get('/userDash',(req,res)=>{
+  const userData = req.session.userDetails;
+  res.render('./USER/dashboard',{userData});
+  })
 
 app.get('/stationData', (req, res) => {
   // Execute both queries concurrently
@@ -286,9 +289,6 @@ app.use(bodyParser.json());
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
-
-
 
 
 

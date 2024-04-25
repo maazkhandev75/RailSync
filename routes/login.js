@@ -18,9 +18,6 @@ module.exports = (pool) => {
       if (result.returnValue === 0) {
         // User account found, retrieve user details
 
-
-
-        
        const userDetails = {
           userId: result.recordset[0].ID,
           username: result.recordset[0].UserName,
@@ -32,6 +29,7 @@ module.exports = (pool) => {
 
          //pass success message obj to login.ejs to display success mesg on top
          res.render('login', { successMessage: 'User logged in successfully!' }); 
+         
         } 
       else {
         // User account not found, render the login form with an error message
