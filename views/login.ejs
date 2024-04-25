@@ -63,5 +63,17 @@
             </div>
         </div>
     </div>
+
+    <!-- Script to redirect to the dashboard only if the success message is present -->
+    <script>
+        // Check if the success message is present
+        <% if (typeof successMessage !== 'undefined') { %>  //if success msg appears only then redirect to dashbaord but after 2 sec delay so that msg can be read by client
+            // Redirect to the dashboard after 2 seconds
+            setTimeout(function() {
+                window.location.href = '/userDash';
+            }, 2000); // 2sec delay
+        <% } %>
+    </script>
+
 </body>
 </html>

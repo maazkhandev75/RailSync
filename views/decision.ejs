@@ -15,7 +15,16 @@
 <button id="login-btn" class="half-btn right-half">Log In</button>
 
 
-<script src="/javascripts/decision_script.js"></script>
+<script >
+	document.getElementById('signup-btn').addEventListener('click', function() {
+	window.location.href = '/signupForm';
+  });
+  
+  document.getElementById('login-btn').addEventListener('click', function() {
+	window.location.href = '/loginForm';
+  });
+
+</script>
 </body>
 
 </html>
