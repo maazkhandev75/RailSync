@@ -152,9 +152,10 @@ app.post('/bookTicketNonStop', (req, res) => {
         if(TicketAvailInfo.length!=0){
           const TicketInfoReq= new sql.Request(pool);
       TicketInfoReq.input('FoundCarriage',sql.NVarChar(30),TicketAvailInfo.CarriageId);
-      TicketInfoReq.input('TrainId',sql.NVarChar(30),TicketAvailInfo.TrainId);
+      TicketInfoReq.input('TrainId',sql.NVarChar(30),req.body.selectedTrainID);
       TicketInfoReq.input('FoundSeat',sql.Int,TicketAvailInfo.SeatNo);
       TicketInfoReq.input('TrackId',sql.NVarChar(30),InputTrackId);
+      console.log(InputTrackId);
       TicketInfoReq.execute('GetTicketInfo',(err,result2)=>{
         if(err){
           console.error(err);
@@ -164,7 +165,8 @@ app.post('/bookTicketNonStop', (req, res) => {
           console.log("seat details are: ");
           console.log(result2);
         }
-        res.render('Ticket');
+        var TicketInfo=result2.recordset;
+        res.render('Ticket',{TicketInfo});
       });
     } 
   }

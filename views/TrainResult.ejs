@@ -1,150 +1,12 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Available Trains</title>
-    <link rel="stylesheet" href="/stylesheets/admin_style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Style+Script&display=swap" rel="stylesheet">
-</head>
-<body>
-<div>
-    <h3 class="Heading">Available Trains </h3>
-    <label class="Heading" for="NonStopTrainsTable"> Non-Stop Trains </label>
-    <table class="table-body" id="NonStopTrainsTable">
-        <tr >
-            <div style="display: flex; align-content: space-between ;">
-
-                <th>TrainID</th>
-                <th>UpDownStatus</th>
-                <th>DeptStation</th>
-                <th>ArrivalStation</th>
-                <th>Dept Time</th>
-                <th>Arrival Time</th>
-            </div>
-            </tr>
-       
-            <% Trains.forEach((i)=>{ %>
-                <tr>
-            <td><%= i.TrainId %></td>
-            <%if(i.UPStatus==1){ %>
-                <td>Up</td>
-            <% }else {%>
-            <td>Down</td>
-            <% }%>
-            <td><%= i.DeptStation %></td>
-            <td><%= i.ArrivalStation %></td>
-            <td><%= i.Station2Id %></td>
-            <td><%= i.DeptTime %></td>
-            <td><%= i.ArrivalTime %></td>
-            <td>
-                <table>
-                    <tr>
-                    <td>Economy:</td>
-                    <td><%= i.Economy%></td>
-                </tr>
-                
-                <tr>
-                    <td>Bussiness:</td>
-                    <td><%= i.BusinessClass%></td>
-                </tr>
-                
-                <tr>
-                    <td>First Class:</td>
-                    <td><%=i.FirstClass%></td>
-                </tr>
-                
-            
-            </table>
-        </td>
-        <td>
-            <button class="searchbutton" onclick="bookTicket('<%= i.TrainID %>','0')" > Book Ticket</button>
-        </td>
-        </tr>
-        <% }); %>
-    </table>
-    <h3 class="Heading"> Trains with Stops </h3>
-    <table class="table-body">
-        <tr >
-            
-                <th>TrainID</th>
-                <th>UpDownStatus</th>
-                <th>DeptStation</th>
-                <th>ArrivalStation</th>
-                <th>Dept Time</th>
-                <th>Arrival Time</th>
-            </div>
-            </tr>
-        
-        <% TrainsWithStops.forEach((i)=>{ %>
-        
-            <tr>
-            <td><%= i.TrainId %></td>
-            <%if(i.UPStatus==1){ %>
-            <td>Up</td>
-            <% }else {%>
-            <td>Down</td>
-            <% }%>
-            <td><%= i.DeptStation %></td>
-            <td><%= i.ArrivalStation %></td>
-            <td><%= i.Station2Id %></td>
-            <td><%= i.DeptTime %></td>
-            <td><%= i.ArrivalTime %></td>
-            <td>
-            <table>
-                <tr>
-                    <td>Economy:</td>
-                    <td><%= i.Economy%></td>
-                </tr>
-            
-                <tr>
-                    <td>Bussiness:</td>
-                    <td><%= i.BusinessClass%></td>
-                </tr>
-
-                <tr>
-                    <td>First Class:</td>
-                    <td><%=i.FirstClass%></td>
-                </tr>
-
-            </table>
-        </td>
-        </tr>
-        <% }); %>
-    </table>
-    <button class="searchbutton" > Book Ticket</button>
-
-</div>
-    <script>
-        function bookTicket(bookTrainId,bookTrackId){
-                fetch('/bookTicketNonStop',{
-                    method:'POST',
-                    headers:{
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({TrainId:bookTrainId}),
-                })
-                .catch(err =>{console.log(err)});
-        }
-    </script>
-</body>
-</html> -->
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Available Trains</title>
-    <link rel="stylesheet" href="/stylesheets/admin_style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
@@ -156,39 +18,42 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Style+Script&display=swap" rel="stylesheet">
 </head>
 <body>
-<div>
-    <h3 class="Heading">Available Trains </h3>
-    <label class="Heading" for="NonStopTrainsTable">Non-Stop Trains</label>
+    <div class="container mt-5">
+    <h3 class="mb-4">Available Trains </h3>
     <form action="/bookTicketNonStop"  method="POST" id="NonStopTrainForm">
-    <table class="table-body" id="NonStopTrainsTable">
+        <table class="table table-dark table table-bordered table-hover"  id="NonStopTrainsTable">
+        <caption>Non-Stop Trains</caption>
         
-        <tr>
+        <thead class=" table-dark">
+            <th>#</th>
             <th>TrainID</th>
-            <th>UpDownStatus</th>
-                <th>DeptStation</th>
-                <th>ArrivalStation</th>
+            <th>UpDown Status</th>
+                <th>Dept Station</th>
+                <th>Arrival Station</th>
                 <th>Dept Time</th>
             <th>Arrival Time</th>
-            <th>Actions</th>
-        </tr>
+            <th>Ticket Type</th>
+        </thead>
         
         <% Trains.forEach((i) => { %>
             <tr>
-              <td>  <input type="radio" name="selectedTrainID" value="<%= i.TrainId %>"> </td>
-                <input type="hidden" name="TrackID" value="<%= i.TrackId %>">
+              <td>  <input class="form-check-input" type="radio" name="selectedTrainID" value="<%= i.TrainId %>"> </td>
+                <input  type="hidden" name="TrackID" value="<%= i.TrackId %>">
                 <td><%= i.TrainId %></td>
                 <% if(i.UPStatus == 1) { %>
                     <td>Up</td>
                 <% } else { %>
                     <td>Down</td>
-                    <% } %> 
-                    <td><%= i.DeptStation %></td>
+                    <% } %>  
+
+                    
+                    <td ><%= i.DeptStation %></td>
                     <td><%= i.ArrivalStation %></td>
-                <td><%= i.Station2Id %></td>
                 <td><%= i.DeptTime %></td>
                 <td><%= i.ArrivalTime %></td>
                 <td>
-                    <table>
+                    
+                    <table> 
                         <tr>
                             <td>Economy:</td>
                             <td><%= i.Economy%></td>
@@ -211,9 +76,9 @@
             
         </table>
     </form>
-    <button class="searchbutton" onclick="bookTicket()"> Book Ticket</button>
+    <button class="btn btn-primary" onclick="bookTicket()"> Book Ticket</button>
     <h3 class="Heading">Trains with Stops</h3>
-    <table class="table-body">
+    <table  class="table table-dark table table-bordered table-hover " >
         <tr>
             <th>TrainID</th>
             <th>UpDownStatus</th>
@@ -221,6 +86,8 @@
             <th>ArrivalStation</th>
             <th>Dept Time</th>
             <th>Arrival Time</th>
+            <th>Ticket Type</th>
+
         </tr>
         
         <% TrainsWithStops.forEach((i) => { %>
@@ -233,12 +100,33 @@
                 <% } %>
                 <td><%= i.DeptStation %></td>
                 <td><%= i.ArrivalStation %></td>
-                <td><%= i.Station2Id %></td>
                 <td><%= i.DeptTime %></td>
                 <td><%= i.ArrivalTime %></td>
+                <td>
+                    
+                    <table> 
+                        <tr>
+                            <td>Economy:</td>
+                            <td><%= i.Economy%></td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Bussiness:</td>
+                            <td><%= i.BusinessClass%></td>
+                        </tr>
+        
+                        <tr>
+                            <td>First Class:</td>
+                            <td><%=i.FirstClass%></td>
+                        </tr>
+        
+                    </table>
+                </td>
             </tr>
         <% }); %>
     </table>
+    <button class="btn btn-primary">Bookk Ticket</button>
+
 </div>
 
 <script>
