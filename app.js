@@ -282,6 +282,14 @@ app.use(bodyParser.json());
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+
+
+
+
+
+
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
@@ -292,12 +300,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-
-
-
-
-
 
 // Export the app and pool objects
 module.exports = { app, pool };
