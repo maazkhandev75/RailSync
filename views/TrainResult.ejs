@@ -76,7 +76,17 @@
             
         </table>
     </form>
+    <div class="col-sm-10">
+        <select class="form-select" id="NonStopsClass" name="selectedClass">
+            <option>Economy</option>
+            <option>Bussiness</option>
+            <option>First Class</option>
+        </select>
+    </div>
     <button class="btn btn-primary" onclick="bookTicket()"> Book Ticket</button>
+
+
+
     <h3 class="Heading">Trains with Stops</h3>
     <table  class="table table-dark table table-bordered table-hover " >
         <tr>
@@ -125,13 +135,21 @@
             </tr>
         <% }); %>
     </table>
+    <select class="form-select" id="StopsClass" name="selectedClass">
+        <option>Economy</option>
+        <option>Bussiness</option>
+        <option>First Class</option>
+    </select>
     <button class="btn btn-primary">Bookk Ticket</button>
 
 </div>
 
 <script>
     function bookTicket() {
-        document.getElementById('NonStopTrainForm').submit();
+        var NonStopForm=document.getElementById('NonStopTrainForm');
+        const selectedClass=document.getElementById("NonStopsClass");
+        NonStopForm.appendChild(selectedClass);
+        NonStopForm.submit();
           }
 </script>
 

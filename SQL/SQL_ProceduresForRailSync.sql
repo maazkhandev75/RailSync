@@ -129,6 +129,14 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
+USE [afaqkhaliq_SampleDB]
+GO
+/****** Object:  StoredProcedure [dbo].[SearchTrainWithStops]    Script Date: 25-04-2024 03:01:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
 ALTER procedure [dbo].[SearchTrainWithStops] @Search_from_Station nvarchar(30),@Search_to_Station nvarchar(30), @SearchDate datetime
 
 as
@@ -172,6 +180,18 @@ WITH  TrainRoute AS (
         Tr.Station1Id <> (SELECT StationId FROM Station WHERE StationName = @Search_to_Station)
 )
 -- Select the final train route
+select T.TrainId,T.UpDownStatus as UPStatus ,CTEtable.TrackId as TrackId,(select StationName from Station where StationId=fromStation) as DeptStation,((select StationName from Station where StationId=toStation)) as ArrivalStation,DeptTime,ArrivalTime,Economy,BusinessClass,FirstClass
+FROM TrainRoute as CTEtable
+join [Train] as T on T.TrainId=CTEtable.TrainId
+join [Route] as R
+on R.TrainId=CTEtable.TrainId
+join Fare as F on F.TrackId=CTEtable.TrackId
+AND CONVERT(date, R.ArrivalTime) = CONVERT(date, @SearchDate)
+
+
+
+[SearchTrainWithStops]  'Karachi','Islamabad','2024-04-16'
+-- Select the final train route
 select T.TrainId,T.UpDownStatus as UPStatus ,fromStation as DeptStation,toStation as ArrivalStation,DeptTime,ArrivalTime,Economy,BusinessClass,FirstClass
 FROM TrainRoute as CTEtable
 join [Train] as T on T.TrainId=CTEtable.TrainId
@@ -195,11 +215,14 @@ where Tr.Station1Id=(select StationId from Station where StationName=@fromStatio
 and Tr.Station2Id=(select StationId from Station where StationName=@toStation )
 AND CONVERT(date, R.ArrivalTime) = CONVERT(date, @SearchDate)
 -------------------Proceduure to getdetails about seats-----------------------------
-alter Procedure GetTicketInfo @FoundCarriage nvarchar(30), @FoundSeat  int, @TrainId nvarchar(30), @TrackId nvarchar(30) as
-select @FoundCarriage as CarriageID,@FoundSeat as SeatNo,@TrainId as TrainId, t.Station1Id as DeptStaion, t.Station2Id as ArrivalStation, r.ArrivalTime, r.DeptTime
+ALTER Procedure [dbo].[GetTicketInfo] @FoundCarriage nvarchar(30), @FoundSeat  int, @TrainId nvarchar(30), @TrackId nvarchar(30)
+as
+select @FoundCarriage as CarriageID,@FoundSeat as SeatNo,@TrainId as TrainId, t.Station1Id as DeptStaion, t.Station2Id as ArrivalStation, r.ArrivalTime, r.DeptTime,F.Economy,F.BusinessClass,F.FirstClass
 from Tracks as t
 join [Route] as r on r.TrackId=@TrackId and r.TrainId=@TrainId
+join Fare as F on F.TrackId=@TrackId
 where t.TrackId=@TrackId
+
 ---------------procdure to search fot available trains----------------------------------
 alter PROCEDURE [dbo].[BookTicket] @TrainId nvarchar(30), @TrackId nvarchar(30), @Class nvarchar(30)
 as

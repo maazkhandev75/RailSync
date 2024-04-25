@@ -40,6 +40,38 @@ module.exports = function(pool) {
   });
 
 
+  router.delete('/deleteSeat', (req, res) => {
+    const { carriageID, trainID, seatNo } = req.query;
+
+    // Perform deletion operation in the database using carriageID, trainID, and seatNo
+    // Replace this with your database deletion logic
+
+    // Respond with success or failure
+    res.sendStatus(200); // Success
+    // res.sendStatus(500); // Failure
+});
+router.delete('/deleteTrain', (req, res) => {
+    const TrainID = req.query;
+
+    // Perform deletion operation in the database using carriageID, trainID, and seatNo
+    // Replace this with your database deletion logic
+    
+    // Respond with success or failure
+    res.sendStatus(200); // Success
+    // res.sendStatus(500); // Failure
+});
+router.delete('/deleteCarriage', (req, res) => {
+    const CarriageID    = req.query;
+
+    // Perform deletion operation in the database using carriageID, trainID, and seatNo
+    // Replace this with your database deletion logic
+    
+    // Respond with success or failure
+    res.sendStatus(200); // Success
+    // res.sendStatus(500); // Failure
+});
+
+
 
     return router;
 };

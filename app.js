@@ -148,19 +148,24 @@ app.get('/userDash',(req,res)=>{
   })
 
 app.get('/stationData', (req, res) => {
-  // Execute both queries concurrently
+  const requestStation = new sql.Request(pool);
+  const requestTrack = new sql.Request(pool);
+
+  // Execute both queries asynchronously
   Promise.all([
-      pool.query('SELECT * FROM Station'),
-      pool.query('SELECT * FROM Tracks')
+    requestStation.query('SELECT * FROM Station'),
+    requestTrack.query('SELECT * FROM Tracks')
   ])
-  .then(([stationResult, tracksResult]) => {
-      const stations = stationResult.recordset;
-      const tracks = tracksResult.recordset;
-      res.render("./ADMIN/stationData.ejs", { stations, tracks });
+  .then(results => {
+    const Station = results[0].recordset;
+    const Track = results[1].recordset;
+    console.log(Station);
+    console.log(Track);
+    res.render('./ADMIN/stationData.ejs', { Station:Station, Track:Track });
   })
   .catch(err => {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+    console.error(err);
+    res.status(500).send('Internal Server Error');
   });
 });
 app.get('/staffdata', (req, res) => {
@@ -183,19 +188,34 @@ app.get('/staffdata', (req, res) => {
 });
 
 
+app.get('/form', (req, res) => {
+  res.render('./ADMIN/form.ejs');
+});
+
 app.get('/staffData', (req, res) => {
   res.render('./ADMIN/staffData.ejs');
 });
 
+app.get('/addTrain', (req, res) => {
+  res.render('./ADMIN/trainForm.ejs');
+});
+
+app.get('/addTrain', (req, res) => {
+  res.render('./ADMIN/trainForm.ejs');
+});
 
 app.post('/bookTicketNonStop', (req, res) => {  
   console.log(req.body);
   const InputTrackId=req.body.TrackID;
+  var inputClassType=req.body.selectedClass;
+  if(req.body.selectedClass==="Economy") inputClassType="E";
+  else if(req.body.selectedClass==="Bussiness") inputClassType="B";
+  else if(req.body.selectedClass==="First Class") inputClassType="F";
+
   const request= new sql.Request(pool);
   request.input('TrainId',sql.NVarChar(30),req.body.selectedTrainID);
   request.input('TrackId',sql.NVarChar(30),req.body.TrackID);
-  const Class='E';
-  request.input('Class',sql.NVarChar(30),Class);
+  request.input('Class',sql.NVarChar(30),inputClassType);
   var TicketAvailInfo="";
   request.execute('BookTicket',(err,result)=>{
     if(err){
@@ -224,7 +244,7 @@ app.post('/bookTicketNonStop', (req, res) => {
         }
 
         var TicketInfo=result2.recordset;
-        res.render('Ticket',{TicketInfo});
+        res.render('Ticket',{TicketInfo,inputClassType});
       });
     } 
   }

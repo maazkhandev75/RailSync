@@ -117,8 +117,10 @@
                                 <td><%= i.StationName %></td>
                                 <td><%= i.Address %></td>
                                 <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
+                                    <td>
+                                        <button class="edit-btn" onclick="redirectToEditPage('<%= i.StationId %>')">Edit</button>
+                                        <button class="delete-btn" onclick="deleteRow('<%= i.StationId %>')">Delete</button>
+                                    </td>
                                 </td>
                             </tr>
                             <% }); %>
@@ -143,14 +145,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% Tracks.forEach((i)=>{ %>
+                        <% Track.forEach((i)=>{ %>
                             <tr>
-                                <td><%= i.StationId %></td>
+                                <td><%= i.TrackId %></td>
                                 <td><%= i.Station1Id %></td>
                                 <td><%= i.Station2Id %></td>
                                 <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
+                                    <td>
+                                        <button class="edit-btn" onclick="redirectToEditPage('<%= i.TrackId %>')">Edit</button>
+                                        <button class="delete-btn" onclick="deleteRow('<%= i.TrackId %>')">Delete</button>
+                                    </td>
                                 </td>
                             </tr>
                             <% }); %>
