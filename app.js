@@ -187,18 +187,22 @@ app.get('/stationData', (req, res) => {
 app.get('/staffdata', (req, res) => {
   
   Promise.all([
-      pool.query('SELECT * FROM Crew')
-      
-  ])
-  .then(([CrewResult]) => {
+      pool.query('SELECT * FROM Crew'),
+      pool.query('SELECT * FROM Pilot'),
+      pool.query('SELECT * FROM Security')
+    ])
+  .then(([CrewResult,PilotResult,SecurityResult]) => {
       const Crew = CrewResult.recordset;
-      res.render("./ADMIN/staffData.ejs", { Crew });
+      const Pilot = PilotResult.recordset;
+      const Security=SecurityResult.recordset;
+      res.render("./ADMIN/staffData.ejs", { Crew,Pilot,Security });
   })
   .catch(err => {
       console.error(err);
       res.status(500).send('Internal Server Error');
   });
 });
+
 
 app.get('/staffData', (req, res) => {
   res.render('./ADMIN/staffData.ejs');
