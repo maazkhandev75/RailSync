@@ -132,6 +132,7 @@ app.get('/admin', (req, res) => {
       });
 });
 
+/////////////ADMIN///////////////////////////////////////////////
 app.get('/trainData', (req, res) => {
   pool.query('SELECT * FROM Train')
       .then(result => {
@@ -148,6 +149,23 @@ app.get('/ds', (req, res) => {
   res.render('./ADMIN/dashboard');
 });
 
+app.get('/stationData', (req, res) => {
+  // Execute both queries concurrently
+  Promise.all([
+      pool.query('SELECT * FROM Station'),
+      pool.query('SELECT * FROM Tracks')
+  ])
+  .then(([stationResult, tracksResult]) => {
+      const stations = stationResult.recordset;
+      const tracks = tracksResult.recordset;
+      res.render("./ADMIN/stationData.ejs", { stations, tracks });
+  })
+  .catch(err => {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  });
+});
+//////////////ADMIN END///////////////////////////////////
 app.post('/bookTicketNonStop', (req, res) => {  
   console.log(req.body);
   const InputTrackId=req.body.TrackID;

@@ -12,3 +12,12 @@ END;
 
 
 EXEC SearchForCarriage @ID='101';
+
+CREATE PROCEDURE SearchForSeats
+    @CARRIAGEID nvarchar(255)
+AS
+BEGIN
+    Select * from [Seat] where CarriageID=@CARRIAGEID
+END;
+
+EXEC SearchForSeats @CARRIAGEID='202'
