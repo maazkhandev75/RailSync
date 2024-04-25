@@ -161,31 +161,6 @@
                 </table>
             </div>
 
-            <div class="container">
-                <h2>Carriage Data</h2>
-                <div class="table-header">
-                    <input type="text" id="searchSeat" placeholder="Search By CarriageID...">
-                    <button id="searchSeatButton" class="search-btn">Search</button>
-                </div>
-                <table id="Seats">
-                    <thead>
-                        <tr>
-                            <th>CarriageID</th>
-                            <th>TrainID</th>
-                            <th>SeatNo</th>
-                            <th>BookingStatus</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr></tr>
-
-
-                        <!-- More rows here -->
-                    </tbody>
-                </table>
-            </div>
-
         </section>
     </main>
   <%- include('./partials/footer.ejs') %>
@@ -232,7 +207,7 @@ document.getElementById('searchCarriageButton').addEventListener('click', functi
         return;
     console.log(searchTerm);
     // You can also send the search term to your server for further processing if needed
-    fetch('/TD/searchCarriage', {
+    fetch('/TD', {
       method: 'POST',
       body: JSON.stringify({ searchTerm: searchTerm }),
         headers: {
@@ -242,65 +217,6 @@ document.getElementById('searchCarriageButton').addEventListener('click', functi
     .then(response => response.json())
     .then(data => {
        updateTable(data);
-
-    })
-    .catch(error => {
-        console.log('gg');
-      console.error('Error:', error);
-    });
-  });
-
-
-  function updateSeatTable(data)
-  {
-    const table = document.getElementById('Seats');
-    table.innerHTML = `
-        <tr>
-            <th>CarriageID</th>
-            <th>TrainID</th>
-            <th>SeatNo</th>
-            <th>BookingStatus</th>
-            <th>Actions</th>
-        </tr>
-    `;
-    // Loop through the received data and append rows to the table
-    if (Array.isArray(data.Seat)) {
-        data.Seat.forEach(entry => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${entry.CarriageID}</td>
-                <td>${entry.TrainID}</td>
-                <td>${entry.SeatNo}</td>
-                <td>${entry.BookingStatus}</td>
-                <td>
-                    <button class="edit-btn">Edit</button>
-                    <button class="delete-btn">Delete</button>
-                </td>
-            `;
-            table.appendChild(row);
-        });
-    } else {
-        console.error('Unexpected data format:', data);
-    }
-  }
-
-  document.getElementById('searchSeatButton').addEventListener('click', function() {
-    // Retrieve the value entered in the search input field
-    const searchTerm = document.getElementById('searchSeat').value;
-    if(searchTerm ==null)
-        return;
-    console.log(searchTerm);
-    // You can also send the search term to your server for further processing if needed
-    fetch('/TD/SearchSeat', {
-      method: 'POST',
-      body: JSON.stringify({ searchTerm: searchTerm }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-       updateSeatTable(data);
 
     })
     .catch(error => {

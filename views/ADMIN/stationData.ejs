@@ -86,7 +86,7 @@
     <main id="main" class="main">
 
         <div class="pagetitle">
-        <h1>Train Meta Data</h1>
+        <h1>Station Meta Data</h1>
         <nav>
             <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="DS">Home</a></li>
@@ -100,28 +100,22 @@
 
 
                 <div class="container">
-                <h2>Train Data</h2>
+                <h2>Station Data</h2>
                 <table>
                     <thead>
                         <tr>
-                            <th>TrainID</th>
-                            <th>UpDownStatus</th>
-                            <th>DeptStation</th>
-                            <th>ArrivalStation</th>
+                            <th>StationID</th>
+                            <th>StationName</th>
+                            <th>Address</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <% Trains.forEach((i)=>{ %>
+                        <% Station.forEach((i)=>{ %>
                             <tr>
-                                <td><%= i.TrainId %></td>
-                                <%if(i.UPStatus==1){ %>
-                                <td>Up</td>
-                                <% }else {%>
-                                <td>Down</td>
-                                <% }%>
-                                <td><%= i.DeptStation %></td>
-                                <td><%= i.ArrivalStation %></td>
+                                <td><%= i.StationId %></td>
+                                <td><%= i.StationName %></td>
+                                <td><%= i.Address %></td>
                                 <td>
                                     <button class="edit-btn">Edit</button>
                                     <button class="delete-btn">Delete</button>
@@ -138,22 +132,28 @@
 
 
             <div class="container">
-                <h2>Carriage Data</h2>
-                <div class="table-header">
-                    <input type="text" id="searchCarriage" placeholder="Search By TrainID...">
-                    <button id="searchCarriageButton" class="search-btn">Search</button>
-                </div>
-                <table id="seatTable">
+                <h2>Track Data</h2>
+                <table>
                     <thead>
                         <tr>
-                            <th>CarriageID</th>
-                            <th>TrainID</th>
-                            <th>Type</th>
+                            <th>TrackID</th>
+                            <th>StationID</th>
+                            <th>StationID</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr></tr>
+                        <% Tracks.forEach((i)=>{ %>
+                            <tr>
+                                <td><%= i.StationId %></td>
+                                <td><%= i.Station1Id %></td>
+                                <td><%= i.Station2Id %></td>
+                                <td>
+                                    <button class="edit-btn">Edit</button>
+                                    <button class="delete-btn">Delete</button>
+                                </td>
+                            </tr>
+                            <% }); %>
 
 
                         <!-- More rows here -->
@@ -161,30 +161,8 @@
                 </table>
             </div>
 
-            <div class="container">
-                <h2>Carriage Data</h2>
-                <div class="table-header">
-                    <input type="text" id="searchSeat" placeholder="Search By CarriageID...">
-                    <button id="searchSeatButton" class="search-btn">Search</button>
-                </div>
-                <table id="Seats">
-                    <thead>
-                        <tr>
-                            <th>CarriageID</th>
-                            <th>TrainID</th>
-                            <th>SeatNo</th>
-                            <th>BookingStatus</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr></tr>
 
 
-                        <!-- More rows here -->
-                    </tbody>
-                </table>
-            </div>
 
         </section>
     </main>

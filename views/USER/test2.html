@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Add custom CSS styles here */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Train Data</h2>
+        <!-- Train Table -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Train Table</h5>
+                <table class="table table-bordered">
+                    <!-- Table header -->
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Age</th>
+                            <th>Start Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <!-- Table body -->
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Brandon Jacob</td>
+                            <td>Designer</td>
+                            <td>28</td>
+                            <td>2016-05-25</td>
+                            <td>
+                                <!-- Edit button opens modal -->
+                                <button type="button" class="btn btn-primary btn-sm edit-btn" data-toggle="modal" data-target="#editModal">Edit</button>
+                                <!-- Delete button (replace with actual delete functionality) -->
+                                <button type="button" class="btn btn-danger btn-sm delete-btn">Delete</button>
+                            </td>
+                        </tr>
+                        <!-- Add more table rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- End Train Table -->
+
+        <!-- Carriage Table -->
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">Carriage Table</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <!-- Table header -->
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Type</th>
+                                <th>Capacity</th>
+                            </tr>
+                        </thead>
+                        <!-- Table body -->
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Standard</td>
+                                <td>50</td>
+                            </tr>
+                            <!-- Add more table rows as needed -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- End Carriage Table -->
+
+        <!-- Seat Table -->
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">Seat Table</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <!-- Table header -->
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Number</th>
+                                <th>Carriage</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <!-- Table body -->
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>1A</td>
+                                <td>1</td>
+                                <td>Available</td>
+                            </tr>
+                            <!-- Add more table rows as needed -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- End Seat Table -->
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Train Data</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Edit form goes here -->
+                    <form id="editForm">
+                        <!-- Form fields for editing -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" form="editForm" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Edit Modal -->
+
+    <!-- Bootstrap JS (optional, for modal functionality) -->
+    <script src="https
