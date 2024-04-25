@@ -205,8 +205,10 @@ app.get('/staffdata', (req, res) => {
   });
 });
 
-app.get('/staffData', (req, res) => {
-  res.render('./ADMIN/staffData.ejs');
+
+
+app.get('/form', (req, res) => {
+  res.render('./ADMIN/form.ejs');
 });
 
 //////////////ADMIN END///////////////////////////////////

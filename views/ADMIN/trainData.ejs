@@ -113,7 +113,7 @@
                     </thead>
                     <tbody>
                         <% Trains.forEach((i)=>{ %>
-                            <tr>
+                            <tr data-train-id="<%= i.TrainId %>">
                                 <td><%= i.TrainId %></td>
                                 <%if(i.UPStatus==1){ %>
                                 <td>Up</td>
@@ -123,8 +123,8 @@
                                 <td><%= i.DeptStation %></td>
                                 <td><%= i.ArrivalStation %></td>
                                 <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
+                                    <button class="edit-btn" onclick="editTrain('<%= i.TrainId %>')">Edit</button>
+                                    <button class="delete-btn" onclick="deleteTrain('<%= i.TrainId %>')">Delete</button>
                                 </td>
                             </tr>
                             <% }); %>
@@ -208,13 +208,14 @@ function updateTable(data) {
     if (Array.isArray(data.Carriage)) {
         data.Carriage.forEach(entry => {
             const row = document.createElement('tr');
+            row.setAttribute('data-carriage-id', entry.CarriageId);
             row.innerHTML = `
                 <td>${entry.CarriageId}</td>
                 <td>${entry.TrainId}</td>
                 <td>${entry.Type}</td>
                 <td>
-                    <button class="edit-btn">Edit</button>
-                    <button class="delete-btn">Delete</button>
+                <button class="edit-btn" onclick="editCarriage('${entry.CarriageId}')">Edit</button>
+                <button class="delete-btn" onclick="deleteCarriage('${entry.CarriageId}')">Delete</button>
                 </td>
             `;
             table.appendChild(row);
@@ -267,14 +268,18 @@ document.getElementById('searchCarriageButton').addEventListener('click', functi
     if (Array.isArray(data.Seat)) {
         data.Seat.forEach(entry => {
             const row = document.createElement('tr');
+            row.setAttribute('data-carriage-id', entry.CarriageID);
+            row.setAttribute('data-train-id', entry.TrainID);
+            row.setAttribute('data-seat-no', entry.SeatNo);
             row.innerHTML = `
                 <td>${entry.CarriageID}</td>
                 <td>${entry.TrainID}</td>
                 <td>${entry.SeatNo}</td>
                 <td>${entry.BookingStatus}</td>
                 <td>
-                    <button class="edit-btn">Edit</button>
-                    <button class="delete-btn">Delete</button>
+                <button class="edit-btn" onclick="editSeat('${entry.CarriageID}', '${entry.TrainID}', '${entry.SeatNo}')">Edit</button>
+                <button class="delete-btn" onclick="deleteSeat('${entry.CarriageID}', '${entry.TrainID}', '${entry.SeatNo}')">Delete</button>
+            </td>
                 </td>
             `;
             table.appendChild(row);
@@ -308,5 +313,117 @@ document.getElementById('searchCarriageButton').addEventListener('click', functi
       console.error('Error:', error);
     });
   });
+
+
+  function editSeat(carriageID, trainID, seatNo) {
+    window.location.href = `/editSeat?carriageID=${carriageID}&trainID=${trainID}&seatNo=${seatNo}`;
+}
+
+function deleteSeat(carriageID, trainID, seatNo) {
+    // Confirm deletion
+    if (confirm('Are you sure you want to delete this seat?')) {
+        // Send a request to delete the seat
+        fetch(`/TD/deleteSeat?carriageID=${carriageID}&trainID=${trainID}&seatNo=${seatNo}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                // Seat deleted successfully, remove the corresponding row from the table
+                const rowToDelete = document.querySelector(`tr[data-carriage-id="${carriageID}"][data-train-id="${trainID}"][data-seat-no="${seatNo}"]`);
+                if (rowToDelete) {
+                    rowToDelete.remove();
+                } else {
+                    console.error('Failed to find row to delete');
+                }
+            } else {
+               
+                console.error('Failed to delete seat');
+                alert('Failed to delete seat. Please try again later.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again later.');
+        });
+    }
+}
+
+
+function editTrain(TrainId) {
+    window.location.href = `/editTrain?TrainID=${TrainId}`;
+}
+
+function deleteTrain(TrainId) {
+    // Confirm deletion
+
+    if (confirm('Are you sure you want to delete this seat?')) {
+        // Find the row containing the delete button
+        const row = document.querySelector(`tr[data-train-id="${TrainId}"]`);
+ 
+        if (row) {
+
+
+            // Send a request to delete the seat
+            fetch(`/TD/deleteTrain?TrainID=${TrainId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Seat deleted successfully, remove the corresponding row from the table
+                    row.remove();
+                } else {
+                    console.error('Failed to delete seat');
+                    alert('Failed to delete seat. Please try again later.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            });
+        } else {
+            console.error('Failed to find row containing delete button');
+            alert('Failed to find row containing delete button. Please refresh the page and try again.');
+        }
+    }
+}
+
+
+function editCarriage(CarriageID) {
+    window.location.href = `/editTrain?carriageID=${carriageID}`;
+}
+
+function deleteCarriage(CarriageID) {
+    // Confirm deletion
+    if (confirm('Are you sure you want to delete this seat?')) {
+        // Find the row containing the delete button
+        const row = document.querySelector(`tr[data-carriage-id="${CarriageID}"]`);
+        if (row) {
+
+
+            // Send a request to delete the seat
+            fetch(`/TD/deleteCarriage?carriageID=${CarriageID}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Seat deleted successfully, remove the corresponding row from the table
+                    row.remove();
+                } else {
+                    console.error('Failed to delete seat');
+                    alert('Failed to delete seat. Please try again later.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            });
+        } else {
+            console.error('Failed to find row containing delete button');
+            alert('Failed to find row containing delete button. Please refresh the page and try again.');
+        }
+    }
+}
+
+
 </script>
 </html>
