@@ -19,6 +19,8 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const SearchTrainRouter = require('./routes/SearchTrain');
 const SearchCarriage = require('./routes/TD');
+//const bookedTicketsRouter = require('./routes/bookedTickets');
+
 const { Console } = require('console');
 
 //configuring a connection pool for MSSQL using the mssql module and connecting to the database
@@ -144,8 +146,25 @@ app.get('/trainData', (req, res) => {
       });
 });
 
+app.get('/ticketsData', (req, res) => {
+  pool.query('SELECT * FROM Ticket ')
+      .then(result => {
+          const Tickets = result.recordset;
+          res.render("./ADMIN/ticketsData.ejs", { Tickets });
+      })
+      .catch(err => {
+          console.error(err);
+          res.status(500).send('Internal Server Error');
+      });
+});
+
+
 app.get('/ds', (req, res) => {
-  res.render('./ADMIN/dashboard');
+  res.render('./ADMIN/dashboard.ejs');
+});
+
+app.get('/userDash', (req, res) => {
+  res.render('./USER/dashboard.ejs');
 });
 
 app.post('/bookTicketNonStop', (req, res) => {  
@@ -167,11 +186,11 @@ app.post('/bookTicketNonStop', (req, res) => {
         console.log(TicketAvailInfo);
         if(TicketAvailInfo.length!=0){
           const TicketInfoReq= new sql.Request(pool);
-      TicketInfoReq.input('FoundCarriage',sql.NVarChar(30),TicketAvailInfo.CarriageId);
-      TicketInfoReq.input('TrainId',sql.NVarChar(30),TicketAvailInfo.TrainId);
-      TicketInfoReq.input('FoundSeat',sql.Int,TicketAvailInfo.SeatNo);
-      TicketInfoReq.input('TrackId',sql.NVarChar(30),InputTrackId);
-      TicketInfoReq.execute('GetTicketInfo',(err,result2)=>{
+        TicketInfoReq.input('FoundCarriage',sql.NVarChar(30),TicketAvailInfo.CarriageId);
+        TicketInfoReq.input('TrainId',sql.NVarChar(30),TicketAvailInfo.TrainId);
+        TicketInfoReq.input('FoundSeat',sql.Int,TicketAvailInfo.SeatNo);
+        TicketInfoReq.input('TrackId',sql.NVarChar(30),InputTrackId);
+        TicketInfoReq.execute('GetTicketInfo',(err,result2)=>{
         if(err){
           console.error(err);
           res.status(500).send('Internel Server Error');
@@ -180,7 +199,7 @@ app.post('/bookTicketNonStop', (req, res) => {
           console.log("seat details are: ");
           console.log(result2);
         }
-        res.render('Ticket');
+        res.render('Ticket.ejs');
       });
     } 
   }
@@ -194,19 +213,16 @@ app.use('/signup', signupRouter(pool));   // Pass pool object to signupRouter
 app.use('/login', loginRouter(pool));     // Pass pool object to loginRouter
 app.use('/SearchTrain', SearchTrainRouter(pool));
 app.use('/TD',SearchCarriage(pool));
+//app.use('/bookedTickets',bookedTicketsRouter(pool));
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
 
 // Configure middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-
-
-
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+});
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
