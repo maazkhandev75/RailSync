@@ -86,7 +86,7 @@
     <main id="main" class="main">
 
         <div class="pagetitle">
-        <h1>Staff Data</h1>
+        <h1>Staff Members Data</h1>
         <nav>
             <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="DS">Home</a></li>
@@ -100,7 +100,7 @@
 
 
                 <div class="container">
-                <h2>Staff Data</h2>
+                <h2>Crew Data</h2>
                 <table>
                     <thead>
                         <tr>
@@ -128,6 +128,58 @@
                 </table>
             </div>
 
+            <div class="container">
+                <h2>Pilot Data</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>CrewId</th>
+                            <th>TrainId</th>
+                           <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% Pilot.forEach((i)=>{ %>
+                            <tr>
+                                <td><%= i.CrewId %></td>
+                                <td><%= i.TrainId %></td>
+                              
+                            </tr>
+                            <% }); %>
+
+
+                        <!-- More rows here -->
+                    </tbody>
+                </table>
+            </div>
+
+
+        
+            <div class="container">
+                <h2>Security Data</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>CrewId</th>
+                            <th>StationId</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% Security.forEach((i)=>{ %>
+                            <tr>
+                                <td><%= i.CrewId %></td>
+                                <td><%= i.StationId %></td>
+                               
+                               
+                            </tr>
+                            <% }); %>
+
+
+                        <!-- More rows here -->
+                    </tbody>
+                </table>
+            </div>
 
 
           

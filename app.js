@@ -2,6 +2,7 @@
 const createError = require('http-errors');
 const bodyParser = require('body-parser');
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -12,6 +13,14 @@ const fs = require('fs');
 const app = express();
 const port=4000;   //our port
 
+// Configure session middleware
+app.use(session({
+  secret: '053eb1bb21545cd881a8e15b6fab7e58be948187fddd5babd64dd2c5e77614b7',
+  resave: false,
+  saveUninitialized: false
+}));
+
+
 //importing routers
 const signupRouter = require('./routes/signup')
 const loginRouter = require('./routes/login')
@@ -19,6 +28,8 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const SearchTrainRouter = require('./routes/SearchTrain');
 const SearchCarriage = require('./routes/TD');
+const sessionRouter = require('./routes/testSession');
+
 //const bookedTicketsRouter = require('./routes/bookedTickets');
 
 const { Console } = require('console');
@@ -109,6 +120,8 @@ app.get('/loginForm',(req,res)=>{
   res.render('login.ejs');
 })
 
+
+
 app.get('/SearchTrainform', (req, res) => {
   pool.query('SELECT StationName FROM Station')
       .then(result => {
@@ -164,9 +177,10 @@ app.get('/ds', (req, res) => {
   res.render('./ADMIN/dashboard.ejs');
 });
 
-app.get('/userDash', (req, res) => {
-  res.render('./USER/dashboard.ejs');
-});
+app.get('/userDash',(req,res)=>{
+  const userData = req.session.userDetails;
+  res.render('./USER/dashboard',{userData});
+  })
 
 app.get('/stationData', (req, res) => {
   const requestStation = new sql.Request(pool);
@@ -192,12 +206,15 @@ app.get('/stationData', (req, res) => {
 app.get('/staffdata', (req, res) => {
   
   Promise.all([
-      pool.query('SELECT * FROM Crew')
-      
-  ])
-  .then(([CrewResult]) => {
+      pool.query('SELECT * FROM Crew'),
+      pool.query('SELECT * FROM Pilot'),
+      pool.query('SELECT * FROM Security')
+    ])
+  .then(([CrewResult,PilotResult,SecurityResult]) => {
       const Crew = CrewResult.recordset;
-      res.render("./ADMIN/staffData.ejs", { Crew });
+      const Pilot = PilotResult.recordset;
+      const Security=SecurityResult.recordset;
+      res.render("./ADMIN/staffData.ejs", { Crew,Pilot,Security });
   })
   .catch(err => {
       console.error(err);
@@ -206,20 +223,27 @@ app.get('/staffdata', (req, res) => {
 });
 
 
-
 app.get('/form', (req, res) => {
   res.render('./ADMIN/form.ejs');
+});
+
+app.get('/staffData', (req, res) => {
+  res.render('./ADMIN/staffData.ejs');
 });
 
 //////////////ADMIN END///////////////////////////////////
 app.post('/bookTicketNonStop', (req, res) => {  
   console.log(req.body);
   const InputTrackId=req.body.TrackID;
+  var inputClassType=req.body.selectedClass;
+  if(req.body.selectedClass==="Economy") inputClassType="E";
+  else if(req.body.selectedClass==="Bussiness") inputClassType="B";
+  else if(req.body.selectedClass==="First Class") inputClassType="F";
+
   const request= new sql.Request(pool);
   request.input('TrainId',sql.NVarChar(30),req.body.selectedTrainID);
   request.input('TrackId',sql.NVarChar(30),req.body.TrackID);
-  const Class='E';
-  request.input('Class',sql.NVarChar(30),Class);
+  request.input('Class',sql.NVarChar(30),inputClassType);
   var TicketAvailInfo="";
   request.execute('BookTicket',(err,result)=>{
     if(err){
@@ -248,7 +272,7 @@ app.post('/bookTicketNonStop', (req, res) => {
         }
 
         var TicketInfo=result2.recordset;
-        res.render('Ticket',{TicketInfo});
+        res.render('Ticket',{TicketInfo,inputClassType});
       });
     } 
   }
@@ -262,6 +286,8 @@ app.use('/signup', signupRouter(pool));   // Pass pool object to signupRouter
 app.use('/login', loginRouter(pool));     // Pass pool object to loginRouter
 app.use('/SearchTrain', SearchTrainRouter(pool));
 app.use('/TD',SearchCarriage(pool));
+app.use('/', sessionRouter);    //for testing session
+
 //app.use('/bookedTickets',bookedTicketsRouter(pool));
 
 
@@ -272,6 +298,11 @@ app.use(bodyParser.json());
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+
+
+
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
@@ -282,12 +313,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-
-
-
-
-
 
 // Export the app and pool objects
 module.exports = { app, pool };
