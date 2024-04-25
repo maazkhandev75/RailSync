@@ -189,6 +189,26 @@ app.get('/stationData', (req, res) => {
     res.status(500).send('Internal Server Error');
   });
 });
+app.get('/staffdata', (req, res) => {
+  
+  Promise.all([
+      pool.query('SELECT * FROM Crew')
+      
+  ])
+  .then(([CrewResult]) => {
+      const Crew = CrewResult.recordset;
+      res.render("./ADMIN/staffData.ejs", { Crew });
+  })
+  .catch(err => {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  });
+});
+
+app.get('/staffData', (req, res) => {
+  res.render('./ADMIN/staffData.ejs');
+});
+
 //////////////ADMIN END///////////////////////////////////
 app.post('/bookTicketNonStop', (req, res) => {  
   console.log(req.body);
