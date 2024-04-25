@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Test route to check session
-router.get('/test-session', (req, res) => {
+router.get('/sessionCheck', (req, res) => {
   // Check if user details are stored in the session
   if (req.session.userDetails) {
     // If user details are stored, display them
