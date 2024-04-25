@@ -231,6 +231,11 @@ app.get('/staffData', (req, res) => {
   res.render('./ADMIN/staffData.ejs');
 });
 
+app.get('/addTrain', (req, res) => {
+  res.render('./ADMIN/trainForm.ejs');
+});
+
+
 //////////////ADMIN END///////////////////////////////////
 app.post('/bookTicketNonStop', (req, res) => {  
   console.log(req.body);
