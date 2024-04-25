@@ -18,13 +18,12 @@ module.exports = (pool) => {
 
       if (result.returnValue === 0) {
         // User created successfully, render the signup form with a success message
-        res.render('signup', { successMessage: 'User created successfully!' });
-      } 
-	  
+        res.render('signup', { successMessage: 'User created successfully! Go back and log in using your credentials' });
+      }
     } catch (error) {
-		console.error('Error creating user:', error);  //for displaying on terminal ( the actual error )
+		//console.error('Error creating user:', error);  //for displaying on terminal ( the actual error )
 		// Send the error message to the client side for display
-		res.render('signup', { errorMessage: 'User already exits!' });
+		res.render('signup', { errorMessage: error });
     }
   });
 

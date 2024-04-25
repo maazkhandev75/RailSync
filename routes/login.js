@@ -29,16 +29,11 @@ module.exports = (pool) => {
 
          //pass success message obj to login.ejs to display success mesg on top
          res.render('login', { successMessage: 'User logged in successfully!' }); 
-         
         } 
-      else {
-        // User account not found, render the login form with an error message
-        res.render('login', { errorMessage: 'User account not found! Please input valid credentials.' });
-      }
     } catch (error) {
-		console.error('Error authenticating user:', error);  //for displaying on terminal ( the actual error )
+		//console.error('Error authenticating user:', error);  //for displaying on terminal ( the actual error )
 		// Send the error message to the client side for display
-		res.render('login', { errorMessage: 'User account not found! Please input valid credendials.' });
+		res.render('login', { errorMessage: error });
     }
   });
 

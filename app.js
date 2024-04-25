@@ -59,7 +59,7 @@ pool.connect((err)=>{
 })
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'),path.join(__dirname, 'views/ADMIN'),path.join(__dirname, 'views/ADMIN/partials'));
+app.set('views', path.join(__dirname, 'views'),path.join(__dirname, 'views/ADMIN'),path.join(__dirname, 'views/ADMIN/partials'),path.join(__dirname, 'views/USER'),path.join(__dirname, 'views/USER/partials'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
@@ -67,40 +67,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));  //set up your Express server to serve static files from public directory..( thats why we have used absolute paths everywhere then )
-
-// Configure a middleware to load user credentials from JSON file
-app.use((req, res, next) => {
-  const credentialsFilePath = path.join(__dirname, 'loggedInCredentials.json');
-  if (fs.existsSync(credentialsFilePath)) {
-    try {
-
-      const fileContent=fs.readFileSync(credentialsFilePath, 'utf8');
-      //check if the file is empty
-      if(fileContent.trim()==='')
-      {
-         // If the file is empty, provide a default value or handle it as needed
-         res.locals.userDetails = {}; // Default value
-      }
-      else 
-      {
-      // If the file is not empty, parse its content as JSON
-      const userDetails = JSON.parse(fs.readFileSync(credentialsFilePath));
-      res.locals.userDetails = userDetails;
-      }
-    } catch (error) {
-      // If an error occurs during JSON parsing, send an error message
-      console.error('Error parsing JSON file (can be invalid format of data):', error);
-
-      //the following has been commented because it prevents the website from even loading if some invalid data is hardcoded in json file so it can't parse properly and displays the error message on client side but in our case we really don't need it because user cannot enter invalid format data from frontend side
-      //res.status(500).send('Error parsing loggedInCredentials.json file. Please empty the json first.');
-      //return; // Exit the middleware to prevent further execution
-    }
-  }
-  next();
-});
-// You can access these logged inuser credentials in your route handlers using res.locals.userDetails
-///the following issue has been solved effectively and is is still written for learning purpose and understand how to deal with error effectively..
-//if you write some illegal format data or empties the json the local server will start encountering 500 http error then you have to first comment out the above code of parsing and making available for others and first you need you write valid data in json format and run server again and then after inserting valid data in json file you can uncomment the above code and can use data for other routes...
 
 
 // Define a route to render an ejs/html page
@@ -147,7 +113,6 @@ app.get('/admin', (req, res) => {
       });
 });
 
-/////////////ADMIN///////////////////////////////////////////////
 app.get('/trainData', (req, res) => {
   pool.query('SELECT * FROM Train')
       .then(result => {
@@ -222,7 +187,7 @@ app.get('/staffData', (req, res) => {
   res.render('./ADMIN/staffData.ejs');
 });
 
-//////////////ADMIN END///////////////////////////////////
+
 app.post('/bookTicketNonStop', (req, res) => {  
   console.log(req.body);
   const InputTrackId=req.body.TrackID;

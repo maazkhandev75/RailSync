@@ -21,8 +21,6 @@ BEGIN
 	INSERT INTO [User] ([Id], [UserName], [Password],[CNIC],[PhoneNo])
 	VALUES(NEWID(), @UserName, @Password,@CNIC,@PhoneNo);
 
-	-- Return success message
-	SELECT 'User created successfully!' AS message;
 END
 
 --------PROCEDURE FOR LOGIN FUNCTIONALITY-------
@@ -38,7 +36,7 @@ BEGIN
 	IF EXISTS (SELECT 1 FROM [User] WHERE  CNIC = @CNIC AND  Password = @Password)
 	BEGIN
 		-- User account found, return a success message
-		 SELECT 'User account found!' AS message, ID, UserName FROM [User] WHERE CNIC = @CNIC;
+		 SELECT ID, UserName FROM [User] WHERE CNIC = @CNIC;
 	END
 	ELSE
 	BEGIN
