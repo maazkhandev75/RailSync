@@ -169,19 +169,24 @@ app.get('/userDash', (req, res) => {
 });
 
 app.get('/stationData', (req, res) => {
-  // Execute both queries concurrently
+  const requestStation = new sql.Request(pool);
+  const requestTrack = new sql.Request(pool);
+
+  // Execute both queries asynchronously
   Promise.all([
-      pool.query('SELECT * FROM Station'),
-      pool.query('SELECT * FROM Tracks')
+    requestStation.query('SELECT * FROM Station'),
+    requestTrack.query('SELECT * FROM Tracks')
   ])
-  .then(([stationResult, tracksResult]) => {
-      const stations = stationResult.recordset;
-      const tracks = tracksResult.recordset;
-      res.render("./ADMIN/stationData.ejs", { stations, tracks });
+  .then(results => {
+    const Station = results[0].recordset;
+    const Track = results[1].recordset;
+    console.log(Station);
+    console.log(Track);
+    res.render('./ADMIN/stationData.ejs', { Station:Station, Track:Track });
   })
   .catch(err => {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
+    console.error(err);
+    res.status(500).send('Internal Server Error');
   });
 });
 //////////////ADMIN END///////////////////////////////////
