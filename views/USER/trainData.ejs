@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/head.ejs') %>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+    tr:hover {
+        background-color: #f9f9f9;
+    }
+    .edit-btn, .delete-btn {
+        padding: 5px 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+    .delete-btn {
+        background-color: #f44336;
+    }
+    .edit-btn:hover, .delete-btn:hover {
+        background-color: #45a049;
+    }
+
+    .table-header {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    #searchInput {
+        flex: 1;
+        margin-right: 10px;
+        padding: 5px;
+        border-radius: 3px;
+        border: 1px solid #ccc;
+    }
+
+    #searchBtn {
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    #searchBtn:hover {
+        background-color: #0056b3;
+    }
+
+</style>
+<body>
+
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/sidebar.ejs') %>
+
+    <main id="main" class="main">
+
+        <div class="pagetitle">
+        <h1>Train Meta Data</h1>
+        <nav>
+            <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="DS">Home</a></li>
+            <li class="breadcrumb-item">Tables</li>
+            <li class="breadcrumb-item active">General</li>
+            </ol>
+        </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+
+
+                <div class="container">
+                <h2>Train Data</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>TrainID</th>
+                            <th>UpDownStatus</th>
+                            <th>DeptStation</th>
+                            <th>ArrivalStation</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% Trains.forEach((i)=>{ %>
+                            <tr>
+                                <td><%= i.TrainId %></td>
+                                <%if(i.UPStatus==1){ %>
+                                <td>Up</td>
+                                <% }else {%>
+                                <td>Down</td>
+                                <% }%>
+                                <td><%= i.DeptStation %></td>
+                                <td><%= i.ArrivalStation %></td>
+                                <td>
+                                    <button class="edit-btn">Edit</button>
+                                    <button class="delete-btn">Delete</button>
+                                </td>
+                            </tr>
+                            <% }); %>
+
+
+                        <!-- More rows here -->
+                    </tbody>
+                </table>
+            </div>
+
+
+
+            <div class="container">
+                <h2>Carriage Data</h2>
+                <div class="table-header">
+                    <input type="text" id="searchCarriage" placeholder="Search By TrainID...">
+                    <button id="searchCarriageButton" class="search-btn">Search</button>
+                </div>
+                <table id="seatTable">
+                    <thead>
+                        <tr>
+                            <th>CarriageID</th>
+                            <th>TrainID</th>
+                            <th>Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr></tr>
+
+
+                        <!-- More rows here -->
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+    </main>
+  <%- include('./partials/footer.ejs') %>
+  <%- include('./partials/script.ejs') %>
+
+</body>
+<script>
+
+function updateTable(data) {
+    const table = document.getElementById('seatTable');
+    table.innerHTML = `
+        <tr>
+            <th>CarriageID</th>
+            <th>TrainID</th>
+            <th>Type</th>
+            <th>Actions</th>
+        </tr>
+    `;
+    // Loop through the received data and append rows to the table
+    if (Array.isArray(data.Carriage)) {
+        data.Carriage.forEach(entry => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${entry.CarriageId}</td>
+                <td>${entry.TrainId}</td>
+                <td>${entry.Type}</td>
+                <td>
+                    <button class="edit-btn">Edit</button>
+                    <button class="delete-btn">Delete</button>
+                </td>
+            `;
+            table.appendChild(row);
+        });
+    } else {
+        console.error('Unexpected data format:', data);
+    }
+}
+
+
+document.getElementById('searchCarriageButton').addEventListener('click', function() {
+    // Retrieve the value entered in the search input field
+    const searchTerm = document.getElementById('searchCarriage').value;
+    if(searchTerm ==null)
+        return;
+    console.log(searchTerm);
+    // You can also send the search term to your server for further processing if needed
+    fetch('/TD', {
+      method: 'POST',
+      body: JSON.stringify({ searchTerm: searchTerm }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+       updateTable(data);
+
+    })
+    .catch(error => {
+        console.log('gg');
+      console.error('Error:', error);
+    });
+  });
+</script>
+</html>

@@ -11,7 +11,8 @@ module.exports = function(pool) {
     request.input('ID',sql.NVarChar,TrainID);
 
     request.execute('SearchForCarriage',(err,result)=>{
-      if(err){
+      if(err)
+      {
       console.error(err);
       res.status(500).send('Internal Server Error');
       }
