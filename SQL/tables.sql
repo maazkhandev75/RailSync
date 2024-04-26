@@ -48,6 +48,8 @@ CREATE TABLE [Station] (
 )
 GO
 
+
+
 CREATE TABLE [Train] (
   [TrainId] nvarchar(255) PRIMARY KEY,
   [UpDownStatus] char,
@@ -177,5 +179,10 @@ select * from [Security]
 select * from [Tracks]
 select * from [Seat]
 select * from [Route]
+select * from [Route]
+
+
+
+
 
 

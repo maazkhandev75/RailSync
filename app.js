@@ -86,6 +86,10 @@ app.get('/loginForm',(req,res)=>{
   res.render('login.ejs');
 })
 
+app.get('/profile',(req,res)=>{
+
+  res.render('./USER/profile.ejs');
+})
 
 
 app.get('/SearchTrainform', (req, res) => {
@@ -144,7 +148,7 @@ app.get('/ds', (req, res) => {
 
 app.get('/userDash',(req,res)=>{
   const userData = req.session.userDetails;
-  res.render('./USER/dashboard',{userData});
+  res.render('./USER/dashboard.ejs',{userData});
   })
 
 app.get('/stationData', (req, res) => {
@@ -206,6 +210,8 @@ app.get('/addTrain', (req, res) => {
 
 app.post('/bookTicketNonStop', (req, res) => {  
   console.log(req.body);
+  const userName = req.session.userDetails.username;
+  console.log(userName);
   const InputTrackId=req.body.TrackID;
   var inputClassType=req.body.selectedClass;
   if(req.body.selectedClass==="Economy") inputClassType="E";
@@ -244,7 +250,7 @@ app.post('/bookTicketNonStop', (req, res) => {
         }
 
         var TicketInfo=result2.recordset;
-        res.render('Ticket',{TicketInfo,inputClassType});
+        res.render('Ticket',{TicketInfo,inputClassType,userName});
       });
     } 
   }

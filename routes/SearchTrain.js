@@ -13,8 +13,8 @@ module.exports = function(pool) {
     request.input('SearchDate',sql.DateTime,tripDate);
     request.input('fromStation',sql.NVarChar,St1);
     request.input('toStation',sql.NVarChar,St2);
-    var Trains=0;
-    var TrainsWithStops=0;
+    var Trains=[];
+    var TrainsWithStops=[];
     request.execute('SearchForTrains',(err,result)=>{
       if(err){
       console.error(err);
@@ -39,8 +39,9 @@ module.exports = function(pool) {
          TrainsWithStops=result.recordset;
         console.log(result);
       }
+      // if(Trains.length!==0 && TrainsWithStops.length!==0)
+      // TrainsWithStops = TrainsWithStops.filter(train => !Trains.some(t => t.TrainId === train.TrainId));
       
-      TrainsWithStops = TrainsWithStops.filter(train => !Trains.some(t => t.TrainId === train.TrainId));
       if (TrainsWithStops.length > 0){
        if( TrainsWithStops[0].DeptStation && TrainsWithStops[TrainsWithStops.length - 1].ArrivalStation) 
         res.render("TrainResult", { Trains, TrainsWithStops });}

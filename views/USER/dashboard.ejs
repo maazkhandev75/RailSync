@@ -6,14 +6,23 @@
 <body>
 
 <%- include('./partials/header.ejs') %>
-
 <%- include('./partials/sidebar.ejs') %>
-<%- include('./partials/main.ejs') %>
 
+<main id="main" class="main">
 
-  <%- include('./partials/footer.ejs') %>
-  <%- include('./partials/script.ejs') %>
+  <div class="pagetitle">
+    <h1>User Dashboard</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="DS">Home</a></li>
+        <li class="breadcrumb-item active">Dashboard</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
 
+</main><!-- End #main -->
+
+<%- include('./partials/footer.ejs') %>
+<%- include('./partials/script.ejs') %>
 </body>
-
 </html>

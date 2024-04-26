@@ -5,17 +5,17 @@
 
 body {
   font-family: "Open Sans", sans-serif;
-  background: #f6f9ff;
-  color: #444444;
+  background: #ffffff;
+  color: #000000;
 }
 
 a {
-  color: #4154f1;
+  color: rgb(0, 170, 217);
   text-decoration: none;
 }
 
 a:hover {
-  color: #717ff5;
+  color: #53e2ff;
   text-decoration: none;
 }
 
@@ -54,7 +54,7 @@ h6 {
   font-size: 24px;
   margin-bottom: 0;
   font-weight: 600;
-  color: #012970;
+  color: rgb(241, 93, 0);
 }
 
 /*--------------------------------------------------------------
@@ -994,7 +994,7 @@ h6 {
 .profile .profile-card h2 {
   font-size: 24px;
   font-weight: 700;
-  color: #2c384e;
+  color: rgb(255, 255, 255);
   margin: 10px 0 0 0;
 }
 
@@ -1021,12 +1021,12 @@ h6 {
 }
 
 .profile .profile-overview .card-title {
-  color: #012970;
+  color: rgb(46, 217, 255);
 }
 
 .profile .profile-overview .label {
   font-weight: 600;
-  color: rgba(1, 41, 112, 0.6);
+  color: rgba(177, 177, 177, 0.6);
 }
 
 .profile .profile-edit label {
@@ -1207,8 +1207,10 @@ h6 {
   padding: 20px 0;
   font-size: 14px;
   transition: all 0.3s;
-  border-top: 1px solid #cddfff;
-  background: #3a3a3a;
+  border-top: 1px solid #505050;
+  background-color: #111; 
+  color: #fff;
+  
 }
 
 .footer .copyright {
