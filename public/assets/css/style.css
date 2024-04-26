@@ -558,12 +558,12 @@ h6 {
 }
 
 .sidebar-nav .nav-link:hover {
-  color: rgb(253, 156, 0);
+  color: rgb(253, 110, 0);
   background: #161616;
 }
 
 .sidebar-nav .nav-link:hover i {
-  color: rgb(255, 182, 36);
+  color: rgb(253, 110, 0);
   background: #161616;
 }
 
@@ -587,7 +587,7 @@ h6 {
   align-items: center;
   font-size: 14px;
   font-weight: 600;
-  color: #012970;
+  color: #c5c5c5;
   transition: 0.3;
   padding: 10px 0 10px 40px;
   transition: 0.3s;
@@ -602,7 +602,7 @@ h6 {
 
 .sidebar-nav .nav-content a:hover,
 .sidebar-nav .nav-content a.active {
-  color: #00a6ff;
+  color: #ff7b00;
 }
 
 .sidebar-nav .nav-content a.active i {
