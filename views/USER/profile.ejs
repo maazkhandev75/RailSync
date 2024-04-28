@@ -64,22 +64,22 @@
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                    <div class="col-lg-9 col-md-8">maaz khan</div>
+                    <div class="col-lg-9 col-md-8"><%= userCredentials.username %></div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">CNIC</div>
-                    <div class="col-lg-9 col-md-8">3520297089087</div>
+                    <div class="col-lg-9 col-md-8"><%= userCredentials.cnic %></div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Password</div>
-                    <div class="col-lg-9 col-md-8">mypass123</div>
+                    <div class="col-lg-9 col-md-8"><%= userCredentials.password %></div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Phone No</div>
-                    <div class="col-lg-9 col-md-8">03204553255</div>
+                    <div class="col-lg-9 col-md-8"><%= userCredentials.phone %></div>
                   </div>
 
                 </div>
@@ -92,28 +92,28 @@
                     <div class="row mb-3">
                       <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="fullName" type="text" class="form-control inputs" id="fullName" value="maaz khan">
+                        <input name="fullName" type="text" class="form-control inputs" id="fullName" value="<%= userCredentials.username %>">
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="about" class="col-md-4 col-lg-3 col-form-label">CNIC</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="about" type="text" class="form-control inputs" id="about" value="3520297089087">
+                        <input name="about" type="text" class="form-control inputs" id="about" value="<%= userCredentials.cnic %>">
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="company" class="col-md-4 col-lg-3 col-form-label">Password</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="company" type="text" class="form-control inputs" id="company" value="mypass123">
+                        <input name="company" type="text" class="form-control inputs" id="company" value="<%= userCredentials.password %>">
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="Job" class="col-md-4 col-lg-3 col-form-label">Phone No</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="job" type="text" class="form-control inputs" id="Job" value="03204553255">
+                        <input name="job" type="text" class="form-control inputs" id="Job" value="<%= userCredentials.phone %>">
                       </div>
                     </div>
 

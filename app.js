@@ -20,7 +20,6 @@ app.use(session({
   saveUninitialized: false
 }));
 
-
 //importing routers
 const signupRouter = require('./routes/signup')
 const loginRouter = require('./routes/login')
@@ -84,11 +83,6 @@ res.render('signup.ejs');
 
 app.get('/loginForm',(req,res)=>{
   res.render('login.ejs');
-})
-
-app.get('/profile',(req,res)=>{
-
-  res.render('./USER/profile.ejs');
 })
 
 
@@ -172,6 +166,7 @@ app.get('/stationData', (req, res) => {
     res.status(500).send('Internal Server Error');
   });
 });
+
 app.get('/staffdata', (req, res) => {
   
   Promise.all([
@@ -204,9 +199,37 @@ app.get('/addTrain', (req, res) => {
   res.render('./ADMIN/trainForm.ejs');
 });
 
-app.get('/addTrain', (req, res) => {
-  res.render('./ADMIN/trainForm.ejs');
-});
+
+app.get('/profile',async(req,res)=>{
+  const cnic=req.session.userDetails.cnic;
+  try{
+    const result = await pool.request()
+    .input('CNIC', sql.NVarChar(255), cnic)
+    .execute('GetUserCredentials');
+
+    if (result.returnValue === 0 && result.recordset.length>0) {
+
+      const userCredentials = {
+         userId: result.recordset[0].Id,
+         username: result.recordset[0].UserName,
+         password: result.recordset[0].Password,
+         cnic: result.recordset[0].CNIC,
+         phone: result.recordset[0].PhoneNo
+       }
+       //console.log(userCredentials.password);  for testing
+        res.render('./USER/profile.ejs',{userCredentials});
+    }
+    else
+    {
+      res.status(404).send('user not found');
+    }
+    }
+    catch(err){
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    }
+})
+
 
 app.post('/bookTicketNonStop', (req, res) => {  
   console.log(req.body);
@@ -256,6 +279,8 @@ app.post('/bookTicketNonStop', (req, res) => {
   }
   })
 });
+
+
 
 // Use the routes
 app.use('/', indexRouter);
