@@ -146,13 +146,19 @@ GO
 --------------- UPDATES
 ALTER TABLE [Ticket] ADD FOREIGN KEY ([CNIC]) REFERENCES [User] ([CNIC])
 GO
-ALTER TABLE [Ticket] ADD FOREIGN KEY ([TrainId]) REFERENCES [Train] ([TrainId])
-ALTER TABLE [Ticket] ADD FOREIGN KEY ([CarriageId]) REFERENCES [Carriage] ([CarriageId])
+ALTER TABLE [Ticket]
+ADD CONSTRAINT FK_Ticket_Seat
+FOREIGN KEY ([CarriageId], [TrainId], [SeatNo])
+REFERENCES [Seat] ([CarriageID], [TrainID], [SeatNo]);
+
 ALTER TABLE [Payment] ADD FOREIGN KEY ([CNIC]) REFERENCES [User] ([CNIC])
 GO
 
 ALTER TABLE [Ticket]
-DROP CONSTRAINT FK__Ticket__UserId__71D1E811;
+DROP CONSTRAINT FK__Ticket__TrainId__607251E5;
+
+ALTER TABLE [Ticket]
+DROP CONSTRAINT FK__Ticket__Carriage__6166761E;
 
 ALTER TABLE [User]
 DROP CONSTRAINT PK__User__3214EC072F032F7B;
@@ -165,7 +171,7 @@ ALTER COLUMN [CNIC] nvarchar(255) NOT NULL;
 
 SELECT CONSTRAINT_NAME
 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
-WHERE TABLE_NAME = 'User' AND CONSTRAINT_TYPE = 'PRIMARY KEY';
+WHERE TABLE_NAME = 'Seat' AND CONSTRAINT_TYPE = 'PRIMARY KEY';
 
 SELECT
     name
@@ -175,6 +181,12 @@ WHERE
     parent_object_id = OBJECT_ID('Ticket');
 
 EXEC sp_rename 'Ticket.carriageId', 'CarriageId', 'COLUMN';
+
+
+ALTER TABLE [Seat]
+ADD CONSTRAINT UQ_Seat
+UNIQUE ([CarriageID], [TrainID], [SeatNo]);
+
 
 --------------------UPDATEE
 
@@ -207,7 +219,10 @@ select * from [Tracks]
 select * from [Seat]
 select * from [Route]
 
-
+SELECT name
+FROM sys.objects
+WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT'
+    AND parent_object_id = OBJECT_ID('Ticket');
 
 
 
