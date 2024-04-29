@@ -1,19 +1,18 @@
 CREATE TABLE [User] (
-  [Id] nvarchar(255) PRIMARY KEY,
   [UserName] nvarchar(255),
   [Password] nvarchar(255),
-  [CNIC] nvarchar(255),
+  [CNIC] nvarchar(255) PRIMARY KEY,
   [PhoneNo] nvarchar(255)
 )
 GO
 
 CREATE TABLE [Ticket] (
   [TicketId] nvarchar(255) PRIMARY KEY,
-  [UserId] nvarchar(255),
+  [CNIC] nvarchar(255),
   [SeatNo] int,
-  [StartingStation] nvarchar(255),
-  [EndingStation] nvarchar(255),
-  [date] DATE
+  [TrainId] NVARCHAR(255),
+  [CarriageId] NVARCHAR(255),
+  [trackId] NVARCHAR(255)
 )
 GO
 
@@ -60,7 +59,7 @@ GO
 
 CREATE TABLE [Payment] (
   [TicketId] nvarchar(255),
-  [UserId] nvarchar(255),
+  [CNIC] nvarchar(255),
   [TotalPrice] nvarchar(255),
   [RefundStatus] char,
   PRIMARY KEY ([TicketId], [UserId])
@@ -144,12 +143,40 @@ GO
 
 ALTER TABLE [Payment] ADD FOREIGN KEY ([TicketId]) REFERENCES [Ticket] ([TicketId])
 GO
-
-ALTER TABLE [Ticket] ADD FOREIGN KEY ([UserId]) REFERENCES [User] ([Id])
+--------------- UPDATES
+ALTER TABLE [Ticket] ADD FOREIGN KEY ([CNIC]) REFERENCES [User] ([CNIC])
+GO
+ALTER TABLE [Ticket] ADD FOREIGN KEY ([TrainId]) REFERENCES [Train] ([TrainId])
+ALTER TABLE [Ticket] ADD FOREIGN KEY ([CarriageId]) REFERENCES [Carriage] ([CarriageId])
+ALTER TABLE [Payment] ADD FOREIGN KEY ([CNIC]) REFERENCES [User] ([CNIC])
 GO
 
-ALTER TABLE [Payment] ADD FOREIGN KEY ([UserId]) REFERENCES [User] ([Id])
-GO
+ALTER TABLE [Ticket]
+DROP CONSTRAINT FK__Ticket__UserId__71D1E811;
+
+ALTER TABLE [User]
+DROP CONSTRAINT PK__User__3214EC072F032F7B;
+
+ALTER TABLE [User]
+ADD CONSTRAINT PK_User PRIMARY KEY ([CNIC]);
+
+ALTER TABLE [User]
+ALTER COLUMN [CNIC] nvarchar(255) NOT NULL;
+
+SELECT CONSTRAINT_NAME
+FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+WHERE TABLE_NAME = 'User' AND CONSTRAINT_TYPE = 'PRIMARY KEY';
+
+SELECT
+    name
+FROM
+    sys.foreign_keys
+WHERE
+    parent_object_id = OBJECT_ID('Ticket');
+
+EXEC sp_rename 'Ticket.carriageId', 'CarriageId', 'COLUMN';
+
+--------------------UPDATEE
 
 ALTER TABLE [Pilot] ADD FOREIGN KEY ([TrainId]) REFERENCES [Train] ([TrainId])
 GO
@@ -179,7 +206,7 @@ select * from [Security]
 select * from [Tracks]
 select * from [Seat]
 select * from [Route]
-select * from [Route]
+
 
 
 
