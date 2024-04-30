@@ -263,25 +263,6 @@ body {
  <script>
 
    
-   fetch('../loggedInCredentials.json')
-  .then(response => {
-    // Check if response is successful
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    // Parse JSON data
-    return response.json();
-  })
-  .then(data => {
-    // Handle the JSON data
-    console.log(data);
-  })
-  .catch(error => {
-    // Handle any errors
-    console.error('Fetch error:', error);
-  });
-  
-  
   </script>
 </body>
 </html>

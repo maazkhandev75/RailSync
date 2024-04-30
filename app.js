@@ -173,7 +173,7 @@ app.get('/stationData', (req, res) => {
   });
 });
 app.get('/staffdata', (req, res) => {
-  
+
   Promise.all([
       pool.query('SELECT * FROM Crew'),
       pool.query('SELECT * FROM Pilot'),
@@ -208,7 +208,7 @@ app.get('/addTrain', (req, res) => {
   res.render('./ADMIN/trainForm.ejs');
 });
 
-app.post('/bookTicketNonStop', (req, res) => {  
+app.post('/bookTicketNonStop', (req, res) => {
   console.log(req.body);
   const userName = req.session.userDetails.username;
   console.log(userName);
@@ -252,11 +252,10 @@ app.post('/bookTicketNonStop', (req, res) => {
         var TicketInfo=result2.recordset;
         res.render('Ticket',{TicketInfo,inputClassType,userName});
       });
-    } 
+    }
   }
   })
 });
-
 // Use the routes
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
