@@ -74,7 +74,7 @@
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Password</div>
-                    <div class="col-lg-9 col-md-8"><%= userCredentials.password %></div>
+                    <div class="col-lg-9 col-md-8" id="orignalPassword"><%= userCredentials.password %></div>
                   </div>
 
                   <div class="row">
@@ -87,33 +87,20 @@
                 <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
                   <!-- Profile Edit Form -->
-                  <form>
+                  <form action="/profileUpdate" method="POST">
                     
                     <div class="row mb-3">
                       <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="fullName" type="text" class="form-control inputs" id="fullName" value="<%= userCredentials.username %>">
+                        <input name="name" type="text" class="form-control inputs" id="fullName" value="<%= userCredentials.username %>">
                       </div>
                     </div>
 
-                    <div class="row mb-3">
-                      <label for="about" class="col-md-4 col-lg-3 col-form-label">CNIC</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="about" type="text" class="form-control inputs" id="about" value="<%= userCredentials.cnic %>">
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="company" class="col-md-4 col-lg-3 col-form-label">Password</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="company" type="text" class="form-control inputs" id="company" value="<%= userCredentials.password %>">
-                      </div>
-                    </div>
 
                     <div class="row mb-3">
                       <label for="Job" class="col-md-4 col-lg-3 col-form-label">Phone No</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="job" type="text" class="form-control inputs" id="Job" value="<%= userCredentials.phone %>">
+                        <input name="phone" type="text" class="form-control inputs" id="Job" value="<%= userCredentials.phone %>">
                       </div>
                     </div>
 
@@ -126,7 +113,7 @@
   
                 <div class="tab-pane fade pt-3 profile-change-password" id="profile-change-password">
                   <!-- Change Password Form -->
-                  <form>
+                  <form action="/passwordChange" method="POST" onsubmit="return checkNewPassword()">
 
                     <div class="row mb-3">
                       <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
@@ -170,6 +157,43 @@
 
   <%- include('./partials/footer.ejs') %>
   <%- include('./partials/script.ejs') %>
+
+  <script>
+    function checkNewPassword() {
+      var orig_pass = document.getElementById("orignalPassword").value;
+      var curr_pass = document.getElementById("currentPassword").value;
+      var new_pass = document.getElementById("newPassword").value;
+      var renew_pass = document.getElementById("renewPassword").value;
+  
+
+      //check if the entered current password is actually the orignal current password of the user
+      if (curr_pass !== orig_pass) {
+        alert("the enterred password is not actual current password of the user");
+        return false;
+      }
+
+      // Check if old pass and new pass are not same
+      if (curr_pass === new_pass) {
+        alert("old and new passwords are same, Kindly make a new password");
+        return false;
+      }
+      if (new_pass !== renew_pass) {
+        alert("new passwords donot match with each other");
+        return false;
+      }
+
+      // Check if password contains at least one digit and one character
+      var digitRegex = /\d/;
+      var charRegex = /[a-zA-Z]/;
+      if (!digitRegex.test(new_pass) || !charRegex.test(new_pass)) {
+      alert("Password must contain at least one digit and one character.");
+      return false;
+    }
+    
+      return true;
+    }
+</script>
+
 
 </body>
 

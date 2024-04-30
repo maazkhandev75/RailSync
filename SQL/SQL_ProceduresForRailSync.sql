@@ -63,19 +63,33 @@ END
 
 
 --------PROCEDURE FOR UPDATE PROFILE FUNCTIONALITY-------
-CREATE PROCEDURE UpdateUser 
+CREATE PROCEDURE UpdateProfile 
 	@CNIC nvarchar(255),
 	@UserName nvarchar(255),
-	@Password nvarchar(255),
 	@PhoneNo nvarchar(255)
 AS 
 BEGIN	
 	SET NOCOUNT ON;
 
 		 UPDATE [User]
-		 SET UserName=@UserName,[Password]=@Password,PhoneNo=@PhoneNo
+		 SET UserName=@UserName,PhoneNo=@PhoneNo
 		 WHERE CNIC=@CNIC
 END
+
+--------PROCEDURE FOR PASSWORD CHANGE FUNCTIONALITY-------
+CREATE PROCEDURE ChangePassword 
+	@CNIC nvarchar(255),
+	@newPassword nvarchar(255)
+
+AS 
+BEGIN	
+	SET NOCOUNT ON;
+
+		 UPDATE [User]
+		 SET Password=@newPassword
+		 WHERE CNIC=@CNIC
+END
+
 
 --------PROCEDURE FOR SHOWING BOOKED TICKETS OF USER-------
 CREATE PROCEDURE ShowBookedTickets

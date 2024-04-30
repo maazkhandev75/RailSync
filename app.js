@@ -28,6 +28,9 @@ const usersRouter = require('./routes/users');
 const SearchTrainRouter = require('./routes/SearchTrain');
 const SearchCarriage = require('./routes/TD');
 const sessionRouter = require('./routes/testSession');
+const profileUpdateRouter = require('./routes/profileUpdate');
+const passwordChangeRouter = require('./routes/passwordChange');
+
 
 //const bookedTicketsRouter = require('./routes/bookedTickets');
 
@@ -216,6 +219,7 @@ app.get('/profile',async(req,res)=>{
          cnic: result.recordset[0].CNIC,
          phone: result.recordset[0].PhoneNo
        }
+
        //console.log(userCredentials.password);  for testing
         res.render('./USER/profile.ejs',{userCredentials});
     }
@@ -281,7 +285,6 @@ app.post('/bookTicketNonStop', (req, res) => {
 });
 
 
-
 // Use the routes
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -290,6 +293,8 @@ app.use('/login', loginRouter(pool));     // Pass pool object to loginRouter
 app.use('/SearchTrain', SearchTrainRouter(pool));
 app.use('/TD',SearchCarriage(pool));
 app.use('/', sessionRouter);    //for testing session
+app.use('/profileUpdate',profileUpdateRouter(pool))
+app.use('/passwordChange',passwordChangeRouter(pool))
 
 //app.use('/bookedTickets',bookedTicketsRouter(pool));
 
@@ -301,9 +306,6 @@ app.use(bodyParser.json());
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
-
-
 
 
 // error handler
