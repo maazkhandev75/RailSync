@@ -160,10 +160,12 @@
 
   <script>
     function checkNewPassword() {
-      var orig_pass = document.getElementById("orignalPassword").value;
+      var orig_pass = document.getElementById("orignalPassword").innerText;;
       var curr_pass = document.getElementById("currentPassword").value;
       var new_pass = document.getElementById("newPassword").value;
       var renew_pass = document.getElementById("renewPassword").value;
+
+      console.log(orig_pass);
   
 
       //check if the entered current password is actually the orignal current password of the user

@@ -1,7 +1,7 @@
 CREATE TABLE [User] (
+  [CNIC] nvarchar(255) PRIMARY KEY,
   [UserName] nvarchar(255),
   [Password] nvarchar(255),
-  [CNIC] nvarchar(255) PRIMARY KEY,
   [PhoneNo] nvarchar(255)
 )
 GO
@@ -15,6 +15,7 @@ CREATE TABLE [Ticket] (
   [trackId] NVARCHAR(255)
 )
 GO
+
 
 CREATE TABLE [Carriage] (
   [CarriageId] nvarchar(255) PRIMARY KEY,
@@ -62,7 +63,7 @@ CREATE TABLE [Payment] (
   [CNIC] nvarchar(255),
   [TotalPrice] nvarchar(255),
   [RefundStatus] char,
-  PRIMARY KEY ([TicketId], [UserId])
+  PRIMARY KEY ([TicketId])
 )
 GO
 
@@ -143,9 +144,10 @@ GO
 
 ALTER TABLE [Payment] ADD FOREIGN KEY ([TicketId]) REFERENCES [Ticket] ([TicketId])
 GO
---------------- UPDATES
+
 ALTER TABLE [Ticket] ADD FOREIGN KEY ([CNIC]) REFERENCES [User] ([CNIC])
 GO
+
 ALTER TABLE [Ticket]
 ADD CONSTRAINT FK_Ticket_Seat
 FOREIGN KEY ([CarriageId], [TrainId], [SeatNo])
@@ -153,6 +155,24 @@ REFERENCES [Seat] ([CarriageID], [TrainID], [SeatNo]);
 
 ALTER TABLE [Payment] ADD FOREIGN KEY ([CNIC]) REFERENCES [User] ([CNIC])
 GO
+
+ALTER TABLE [Pilot] ADD FOREIGN KEY ([TrainId]) REFERENCES [Train] ([TrainId])
+GO
+
+ALTER TABLE [Ticket] ADD FOREIGN KEY ([StartingStation]) REFERENCES [Station] ([StationId])
+GO
+
+ALTER TABLE [Ticket] ADD FOREIGN KEY ([EndingStation]) REFERENCES [Station] ([StationId])
+GO
+
+ALTER TABLE [Train] ADD FOREIGN KEY ([DeptStation]) REFERENCES [Station] ([StationId])
+GO
+
+ALTER TABLE [Train] ADD FOREIGN KEY ([ArrivalStation]) REFERENCES [Station] ([StationId])
+GO
+
+
+--------------- UPDATES -------------------------------
 
 ALTER TABLE [Ticket]
 DROP CONSTRAINT FK__Ticket__TrainId__607251E5;
@@ -162,6 +182,12 @@ DROP CONSTRAINT FK__Ticket__Carriage__6166761E;
 
 ALTER TABLE [User]
 DROP CONSTRAINT PK__User__3214EC072F032F7B;
+
+ALTER TABLE [Payment] 
+DROP FK__Payment__CNIC__5D95E53A
+
+ALTER TABLE [Ticket]
+DROP CONSTRAINT FK__Ticket__user_CNIC;
 
 ALTER TABLE [User]
 ADD CONSTRAINT PK_User PRIMARY KEY ([CNIC]);
@@ -182,28 +208,35 @@ WHERE
 
 EXEC sp_rename 'Ticket.carriageId', 'CarriageId', 'COLUMN';
 
-
 ALTER TABLE [Seat]
 ADD CONSTRAINT UQ_Seat
 UNIQUE ([CarriageID], [TrainID], [SeatNo]);
 
+SELECT name
+FROM sys.objects
+WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT'
+AND parent_object_id = OBJECT_ID('Ticket');
 
---------------------UPDATEE
+delete from [user]
+where userName='Muhammad Hassan Javed'
 
-ALTER TABLE [Pilot] ADD FOREIGN KEY ([TrainId]) REFERENCES [Train] ([TrainId])
-GO
+insert into [User]
+values('1234567890123','Muhammad Hassan Javed','jackpot123','03200202469')
+go
 
-ALTER TABLE [Ticket] ADD FOREIGN KEY ([StartingStation]) REFERENCES [Station] ([StationId])
-GO
+alter table [user] drop column id
 
-ALTER TABLE [Ticket] ADD FOREIGN KEY ([EndingStation]) REFERENCES [Station] ([StationId])
-GO
 
-ALTER TABLE [Train] ADD FOREIGN KEY ([DeptStation]) REFERENCES [Station] ([StationId])
-GO
+insert into [ticket]
+values('122148','1234567890123',1,'202','202-1','2')
+go
 
-ALTER TABLE [Train] ADD FOREIGN KEY ([ArrivalStation]) REFERENCES [Station] ([StationId])
-GO
+
+insert into [ticket]
+values('122149','1234567890123',2,'202','202-8','2')
+go
+
+
 
 select * from [User]
 select * from [Ticket]
@@ -218,13 +251,3 @@ select * from [Security]
 select * from [Tracks]
 select * from [Seat]
 select * from [Route]
-
-SELECT name
-FROM sys.objects
-WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT'
-    AND parent_object_id = OBJECT_ID('Ticket');
-
-
-
-
-
