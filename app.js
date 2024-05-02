@@ -28,6 +28,9 @@ const usersRouter = require('./routes/users');
 const SearchTrainRouter = require('./routes/SearchTrain');
 const SearchCarriage = require('./routes/TD');
 const sessionRouter = require('./routes/testSession');
+const profileUpdateRouter = require('./routes/profileUpdate');
+const passwordChangeRouter = require('./routes/passwordChange');
+
 
 //const bookedTicketsRouter = require('./routes/bookedTickets');
 
@@ -199,9 +202,88 @@ app.get('/addTrain', (req, res) => {
   res.render('./ADMIN/trainForm.ejs');
 });
 
-app.get('/addTrain', (req, res) => {
-  res.render('./ADMIN/trainForm.ejs');
+
+app.get('/profile',async(req,res)=>{
+  const cnic=req.session.userDetails.cnic;
+  try{
+    const result = await pool.request()
+    .input('CNIC', sql.NVarChar(255), cnic)
+    .execute('GetUserCredentials');
+
+    if (result.returnValue === 0 && result.recordset.length>0) {
+
+      const userCredentials = {
+         userId: result.recordset[0].Id,
+         username: result.recordset[0].UserName,
+         password: result.recordset[0].Password,
+         cnic: result.recordset[0].CNIC,
+         phone: result.recordset[0].PhoneNo
+       }
+
+       //console.log(userCredentials.password);  for testing
+        res.render('./USER/profile.ejs',{userCredentials});
+    }
+    else
+    {
+      res.status(404).send('user not found');
+    }
+    }
+    catch(err){
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    }
+})
+
+
+app.post('/bookTicketNonStop', (req, res) => {  
+  console.log(req.body);
+  const userName = req.session.userDetails.username;
+  console.log(userName);
+  const InputTrackId=req.body.TrackID;
+  var inputClassType=req.body.selectedClass;
+  if(req.body.selectedClass==="Economy") inputClassType="E";
+  else if(req.body.selectedClass==="Bussiness") inputClassType="B";
+  else if(req.body.selectedClass==="First Class") inputClassType="F";
+
+  const request= new sql.Request(pool);
+  request.input('TrainId',sql.NVarChar(30),req.body.selectedTrainID);
+  request.input('TrackId',sql.NVarChar(30),req.body.TrackID);
+  request.input('Class',sql.NVarChar(30),inputClassType);
+  var TicketAvailInfo="";
+  request.execute('BookTicket',(err,result)=>{
+    if(err){
+      console.log(err);
+      res.status(500).send('Internal Server Error');
+    }
+    else{
+        TicketAvailInfo=result.recordset[0];
+        console.log(TicketAvailInfo);
+        if(TicketAvailInfo.length!=0){
+          const TicketInfoReq= new sql.Request(pool);
+        TicketInfoReq.input('FoundCarriage',sql.NVarChar(30),TicketAvailInfo.CarriageId);
+        TicketInfoReq.input('TrainId',sql.NVarChar(30),req.body.selectedTrainID);
+        TicketInfoReq.input('FoundSeat',sql.Int,TicketAvailInfo.SeatNo);
+        TicketInfoReq.input('TrackId',sql.NVarChar(30),InputTrackId);
+        console.log(InputTrackId);
+        TicketInfoReq.execute('GetTicketInfo',(err,result2)=>{
+
+        if(err){
+          console.error(err);
+          res.status(500).send('Internel Server Error');
+        }
+        else{
+          console.log("seat details are: ");
+          console.log(result2);
+        }
+
+        var TicketInfo=result2.recordset;
+        res.render('Ticket',{TicketInfo,inputClassType,userName});
+      });
+    } 
+  }
+  })
 });
+
 
 // Use the routes
 app.use('/', indexRouter);
@@ -211,6 +293,8 @@ app.use('/login', loginRouter(pool));     // Pass pool object to loginRouter
 app.use('/SearchTrain', SearchTrainRouter(pool));
 app.use('/TD',SearchCarriage(pool));
 app.use('/', sessionRouter);    //for testing session
+app.use('/profileUpdate',profileUpdateRouter(pool))
+app.use('/passwordChange',passwordChangeRouter(pool))
 
 //app.use('/bookedTickets',bookedTicketsRouter(pool));
 
@@ -222,9 +306,6 @@ app.use(bodyParser.json());
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
-
-
 
 
 // error handler
