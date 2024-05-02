@@ -201,7 +201,12 @@ app.get('/staffData', (req, res) => {
 app.get('/addTrain', (req, res) => {
   res.render('./ADMIN/trainForm.ejs');
 });
-
+app.get('/addCarriage', (req, res) => {
+  res.render('./ADMIN/CarriageForm.ejs');
+});
+app.get('/addSeat', (req, res) => {
+  res.render('./ADMIN/SeatForm.ejs');
+});
 
 app.get('/profile',async(req,res)=>{
   const cnic=req.session.userDetails.cnic;

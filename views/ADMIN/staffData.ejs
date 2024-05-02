@@ -136,59 +136,7 @@
                 </table>
             </div>
 
-            <div class="container">
-                <h2>Pilot Data</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>CrewId</th>
-                            <th>TrainId</th>
-                           <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% Pilot.forEach((i)=>{ %>
-                            <tr>
-                                <td><%= i.CrewId %></td>
-                                <td><%= i.TrainId %></td>
-                              
-                            </tr>
-                            <% }); %>
-
-
-                        <!-- More rows here -->
-                    </tbody>
-                </table>
-            </div>
-
-
-        
-            <div class="container">
-                <h2>Security Data</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>CrewId</th>
-                            <th>StationId</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% Security.forEach((i)=>{ %>
-                            <tr>
-                                <td><%= i.CrewId %></td>
-                                <td><%= i.StationId %></td>
-                               
-                               
-                            </tr>
-                            <% }); %>
-
-
-                        <!-- More rows here -->
-                    </tbody>
-                </table>
-            </div>
-
+       
 
           
         </section>
