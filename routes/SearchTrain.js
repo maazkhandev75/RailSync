@@ -117,8 +117,6 @@ module.exports = function(pool) {
 
 router.post('/PrintTicketNonStop', (req, res) => {
   console.log(req.body);
-  
-
     const userName = req.session.userDetails.username;
     console.log(userName);
   const InputTrackId=req.body.TrackID;
@@ -167,6 +165,28 @@ router.post('/PrintTicketNonStop', (req, res) => {
     }
   }
 })
+});
+
+
+router.post('/ConfirmNonStopTicket',(req,res)=>{
+  
+  console.log(req.body);
+  let AddTicket= new sql.Request(pool);
+  AddTicket.input('Seat',sql.Int,req.body.SeatNo);
+  AddTicket.input('Carriageid',sql.NVarChar,req.body.CarriageId);
+  AddTicket.input('TrainId',sql.NVarChar,req.body.TrainId);
+  AddTicket.input('TrackId',sql.NVarChar,req.body.trackId);
+  AddTicket.input('CNIC',sql.NVarChar, req.session.userDetails.cnic);
+  AddTicket.execute('insertTicket',(err,result)=>{
+    if(err) {
+      res.json({status:false});
+      }
+    else{
+     console.log("Ticket Booked ");  
+    res.json({status:true});
+    }
+  });
+
 });
 
 
@@ -245,37 +265,5 @@ router.post('/PrintTicketsWithStopsDetails', (req, res) => {
       res.status(500).send('Internal Server Error');
     });
 });
-
-
-  router.post('/ConfirmNonStopTicket',(req,res)=>{
-    console.log(req.body);
-
-    let SetStatusReq= new sql.Request(pool);
-    SetStatusReq.input('Seat',sql.Int,req.body.SeatNo);
-    SetStatusReq.input('Carriageid',sql.NVarChar,req.body.CarriageId);
-    SetStatusReq.input('TrainId',sql.NVarChar,req.body.TrainId);
-    SetStatusReq.execute('ChangeSeatStatus',(err,result)=>{
-      if(err) throw err;
-
-      
-    let AddTicket= new sql.Request(pool);
-    AddTicket.input('Seat',sql.Int,req.body.SeatNo);
-    AddTicket.input('Carriageid',sql.NVarChar,req.body.CarriageId);
-    AddTicket.input('TrainId',sql.NVarChar,req.body.TrainId);
-    AddTicket.input('TrackId',sql.NVarChar,req.body.trackId);
-    AddTicket.input('CNIC',sql.NVarChar, req.session.userDetails.cnic);
-    AddTicket.execute('insertTicket',(err,result)=>{
-      if(err) {
-        res.json({status:false});
-        }
-      else{
-       console.log("Ticket Booked ");  
-      res.json({status:true});
-      }
-    });
-
-    });
-
-  });
   return router;
 };

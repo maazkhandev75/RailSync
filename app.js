@@ -102,6 +102,7 @@ app.get('/SearchTrainform', (req, res) => {
       });
 });
 
+
 app.get('/admin', (req, res) => {
   pool.query('SELECT * FROM Train')
       .then(result => {
