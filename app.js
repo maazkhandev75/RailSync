@@ -20,7 +20,6 @@ app.use(session({
   saveUninitialized: false
 }));
 
-
 //importing routers
 const signupRouter = require('./routes/signup')
 const loginRouter = require('./routes/login')
@@ -84,11 +83,6 @@ res.render('signup.ejs');
 
 app.get('/loginForm',(req,res)=>{
   res.render('login.ejs');
-})
-
-app.get('/profile',(req,res)=>{
-
-  res.render('./USER/profile.ejs');
 })
 
 
@@ -172,6 +166,7 @@ app.get('/stationData', (req, res) => {
     res.status(500).send('Internal Server Error');
   });
 });
+
 app.get('/staffdata', (req, res) => {
 
   Promise.all([
@@ -207,6 +202,7 @@ app.get('/addTrain', (req, res) => {
 app.get('/addTrain', (req, res) => {
   res.render('./ADMIN/trainForm.ejs');
 });
+
 
 app.post('/bookTicketNonStop', (req, res) => {
   console.log(req.body);
@@ -252,10 +248,13 @@ app.post('/bookTicketNonStop', (req, res) => {
         var TicketInfo=result2.recordset;
         res.render('Ticket',{TicketInfo,inputClassType,userName});
       });
-    }
+    } 
   }
   })
 });
+
+
+
 // Use the routes
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
