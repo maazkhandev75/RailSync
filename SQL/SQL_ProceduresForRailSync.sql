@@ -236,17 +236,33 @@ join Fare as F on F.TrackId=Tr.TrackId
 join Carriage as c on c.TrainId=T.TrainId
 join Seat as s on s.TrainID=T.TrainId
 where c.Type=@Class and s.BookingStatus is  Null
-------------------------Proceudr eot book ticket and update seat and paymen ttabel;---------
-if(@FoundSeat is not null)
-begin 
-update Seat
-set BookingStatus='B'
-where Seat.TrainID=@TrainID and SeatNo=@FoundSeat and CarriageId=@FoundCarriage
-print 'Seat Found'
+-----------------------;---------
 
-end
-else 
+create trigger Addpayment on Ticket
+as
+after insert
+declare @CNIC nvarchar(255)
+declare @TicketId nvarchar(255)
+declare @TrackId nvarchar(255)
+declare @CarriageId nvarchar(255)
+declare @price int
+declare @type char
+select @CNIC=CNIC,@TicketId=TicketId,@CarriageId=CarriageId,@TrackId=TrackId from inserted
+select @type=[Type] from Carriage where CarraigeId=@CarriageId
+if (type='B')
 begin
+select @price=select BussinessClass from Fare where TrackId= @TrackId
+end
+if (type='E')
+begin
+select @price=select Economy from Fare where TrackId= @TrackId
+end
+if (type='F')
+begin
+select @price=select FirstClass from Fare where TrackId= @TrackId
+end
+insert into Payment
+values(@TicketId,@CNIC,@Price,NULL)
 
 
 

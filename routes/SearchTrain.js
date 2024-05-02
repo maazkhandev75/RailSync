@@ -114,7 +114,63 @@ module.exports = function(pool) {
 //   console.log(TicketInfo);
 //   res.render('Ticket.ejs', { TicketInfo, inputClassType, userName });
 // });
-router.post('/PrintTrainsWithStopsDetails', (req, res) => {
+
+router.post('/PrintTicketNonStop', (req, res) => {
+  console.log(req.body);
+  
+
+    const userName = req.session.userDetails.username;
+    console.log(userName);
+  const InputTrackId=req.body.TrackID;
+  var inputClassType=req.body.selectedClass;
+  if(req.body.selectedClass==="Economy") inputClassType="E";
+  else if(req.body.selectedClass==="Bussiness") inputClassType="B";
+  else if(req.body.selectedClass==="First Class") inputClassType="F";
+
+  const request= new sql.Request(pool);
+  request.input('TrainId',sql.NVarChar(30),req.body.selectedTrainID);
+  request.input('TrackId',sql.NVarChar(30),req.body.TrackID);
+  request.input('Class',sql.NVarChar(30),inputClassType);
+  var TicketAvailInfo="";
+  request.execute('BookTicket',(err,result)=>{
+    if(err){
+      console.log(err);
+      res.status(500).send('Internal Server Error');
+    }
+    else{
+        TicketAvailInfo=result.recordset[0];
+        console.log(TicketAvailInfo);
+        if(TicketAvailInfo.length!=0){
+          const TicketInfoReq= new sql.Request(pool);
+        TicketInfoReq.input('FoundCarriage',sql.NVarChar(30),TicketAvailInfo.CarriageId);
+        TicketInfoReq.input('TrainId',sql.NVarChar(30),req.body.selectedTrainID);
+        TicketInfoReq.input('FoundSeat',sql.Int,TicketAvailInfo.SeatNo);
+        TicketInfoReq.input('TrackId',sql.NVarChar(30),InputTrackId);
+        console.log(InputTrackId);
+        TicketInfoReq.execute('GetTicketInfo',(err,result2)=>{
+
+        if(err){
+          console.error(err);
+          res.status(500).send('Internel Server Error');
+        }
+        else{
+          console.log("seat details are: ");
+          console.log(result2);
+        }
+
+        var TicketInfo=result2.recordset;
+        res.render('Ticket',{TicketInfo,inputClassType,userName});
+      });
+    }
+    else{
+      alert("NO SEAT AVAILABLE");
+    }
+  }
+})
+});
+
+
+router.post('/PrintTicketsWithStopsDetails', (req, res) => {
   console.log(req.body);
   const userName = ""; // Assuming this variable will be used later in the code
   let inputClassType = "";
@@ -189,5 +245,37 @@ router.post('/PrintTrainsWithStopsDetails', (req, res) => {
       res.status(500).send('Internal Server Error');
     });
 });
+
+
+  router.post('/ConfirmNonStopTicket',(req,res)=>{
+    console.log(req.body);
+
+    let SetStatusReq= new sql.Request(pool);
+    SetStatusReq.input('Seat',sql.Int,req.body.SeatNo);
+    SetStatusReq.input('Carriageid',sql.NVarChar,req.body.CarriageId);
+    SetStatusReq.input('TrainId',sql.NVarChar,req.body.TrainId);
+    SetStatusReq.execute('ChangeSeatStatus',(err,result)=>{
+      if(err) throw err;
+
+      
+    let AddTicket= new sql.Request(pool);
+    AddTicket.input('Seat',sql.Int,req.body.SeatNo);
+    AddTicket.input('Carriageid',sql.NVarChar,req.body.CarriageId);
+    AddTicket.input('TrainId',sql.NVarChar,req.body.TrainId);
+    AddTicket.input('TrackId',sql.NVarChar,req.body.trackId);
+    AddTicket.input('CNIC',sql.NVarChar, req.session.userDetails.cnic);
+    AddTicket.execute('insertTicket',(err,result)=>{
+      if(err) {
+        res.json({status:false});
+        }
+      else{
+       console.log("Ticket Booked ");  
+      res.json({status:true});
+      }
+    });
+
+    });
+
+  });
   return router;
 };

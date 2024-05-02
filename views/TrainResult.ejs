@@ -20,7 +20,7 @@
 <body>
     <div class="container mt-5">
     <h3 class="mb-4">Available Trains </h3>
-    <form action="/bookTicketNonStop"  method="POST" id="NonStopTrainForm">
+    <form action="SearchTrain/PrintTicketNonStop"  method="POST" id="NonStopTrainForm">
         <table class="table table-dark table table-bordered table-hover"  id="NonStopTrainsTable">
         <caption>Non-Stop Trains</caption>
         
@@ -209,11 +209,6 @@ function getDataAndCallApi(){
     console.log('Table data is:');
     console.log(JSON.parse(jsonString));
     
-    // let StopForm =  new FormData();
-    // StopForm.append('jsonData',jsonString);
-    // StopForm.setAttribute('action', 'SearchTrain/PrintTrainsWithStopsDetails');
-    // StopForm.setAttribute('method', 'POST');
-    // StopForm.submit();
     if(jsonData){   
         let option={
             method: 'POST',
@@ -224,7 +219,7 @@ function getDataAndCallApi(){
         }
 
 
-        fetch('SearchTrain/PrintTrainsWithStopsDetails',option)
+        fetch('SearchTrain/PrintTicketsWithStopsDetails',option)
         .then(response => response.json())
         .catch(err=> console.log(err))
         .then(data=>{
