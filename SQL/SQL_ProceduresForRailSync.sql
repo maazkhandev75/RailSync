@@ -18,10 +18,11 @@ BEGIN
 	END
 
 	-- Insert the new user into the User table
-	INSERT INTO [User] ([Id], [UserName], [Password],[CNIC],[PhoneNo])
-	VALUES(NEWID(), @UserName, @Password,@CNIC,@PhoneNo);
+	INSERT INTO [User] ([UserName], [Password],[CNIC],[PhoneNo])
+	VALUES(@UserName, @Password, @CNIC, @PhoneNo);
 
 END
+
 
 --------PROCEDURE FOR LOGIN FUNCTIONALITY-------
 
@@ -36,7 +37,7 @@ BEGIN
 	IF EXISTS (SELECT 1 FROM [User] WHERE  CNIC = @CNIC AND  Password = @Password)
 	BEGIN
 		-- User account found, return a success message
-		 SELECT ID, UserName FROM [User] WHERE CNIC = @CNIC;
+		 SELECT UserName FROM [User] WHERE CNIC = @CNIC;
 	END
 	ELSE
 	BEGIN
@@ -93,14 +94,14 @@ END
 
 --------PROCEDURE FOR SHOWING BOOKED TICKETS OF USER-------
 CREATE PROCEDURE ShowBookedTickets
-	@UserId nvarchar(255)
+	@CNIC nvarchar(255)
 AS 
 BEGIN	
 	SET NOCOUNT ON;
 
-	IF EXISTS (SELECT 1 FROM [Ticket] WHERE  UserId = @UserId)
+	IF EXISTS (SELECT 1 FROM [Ticket] WHERE  CNIC = @CNIC)
 	BEGIN
-		SELECT * FROM [Ticket] WHERE  UserId = @UserId
+		SELECT * FROM [Ticket] WHERE  CNIC = @CNIC
 	END
 	ELSE
 	BEGIN
@@ -110,19 +111,20 @@ BEGIN
 	END
 END
 
+drop proc ShowBookedTickets
 
 
 --------PROCEDURE FOR CANCEL TICKET OF USER-------
 CREATE PROCEDURE CancelTicket
-	@UserId nvarchar(255),
+	@CNIC nvarchar(255)
 AS 
 BEGIN	
 	SET NOCOUNT ON;
 
-	IF EXISTS (SELECT 1 FROM [Ticket] WHERE  UserId = @UserId)
+	IF EXISTS (SELECT 1 FROM [Ticket] WHERE  CNIC = @CNIC)
 	BEGIN
 	
-		DELETE FROM [Ticket] WHERE  UserId = @UserId
+		DELETE FROM [Ticket] WHERE  CNIC = @CNIC
 	END
 	ELSE
 	BEGIN
@@ -132,6 +134,7 @@ BEGIN
 	END
 END
 
+drop proc CancelTicket
 
 ---------------Procedure to Search Train recursively-=----------------
 USE [afaqkhaliq_SampleDB]
@@ -313,7 +316,7 @@ exec ShowUser '3520297089087'
 
 UpdateUser '3520297089087','m maaz khan','mypass123','03204553255'
 
-INSERT INTO [Ticket] ([TicketId], [UserId],[SeatNo],[StartingStation],[EndingStation],[date])
+INSERT INTO [Ticket] ([TicketId],[CNIC],[SeatNo],[StartingStation],[EndingStation],[date])
 VALUES(NEWID(),'0CD8799B-6898-4682-8C22-75A6C7224DA0',1,'KHI','LHR','2025-3-13')
 
 SELECT * FROM [Ticket]

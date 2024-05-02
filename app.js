@@ -213,7 +213,6 @@ app.get('/profile',async(req,res)=>{
     if (result.returnValue === 0 && result.recordset.length>0) {
 
       const userCredentials = {
-         userId: result.recordset[0].Id,
          username: result.recordset[0].UserName,
          password: result.recordset[0].Password,
          cnic: result.recordset[0].CNIC,
