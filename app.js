@@ -102,7 +102,6 @@ app.get('/SearchTrainform', (req, res) => {
       });
 });
 
-
 app.get('/admin', (req, res) => {
   pool.query('SELECT * FROM Train')
       .then(result => {
@@ -140,50 +139,6 @@ app.get('/ticketsData', (req, res) => {
 });
 
 
-app.get('/showTicketsOfUser', async (req, res) => {
-  const cnic = req.session.userDetails.cnic;
-	  try {
-		// Call the stored procedure to fetch booked tickets
-		const result = await pool.request()
-		  .input('CNIC', sql.NVarChar(255), cnic)
-		  .execute('ShowBookedTickets');
-	
-		if (result.returnValue === 0) 
-    {
-		  console.log('Tickets found!');
-		  const Tickets = result.recordset; 
-      //console.log(Tickets)
-      const ticketsUpcoming = [];
-      const ticketsPrevious = [];
-      const currentTime = new Date();
-
-      Tickets.forEach((ticket) => {
-        if(ticket.Deptime < currentTime)
-        {
-          ticketsPrevious.push(ticket);
-        }
-        else
-        {
-          ticketsUpcoming.push(ticket);
-        }
-      });
-
-      // Assuming this is how your ticket data is structured
-		  res.render('./USER/ticketsOfUser.ejs',{ticketsPrevious,ticketsUpcoming}); 
-      // Send ticket data as JSON response
-		} 
-    else
-    {
-		  throw new Error('Failed to retrieve tickets');
-		} 
-	  } 
-    catch (error)
-    {
-		console.error('Error retrieving tickets:', error);
-		res.status(500).send('Failed to retrieve tickets');
-	  }
-});
-
 app.get('/ds', (req, res) => {
   res.render('./ADMIN/dashboard.ejs');
 });
@@ -216,7 +171,7 @@ app.get('/stationData', (req, res) => {
 });
 
 app.get('/staffdata', (req, res) => {
-
+  
   Promise.all([
       pool.query('SELECT * FROM Crew'),
       pool.query('SELECT * FROM Pilot'),
@@ -246,8 +201,21 @@ app.get('/staffData', (req, res) => {
 app.get('/addTrain', (req, res) => {
   res.render('./ADMIN/trainForm.ejs');
 });
-
-
+app.get('/addCarriage', (req, res) => {
+  res.render('./ADMIN/CarriageForm.ejs');
+});
+app.get('/addSeat', (req, res) => {
+  res.render('./ADMIN/SeatForm.ejs');
+});
+app.get('/editTrain', (req, res) => {
+  res.render('./ADMIN/EditTrain.ejs');
+});
+app.get('/editCarriage', (req, res) => {
+  res.render('./ADMIN/EditCarrriage.ejs');
+});
+app.get('/editSeat', (req, res) => {
+  res.render('./ADMIN/EditSeat.ejs');
+});
 app.get('/profile',async(req,res)=>{
   const cnic=req.session.userDetails.cnic;
   try{
@@ -258,6 +226,7 @@ app.get('/profile',async(req,res)=>{
     if (result.returnValue === 0 && result.recordset.length>0) {
 
       const userCredentials = {
+         userId: result.recordset[0].Id,
          username: result.recordset[0].UserName,
          password: result.recordset[0].Password,
          cnic: result.recordset[0].CNIC,
@@ -339,7 +308,6 @@ app.use('/TD',SearchCarriage(pool));
 app.use('/', sessionRouter);    //for testing session
 app.use('/profileUpdate',profileUpdateRouter(pool))
 app.use('/passwordChange',passwordChangeRouter(pool))
-
 
 //app.use('/bookedTickets',bookedTicketsRouter(pool));
 
