@@ -151,6 +151,9 @@ ADD CONSTRAINT FK_Ticket_Seat
 FOREIGN KEY ([CarriageId], [TrainId], [SeatNo])
 REFERENCES [Seat] ([CarriageID], [TrainID], [SeatNo]);
 
+insert [Ticket] values ('3512389230239',5,'101','202','122121')
+INSERT INTO Ticket (CNIC, SeatNo,TrainId,CarriageId,TicketId) values ('3512389230239',5,'101','202','122121')
+SET IDENTITY_INSERT Ticket OFF;
 ALTER TABLE [Payment] ADD FOREIGN KEY ([CNIC]) REFERENCES [User] ([CNIC])
 GO
 
@@ -223,8 +226,36 @@ SELECT name
 FROM sys.objects
 WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT'
     AND parent_object_id = OBJECT_ID('Ticket');
+ 
+insert [Tracks] values ('6','QUET','LHR')
+insert [Station] values ('QUET','Quetta','Quetta Pakistan')
+insert [Train] values ('206','1','LHR','QUET')
+alter Proc insertTicket 
+@CNIC nvarchar(255),
+@Seat int,
+@CarriageId nvarchar(255),
+@TrackId nvarchar(255),
+@TrainId nvarchar(255)
+as 
+insert into Ticket(CNIC,SeatNo,TrainId,CarriageId,trackId)
+values(@CNIC,@Seat,@TrainId,@CarriageId,@TrackId)
 
+insertTicket  '3512389230239',22,'202','5','101'
 
+SELECT COLUMN_NAME, DATA_TYPE
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'Ticket'
 
+SELECT
+  COLUMN_NAME,
+  DATA_TYPE,
+  CHARACTER_MAXIMUM_LENGTH AS MaxLength,
+  ISNULL(NUMERIC_PRECISION, 0) AS NumericPrecision,
+  ISNULL(NUMERIC_SCALE, 0) AS NumericScale
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'Ticket'
 
+DELETE FROM "Ticket";
 
+update Tracks set Station1Id='ISB', Station2Id='LHR'
+where TrackId='3'
