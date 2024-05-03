@@ -140,6 +140,50 @@ app.get('/ticketsData', (req, res) => {
 });
 
 
+app.get('/showTicketsOfUser', async (req, res) => {
+  const cnic = req.session.userDetails.cnic;
+	  try {
+		// Call the stored procedure to fetch booked tickets
+		const result = await pool.request()
+		  .input('CNIC', sql.NVarChar(255), cnic)
+		  .execute('ShowBookedTickets');
+	
+		if (result.returnValue === 0) 
+    {
+		  console.log('Tickets found!');
+		  const Tickets = result.recordset; 
+      //console.log(Tickets)
+      const ticketsUpcoming = [];
+      const ticketsPrevious = [];
+      const currentTime = new Date();
+
+      Tickets.forEach((ticket) => {
+        if(ticket.Deptime < currentTime)
+        {
+          ticketsPrevious.push(ticket);
+        }
+        else
+        {
+          ticketsUpcoming.push(ticket);
+        }
+      });
+
+      // Assuming this is how your ticket data is structured
+		  res.render('./USER/ticketsOfUser.ejs',{ticketsPrevious,ticketsUpcoming}); 
+      // Send ticket data as JSON response
+		} 
+    else
+    {
+		  throw new Error('Failed to retrieve tickets');
+		} 
+	  } 
+    catch (error)
+    {
+		console.error('Error retrieving tickets:', error);
+		res.status(500).send('Failed to retrieve tickets');
+	  }
+});
+
 app.get('/ds', (req, res) => {
   res.render('./ADMIN/dashboard.ejs');
 });
@@ -295,6 +339,7 @@ app.use('/TD',SearchCarriage(pool));
 app.use('/', sessionRouter);    //for testing session
 app.use('/profileUpdate',profileUpdateRouter(pool))
 app.use('/passwordChange',passwordChangeRouter(pool))
+
 
 //app.use('/bookedTickets',bookedTicketsRouter(pool));
 

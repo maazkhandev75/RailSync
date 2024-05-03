@@ -98,7 +98,7 @@ BEGIN
 
 	IF EXISTS (SELECT 1 FROM [Ticket] WHERE  CNIC = @CNIC)
 	BEGIN
-		SELECT * FROM [Ticket] WHERE  CNIC = @CNIC
+		SELECT T.TicketId, T.SeatNo, P.TotalPrice, P.RefundStatus, R.DeptTime FROM [Ticket] as T JOIN [Payment] as P on P.TicketId = T.TicketId  JOIN [Route] as R on ( R.TrainId=T.TrainId AND R.TrackId=T.trackId )WHERE  T.CNIC = @CNIC
 	END
 	ELSE
 	BEGIN
@@ -107,6 +107,8 @@ BEGIN
 		RETURN -1;
 	END
 END
+
+
 
 drop proc ShowBookedTickets
 

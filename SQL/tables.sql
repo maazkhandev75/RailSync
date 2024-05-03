@@ -227,15 +227,6 @@ go
 alter table [user] drop column id
 
 
-insert into [ticket]
-values('122148','1234567890123',1,'202','202-1','2')
-go
-
-
-insert into [ticket]
-values('122149','1234567890123',2,'202','202-8','2')
-go
-
 
 
 select * from [User]
