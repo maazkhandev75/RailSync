@@ -48,6 +48,9 @@ BEGIN
 
 END
 
+--------------------------------------------------------------------------------------------------------
+
+
 --------PROCEDURE FOR SHOW PROFILE FUNCTIONALITY-------
 
 CREATE PROCEDURE GetUserCredentials
