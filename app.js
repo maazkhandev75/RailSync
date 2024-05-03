@@ -102,7 +102,6 @@ app.get('/SearchTrainform', (req, res) => {
       });
 });
 
-
 app.get('/admin', (req, res) => {
   pool.query('SELECT * FROM Train')
       .then(result => {
@@ -172,7 +171,7 @@ app.get('/stationData', (req, res) => {
 });
 
 app.get('/staffdata', (req, res) => {
-
+  
   Promise.all([
       pool.query('SELECT * FROM Crew'),
       pool.query('SELECT * FROM Pilot'),
@@ -202,8 +201,21 @@ app.get('/staffData', (req, res) => {
 app.get('/addTrain', (req, res) => {
   res.render('./ADMIN/trainForm.ejs');
 });
-
-
+app.get('/addCarriage', (req, res) => {
+  res.render('./ADMIN/CarriageForm.ejs');
+});
+app.get('/addSeat', (req, res) => {
+  res.render('./ADMIN/SeatForm.ejs');
+});
+app.get('/editTrain', (req, res) => {
+  res.render('./ADMIN/EditTrain.ejs');
+});
+app.get('/editCarriage', (req, res) => {
+  res.render('./ADMIN/EditCarrriage.ejs');
+});
+app.get('/editSeat', (req, res) => {
+  res.render('./ADMIN/EditSeat.ejs');
+});
 app.get('/profile',async(req,res)=>{
   const cnic=req.session.userDetails.cnic;
   try{
@@ -214,6 +226,7 @@ app.get('/profile',async(req,res)=>{
     if (result.returnValue === 0 && result.recordset.length>0) {
 
       const userCredentials = {
+         userId: result.recordset[0].Id,
          username: result.recordset[0].UserName,
          password: result.recordset[0].Password,
          cnic: result.recordset[0].CNIC,
