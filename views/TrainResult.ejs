@@ -83,7 +83,14 @@
             <option>First Class</option>
         </select>
     </div>
-    <button class="btn btn-primary" onclick="bookTicket()"> Book Ticket</button>
+    <button class="btn btn-primary" onclick="bookTicket()">Check Seat</button>
+
+
+
+
+
+
+
 
 
 
@@ -103,6 +110,7 @@
         
         <% TrainsWithStops.forEach((i) => { %>
             <tr>
+    <form action="SearchTrain/PrintTicketNonStop"  method="POST" id="<%= i.TrainId %>">
                 <td><%= i.TrainId %></td>
                 <td><%= i.TrackId %></td>
                 <% if(i.UPStatus == 1) { %>
@@ -133,18 +141,31 @@
                         </tr>
         
                     </table>
+                    <input  type="hidden" name="TrackID" value="<%= i.TrackId %>">
+                    <input  type="hidden" name="selectedTrainID" value="<%= i.TrainId %>">
+                    <td>
+                        <select class="form-select" name="selectedClass">
+                            <option>Economy</option>
+                            <option>Bussiness</option>
+                            <option>First Class</option>
+                        </select>
+                    </td>
                 </td>
+                <td>
+                    <input type="submit" value="Check Seat" class="form-submit">
+                </td>
+    </form>
             </tr>
         <% }); %>
     </table>
-    <select class="form-select" id="StopsClass" name="selectedClass">
+    <!-- <select class="form-select" id="StopsClass" name="selectedClass">
         <option>Economy</option>
         <option>Bussiness</option>
         <option>First Class</option>
     </select>
     <button type="button" onclick="getDataAndCallApi()" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
         Check Tickets
-    </button>
+    </button> -->
     
 
 </div>
@@ -160,7 +181,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <table class=" table table-dark table table-bordered table-hover">
+          <table class=" table table-dark table table-bordered table-hover" id="NonStopTicketsTable">
             <thead class=" table-dark">
                 <th> Name</th>
                 <th> TrainID</th>
@@ -171,6 +192,10 @@
                 <th> Seat No</th>
                 <th> Price</th>
             </thead>
+
+            <tbody>
+
+            </tbody>
           </table>
         </div>
         <div class="modal-footer">
@@ -182,11 +207,6 @@
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-
-// $('#exampleModalCenter').on('shown.bs.modal', function () {
-//   $('#exampleModalCenter').trigger('focus')
-// })
-
 
     function bookTicket() {
         var NonStopForm=document.getElementById('NonStopTrainForm');
@@ -230,6 +250,22 @@
     // Return the array containing data from each row
     return rowData;
 }
+
+function  DisplayNonStopTicketData(Ticket){
+    console.log("Ticket array:", Ticket); // Log the Ticket array
+    Ticket.forEach( i  => {
+        var table = document.getElementById("NonStopTicketsTable");
+
+// Create a new row
+var newRow = table.insertRow();
+
+// Insert cells into the new row and set their content
+var TrainID = newRow.insertCell(0);
+TrainID.innerHTML = i.TrainID;
+
+    });
+}
+
 function getDataAndCallApi(){
 
     var jsonData = fetchTableData(); 
@@ -244,10 +280,10 @@ function getDataAndCallApi(){
     // Convert the array of row data to JSON string
     
     var jsonString = JSON.stringify(jsonData);
-    console.log('JSON string is:');
-    console.log(jsonString);
-    console.log('Table data is:');
-    console.log(JSON.parse(jsonString));
+    // console.log('JSON string is:');
+    // console.log(jsonString);
+    // console.log('Table data is:');
+    // console.log(JSON.parse(jsonString));
     
     if(jsonData){   
         let option={
@@ -266,6 +302,18 @@ function getDataAndCallApi(){
             let SeatInfo=json.parse(data);
             console.log("Json got the data: ")
             console.log(data);
+
+            var table = document.getElementById("NonStopTicketsTable");
+            data.forEach( i  => {
+
+// Create a new row
+var newRow = table.insertRow();
+alert(i.TrainID);
+// Insert cells into the new row and set their content
+var TrainID = newRow.insertCell(0);
+TrainID.innerHTML = i.TrainID;
+
+    });
         });
 
     }

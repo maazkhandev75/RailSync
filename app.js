@@ -258,7 +258,7 @@ app.post('/bookTicketNonStop', (req, res) => {
     else{
         TicketAvailInfo=result.recordset[0];
         console.log(TicketAvailInfo);
-        if(TicketAvailInfo.length!=0){
+        if(TicketAvailInfo.length!= undefined){
           const TicketInfoReq= new sql.Request(pool);
         TicketInfoReq.input('FoundCarriage',sql.NVarChar(30),TicketAvailInfo.CarriageId);
         TicketInfoReq.input('TrainId',sql.NVarChar(30),req.body.selectedTrainID);
@@ -280,6 +280,9 @@ app.post('/bookTicketNonStop', (req, res) => {
         res.render('Ticket',{TicketInfo,inputClassType,userName});
       });
     } 
+    else{
+        res.send("No Avaiailable Seat Found");
+    }
   }
   })
 });
