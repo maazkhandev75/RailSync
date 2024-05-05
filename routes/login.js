@@ -19,7 +19,6 @@ module.exports = (pool) => {
         // User account found, retrieve user details
 
        const userDetails = {
-          userId: result.recordset[0].ID,
           username: result.recordset[0].UserName,
           cnic: cnic
         }; //we have to fetch username and id from database and no need to do this for cnic because we already have it because user entered it in the form

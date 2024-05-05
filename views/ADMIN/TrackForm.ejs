@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/head.ejs') %>
+
+<body>
+
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/sidebar.ejs') %>
+<style>
+  /* CSS */
+#inputName5 {
+    /* Style the input field to make it visually distinct */
+    color: #555; /* Example text color */
+    background-color: #f9f9f9; /* Example background color */
+    border: 1px solid #ddd; /* Example border */
+    /* Add any other styles as needed */
+}
+
+</style>
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1 style="color: rgb(219, 135, 56);">Form Layouts</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="DS">Home</a></li>
+          <li class="breadcrumb-item">Forms</li>
+          <li class="breadcrumb-item active">Layouts</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+    <section class="section">
+      <div class="row">
+
+
+        
+
+          <div class="card" style="color: rgb(219, 135, 56);">
+            <div class="card-body">
+              <h5 class="card-title" style="color: rgb(219, 135, 56);" >Add Track</h5>
+
+              <!-- Multi Columns Form -->
+              <form class="row g-3">
+
+
+                <div class="col-md-6">
+                  <label for="inputStartStation" class="form-label">Starting Station</label>
+                  <select id="inputStartStation" class="form-select">
+                    <% Station.forEach((station) => { %>
+                      <option value="<%= station.StationId %>"><%= station.StationName %></option>
+                  <% }); %>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="inputArrivalStation" class="form-label">Arrival Station</label>
+                  <select id="inputArrivalStation" class="form-select">
+                  <% Station.forEach((station) => { %>
+                    <option value="<%= station.StationId %>"><%= station.StationName %></option>
+                <% }); %>
+              </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="Economy" class="form-label">Economy Price</label>
+                    <input type="text" class="form-control" id="Economy" >
+                  </div>
+                  <div class="col-md-4">
+                    <label for="BusinessClass" class="form-label">BusinessClass Price</label>
+                    <input type="text" class="form-control" id="BusinessClass" >
+                  </div>
+                  <div class="col-md-4">
+                    <label for="FirstClass" class="form-label">FirstClass Price</label>
+                    <input type="text" class="form-control" id="FirstClass" >
+                  </div>
+                <div class="text-center">
+                  <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>
+                  <button type="reset" class="btn btn-secondary">Reset</button>
+                </div>
+              </form><!-- End Multi Columns Form -->
+
+            </div>
+          </div>
+
+
+        </div>
+
+    </section>
+
+  </main><!-- End #main -->
+
+
+  <%- include('./partials/footer.ejs') %>
+  <%- include('./partials/script.ejs') %>
+
+</body>
+<script>
+  document.getElementById('submitButton').addEventListener('click', function() {
+      event.preventDefault();
+      const Station1Id = document.getElementById('inputStartStation').value;
+      const Station2Id = document.getElementById('inputArrivalStation').value;
+      const Economy = document.getElementById('Economy').value;
+      const BusinessClass = document.getElementById('BusinessClass').value;
+      const FirstClass = document.getElementById('FirstClass').value;
+  
+      fetch('/TD/addTrack', {
+      method: 'POST',
+      body: JSON.stringify({ Station1Id,Station2Id,Economy,BusinessClass,FirstClass }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+      const result = data.Message;
+       if(result[0].ResultMessage=='TRACK ADDED SUCCESSFULLY')
+          {window.location.href = '/stationData';}
+        else
+        {
+          console.log(result[0].ResultMessage);
+          alert(result[0].ResultMessage);
+        }
+
+    })
+    .catch(error => {
+       
+      console.error('Error:', error);
+    });
+      // You can perform further actions here, such as sending the data to the server via fetch() or XMLHttpRequest
+  });
+</script>
+
+</html>

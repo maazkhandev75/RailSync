@@ -125,10 +125,10 @@
                                 <td><%= i.StationName %></td>
                                 <td><%= i.Address %></td>
                                 <td>
-                                    <td>
+                                    
                                         <button class="edit-btn" onclick="redirectToEditPage('<%= i.StationId %>')">Edit</button>
                                         <button class="delete-btn" onclick="deleteRow('<%= i.StationId %>')">Delete</button>
-                                    </td>
+                                   
                                 </td>
                             </tr>
                             <% }); %>
@@ -149,6 +149,9 @@
                             <th>TrackID</th>
                             <th>StationID</th>
                             <th>StationID</th>
+                            <th>Economy</th>
+                            <th>BusinessClass</th>
+                            <th>FirstClass</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -158,11 +161,14 @@
                                 <td><%= i.TrackId %></td>
                                 <td><%= i.Station1Id %></td>
                                 <td><%= i.Station2Id %></td>
+                                <td><%= i.Economy %></td>
+                                <td><%= i.BusinessClass %></td>
+                                <td><%= i.FirstClass %></td>
                                 <td>
-                                    <td>
+                                    
                                         <button class="edit-btn" onclick="redirectToEditPage('<%= i.TrackId %>')">Edit</button>
                                         <button class="delete-btn" onclick="deleteRow('<%= i.TrackId %>')">Delete</button>
-                                    </td>
+                                  
                                 </td>
                             </tr>
                             <% }); %>
@@ -184,119 +190,5 @@
 </body>
 <script>
 
-function updateTable(data) {
-    const table = document.getElementById('seatTable');
-    table.innerHTML = `
-        <tr>
-            <th>CarriageID</th>
-            <th>TrainID</th>
-            <th>Type</th>
-            <th>Actions</th>
-        </tr>
-    `;
-    // Loop through the received data and append rows to the table
-    if (Array.isArray(data.Carriage)) {
-        data.Carriage.forEach(entry => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${entry.CarriageId}</td>
-                <td>${entry.TrainId}</td>
-                <td>${entry.Type}</td>
-                <td>
-                    <button class="edit-btn">Edit</button>
-                    <button class="delete-btn">Delete</button>
-                </td>
-            `;
-            table.appendChild(row);
-        });
-    } else {
-        console.error('Unexpected data format:', data);
-    }
-}
-
-
-document.getElementById('searchCarriageButton').addEventListener('click', function() {
-    // Retrieve the value entered in the search input field
-    const searchTerm = document.getElementById('searchCarriage').value;
-    if(searchTerm ==null)
-        return;
-    console.log(searchTerm);
-    // You can also send the search term to your server for further processing if needed
-    fetch('/TD/searchCarriage', {
-      method: 'POST',
-      body: JSON.stringify({ searchTerm: searchTerm }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-       updateTable(data);
-
-    })
-    .catch(error => {
-        console.log('gg');
-      console.error('Error:', error);
-    });
-  });
-
-
-  function updateSeatTable(data)
-  {
-    const table = document.getElementById('Seats');
-    table.innerHTML = `
-        <tr>
-            <th>CarriageID</th>
-            <th>TrainID</th>
-            <th>SeatNo</th>
-            <th>BookingStatus</th>
-            <th>Actions</th>
-        </tr>
-    `;
-    // Loop through the received data and append rows to the table
-    if (Array.isArray(data.Seat)) {
-        data.Seat.forEach(entry => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${entry.CarriageID}</td>
-                <td>${entry.TrainID}</td>
-                <td>${entry.SeatNo}</td>
-                <td>${entry.BookingStatus}</td>
-                <td>
-                    <button class="edit-btn">Edit</button>
-                    <button class="delete-btn">Delete</button>
-                </td>
-            `;
-            table.appendChild(row);
-        });
-    } else {
-        console.error('Unexpected data format:', data);
-    }
-  }
-
-  document.getElementById('searchSeatButton').addEventListener('click', function() {
-    // Retrieve the value entered in the search input field
-    const searchTerm = document.getElementById('searchSeat').value;
-    if(searchTerm ==null)
-        return;
-    console.log(searchTerm);
-    // You can also send the search term to your server for further processing if needed
-    fetch('/TD/SearchSeat', {
-      method: 'POST',
-      body: JSON.stringify({ searchTerm: searchTerm }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-       updateSeatTable(data);
-
-    })
-    .catch(error => {
-        console.log('gg');
-      console.error('Error:', error);
-    });
-  });
 </script>
 </html>

@@ -28,6 +28,9 @@ const usersRouter = require('./routes/users');
 const SearchTrainRouter = require('./routes/SearchTrain');
 const SearchCarriage = require('./routes/TD');
 const sessionRouter = require('./routes/testSession');
+const profileUpdateRouter = require('./routes/profileUpdate');
+const passwordChangeRouter = require('./routes/passwordChange');
+
 
 //const bookedTicketsRouter = require('./routes/bookedTickets');
 
@@ -99,6 +102,7 @@ app.get('/SearchTrainform', (req, res) => {
       });
 });
 
+
 app.get('/admin', (req, res) => {
   pool.query('SELECT * FROM Train')
       .then(result => {
@@ -152,7 +156,7 @@ app.get('/stationData', (req, res) => {
   // Execute both queries asynchronously
   Promise.all([
     requestStation.query('SELECT * FROM Station'),
-    requestTrack.query('SELECT * FROM Tracks')
+    requestTrack.query('SELECT * FROM Tracks join Fare on Tracks.TrackId=Fare.TrackId')
   ])
   .then(results => {
     const Station = results[0].recordset;
@@ -168,7 +172,7 @@ app.get('/stationData', (req, res) => {
 });
 
 app.get('/staffdata', (req, res) => {
-  
+
   Promise.all([
       pool.query('SELECT * FROM Crew'),
       pool.query('SELECT * FROM Pilot'),
@@ -196,9 +200,58 @@ app.get('/staffData', (req, res) => {
 });
 
 app.get('/addTrain', (req, res) => {
-  res.render('./ADMIN/trainForm.ejs');
+  pool.query('SELECT * FROM Station')
+      .then(result => {
+          const Station = result.recordset;
+
+          res.render('./ADMIN/trainForm.ejs', {  Station: Station });
+
+      })
+      .catch(err => {
+          console.error(err);
+          res.status(500).send('Internal Server Error');
+      });
+  
 });
 
+app.get('/addStation', (req, res) => {
+  res.render('./ADMIN/stationForm.ejs');
+});
+
+app.get('/addTrack', (req, res) => {
+  pool.query('SELECT * FROM Station')
+  .then(result => {
+      const Station = result.recordset;
+      res.render('./ADMIN/TrackForm.ejs', {Station: Station });
+
+  })
+  .catch(err => {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  });
+});
+
+app.get('/addCarriage', (req, res) => {
+  res.render('./ADMIN/CarriageForm.ejs');
+});
+app.get('/addSeat', (req, res) => {
+  res.render('./ADMIN/SeatForm.ejs');
+});
+
+app.get('/editTrain', (req, res) => {
+  const TrainId = req.query.TrainID;
+  pool.query('SELECT * FROM Station')
+      .then(result => {
+          const Station = result.recordset;
+          res.render('./ADMIN/editTrain.ejs', { TrainId: TrainId, Station: Station });
+
+      })
+      .catch(err => {
+          console.error(err);
+          res.status(500).send('Internal Server Error');
+      });
+  
+});
 
 app.get('/profile',async(req,res)=>{
   const cnic=req.session.userDetails.cnic;
@@ -210,12 +263,12 @@ app.get('/profile',async(req,res)=>{
     if (result.returnValue === 0 && result.recordset.length>0) {
 
       const userCredentials = {
-         userId: result.recordset[0].Id,
          username: result.recordset[0].UserName,
          password: result.recordset[0].Password,
          cnic: result.recordset[0].CNIC,
          phone: result.recordset[0].PhoneNo
        }
+
        //console.log(userCredentials.password);  for testing
         res.render('./USER/profile.ejs',{userCredentials});
     }
@@ -281,7 +334,6 @@ app.post('/bookTicketNonStop', (req, res) => {
 });
 
 
-
 // Use the routes
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -290,6 +342,8 @@ app.use('/login', loginRouter(pool));     // Pass pool object to loginRouter
 app.use('/SearchTrain', SearchTrainRouter(pool));
 app.use('/TD',SearchCarriage(pool));
 app.use('/', sessionRouter);    //for testing session
+app.use('/profileUpdate',profileUpdateRouter(pool))
+app.use('/passwordChange',passwordChangeRouter(pool))
 
 //app.use('/bookedTickets',bookedTicketsRouter(pool));
 
@@ -301,9 +355,6 @@ app.use(bodyParser.json());
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
-
-
 
 
 // error handler

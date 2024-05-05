@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/head.ejs') %>
+
+<body>
+
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/sidebar.ejs') %>
+<style>
+  /* CSS */
+#inputName5 {
+    /* Style the input field to make it visually distinct */
+    color: #555; /* Example text color */
+    background-color: #f9f9f9; /* Example background color */
+    border: 1px solid #ddd; /* Example border */
+    /* Add any other styles as needed */
+}
+
+</style>
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1 style="color: rgb(219, 135, 56);">Form Layouts</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="DS">Home</a></li>
+          <li class="breadcrumb-item">Forms</li>
+          <li class="breadcrumb-item active">Layouts</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+    <section class="section">
+      <div class="row">
+
+
+        
+
+          <div class="card" style="color: rgb(219, 135, 56);">
+            <div class="card-body">
+              <h5 class="card-title" style="color: rgb(219, 135, 56);" >Train Update Form</h5>
+
+              <!-- Multi Columns Form -->
+              <form class="row g-3">
+                <div class="col-md-6">
+                  <label for="inputName5" class="form-label">TrainID</label>
+                  <input type="text" class="form-control" id="inputName5" readonly placeholder="<%= TrainId %>">
+                </div>
+                <div class="col-md-6">
+                  <label for="inputState" class="form-label">UpDownStatus</label>
+                  <select id="inputState" class="form-select">
+                    <option selected>UP</option>
+                    <option>Down</option>
+
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="inputArrivalStation" class="form-label">Arrival Station</label>
+                  <select id="inputArrivalStation" class="form-select">
+                    <% Station.forEach((station) => { %>
+                      <option value="<%= station.StationId %>" <%= station.StationId === TrainId ? 'selected' : '' %>><%= station.StationName %></option>
+                  <% }); %>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="inputDepartureStation" class="form-label">Depature Station</label>
+                  <select id="inputDepartureStation" class="form-select">
+                    <% Station.forEach((station) => { %>
+                      <option value="<%= station.StationId %>" <%= station.StationId === TrainId ? 'selected' : '' %>><%= station.StationName %></option>
+                  <% }); %>
+                  </select>
+                </div>
+                <div class="text-center">
+                  <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>
+                  <button type="reset" class="btn btn-secondary">Reset</button>
+                </div>
+              </form><!-- End Multi Columns Form -->
+
+            </div>
+          </div>
+
+
+        </div>
+
+    </section>
+
+  </main><!-- End #main -->
+
+
+  <%- include('./partials/footer.ejs') %>
+  <%- include('./partials/script.ejs') %>
+
+</body>
+<script>
+  document.getElementById('submitButton').addEventListener('click', function() {
+      event.preventDefault();
+      const trainId = document.getElementById('inputName5').placeholder;
+      const departureStation = document.getElementById('inputDepartureStation').value;
+      const ArrivalStation = document.getElementById('inputArrivalStation').value;
+      let upDownStatus = document.getElementById('inputState').value;
+      if(upDownStatus=='UP')
+        upDownStatus='1';
+      else
+        upDownStatus='0';
+      console.log('Train ID:', trainId);
+      console.log('arrival Station:', ArrivalStation);
+      console.log('Departure Station:', departureStation);
+      console.log('UpDown Status:', upDownStatus);
+      fetch('/TD/editTrain', {
+      method: 'POST',
+      body: JSON.stringify({ trainId,departureStation,ArrivalStation,upDownStatus }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+       console.log(data);
+       window.location.href = '/traindata';
+
+    })
+    .catch(error => {
+       
+      console.error('Error:', error);
+    });
+      // You can perform further actions here, such as sending the data to the server via fetch() or XMLHttpRequest
+  });
+</script>
+
+</html>

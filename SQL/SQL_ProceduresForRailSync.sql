@@ -18,10 +18,11 @@ BEGIN
 	END
 
 	-- Insert the new user into the User table
-	INSERT INTO [User] ([Id], [UserName], [Password],[CNIC],[PhoneNo])
-	VALUES(NEWID(), @UserName, @Password,@CNIC,@PhoneNo);
+	INSERT INTO [User] ([UserName], [Password],[CNIC],[PhoneNo])
+	VALUES(@UserName, @Password, @CNIC, @PhoneNo);
 
 END
+
 
 --------PROCEDURE FOR LOGIN FUNCTIONALITY-------
 
@@ -36,7 +37,7 @@ BEGIN
 	IF EXISTS (SELECT 1 FROM [User] WHERE  CNIC = @CNIC AND  Password = @Password)
 	BEGIN
 		-- User account found, return a success message
-		 SELECT ID, UserName FROM [User] WHERE CNIC = @CNIC;
+		 SELECT UserName FROM [User] WHERE CNIC = @CNIC;
 	END
 	ELSE
 	BEGIN
@@ -46,9 +47,6 @@ BEGIN
 	END
 
 END
-
---------------------------------------------------------------------------------------------------------
-
 
 --------PROCEDURE FOR SHOW PROFILE FUNCTIONALITY-------
 
@@ -63,30 +61,44 @@ END
 
 
 --------PROCEDURE FOR UPDATE PROFILE FUNCTIONALITY-------
-CREATE PROCEDURE UpdateUser 
+CREATE PROCEDURE UpdateProfile 
 	@CNIC nvarchar(255),
 	@UserName nvarchar(255),
-	@Password nvarchar(255),
 	@PhoneNo nvarchar(255)
 AS 
 BEGIN	
 	SET NOCOUNT ON;
 
 		 UPDATE [User]
-		 SET UserName=@UserName,[Password]=@Password,PhoneNo=@PhoneNo
+		 SET UserName=@UserName,PhoneNo=@PhoneNo
 		 WHERE CNIC=@CNIC
 END
 
---------PROCEDURE FOR SHOWING BOOKED TICKETS OF USER-------
-CREATE PROCEDURE ShowBookedTickets
-	@UserId nvarchar(255)
+--------PROCEDURE FOR PASSWORD CHANGE FUNCTIONALITY-------
+CREATE PROCEDURE ChangePassword 
+	@CNIC nvarchar(255),
+	@newPassword nvarchar(255)
+
 AS 
 BEGIN	
 	SET NOCOUNT ON;
 
-	IF EXISTS (SELECT 1 FROM [Ticket] WHERE  UserId = @UserId)
+		 UPDATE [User]
+		 SET Password=@newPassword
+		 WHERE CNIC=@CNIC
+END
+
+
+--------PROCEDURE FOR SHOWING BOOKED TICKETS OF USER-------
+CREATE PROCEDURE ShowBookedTickets
+	@CNIC nvarchar(255)
+AS 
+BEGIN	
+	SET NOCOUNT ON;
+
+	IF EXISTS (SELECT 1 FROM [Ticket] WHERE  CNIC = @CNIC)
 	BEGIN
-		SELECT * FROM [Ticket] WHERE  UserId = @UserId
+		SELECT * FROM [Ticket] WHERE  CNIC = @CNIC
 	END
 	ELSE
 	BEGIN
@@ -96,19 +108,20 @@ BEGIN
 	END
 END
 
+drop proc ShowBookedTickets
 
 
 --------PROCEDURE FOR CANCEL TICKET OF USER-------
 CREATE PROCEDURE CancelTicket
-	@UserId nvarchar(255),
+	@CNIC nvarchar(255)
 AS 
 BEGIN	
 	SET NOCOUNT ON;
 
-	IF EXISTS (SELECT 1 FROM [Ticket] WHERE  UserId = @UserId)
+	IF EXISTS (SELECT 1 FROM [Ticket] WHERE  CNIC = @CNIC)
 	BEGIN
 	
-		DELETE FROM [Ticket] WHERE  UserId = @UserId
+		DELETE FROM [Ticket] WHERE  CNIC = @CNIC
 	END
 	ELSE
 	BEGIN
@@ -118,6 +131,7 @@ BEGIN
 	END
 END
 
+drop proc CancelTicket
 
 ---------------Procedure to Search Train recursively-=----------------
 USE [afaqkhaliq_SampleDB]
@@ -236,17 +250,33 @@ join Fare as F on F.TrackId=Tr.TrackId
 join Carriage as c on c.TrainId=T.TrainId
 join Seat as s on s.TrainID=T.TrainId
 where c.Type=@Class and s.BookingStatus is  Null
-------------------------Proceudr eot book ticket and update seat and paymen ttabel;---------
-if(@FoundSeat is not null)
-begin 
-update Seat
-set BookingStatus='B'
-where Seat.TrainID=@TrainID and SeatNo=@FoundSeat and CarriageId=@FoundCarriage
-print 'Seat Found'
+-----------------------;---------
 
-end
-else 
+create trigger Addpayment on Ticket
+as
+after insert
+declare @CNIC nvarchar(255)
+declare @TicketId nvarchar(255)
+declare @TrackId nvarchar(255)
+declare @CarriageId nvarchar(255)
+declare @price int
+declare @type char
+select @CNIC=CNIC,@TicketId=TicketId,@CarriageId=CarriageId,@TrackId=TrackId from inserted
+select @type=[Type] from Carriage where CarraigeId=@CarriageId
+if (type='B')
 begin
+select @price=select BussinessClass from Fare where TrackId= @TrackId
+end
+if (type='E')
+begin
+select @price=select Economy from Fare where TrackId= @TrackId
+end
+if (type='F')
+begin
+select @price=select FirstClass from Fare where TrackId= @TrackId
+end
+insert into Payment
+values(@TicketId,@CNIC,@Price,NULL)
 
 
 
@@ -283,7 +313,7 @@ exec ShowUser '3520297089087'
 
 UpdateUser '3520297089087','m maaz khan','mypass123','03204553255'
 
-INSERT INTO [Ticket] ([TicketId], [UserId],[SeatNo],[StartingStation],[EndingStation],[date])
+INSERT INTO [Ticket] ([TicketId],[CNIC],[SeatNo],[StartingStation],[EndingStation],[date])
 VALUES(NEWID(),'0CD8799B-6898-4682-8C22-75A6C7224DA0',1,'KHI','LHR','2025-3-13')
 
 SELECT * FROM [Ticket]
@@ -301,5 +331,102 @@ where TicketId='8FDD6A4D-938B-4871-88AA-DC1F7B0D8A1D'
 
 alter table [Ticket] drop  column date
 alter table [ticket] add  Date_and_Time DATETIME
+
+
+--------EditTrain
+CREATE PROCEDURE EditTrain
+    @TRAINID NVARCHAR(255),
+    @DEPARTURESTATION NVARCHAR(255),
+    @ARRIVALSTATION NVARCHAR(255),
+    @UPDOWNSTATUS CHAR
+AS 
+BEGIN
+    IF EXISTS (SELECT * FROM Train WHERE TrainId = @TRAINID)
+    BEGIN
+        UPDATE Train 
+        SET DeptStation = @DEPARTURESTATION, 
+            ArrivalStation = @ARRIVALSTATION, 
+            UpDownStatus = @UPDOWNSTATUS 
+        WHERE TrainId = @TRAINID;
+    END
+END
+
+exec EditTrain '206','ISB','QUET','1'
+
+CREATE PROCEDURE AddTrain
+    @TRAINID NVARCHAR(255),
+    @DEPARTURESTATION NVARCHAR(255),
+    @ARRIVALSTATION NVARCHAR(255),
+    @UPDOWNSTATUS CHAR
+AS 
+BEGIN
+    IF NOT EXISTS (SELECT * FROM Train WHERE TrainId = @TRAINID)
+    BEGIN
+        INSERT INTO Train (TrainId, StationName, DeptStation, ArrivalStation)
+        VALUES (@TRAINID, @UPDOWNSTATUS, @DEPARTURESTATION, @ARRIVALSTATION);
+        SELECT 'TRAIN ADDED SUCCESSFULLY' AS ResultMessage; -- Return success message
+    END
+    ELSE
+    BEGIN
+        SELECT 'ID ALREADY EXISTS' AS ResultMessage; -- Return message indicating ID already exists
+    END
+END
+
+
+CREATE PROCEDURE AddStation
+    @STATIONID NVARCHAR(255),
+    @STATIONNAME NVARCHAR(255),
+    @STATIONADDRESS NVARCHAR(255)
+AS 
+BEGIN
+    IF NOT EXISTS (SELECT * FROM Station WHERE StationId = @STATIONID)
+    BEGIN
+        INSERT INTO Station (StationId, StationName, [Address])
+        VALUES (@STATIONID, @STATIONNAME, @STATIONADDRESS);
+        SELECT 'STATION ADDED SUCCESSFULLY' AS ResultMessage; -- Return success message
+    END
+    ELSE
+    BEGIN
+        SELECT 'ID ALREADY EXISTS' AS ResultMessage; -- Return message indicating ID already exists
+    END
+END
+
+
+alter PROCEDURE InsertTrack
+    @Station1Id NVARCHAR(255),
+    @Station2Id NVARCHAR(255),
+    @Economy FLOAT,
+    @BusinessClass float,
+    @FirstClass FLOAT
+AS 
+BEGIN
+    DECLARE @COUNT INT;
+
+    -- Get the count of existing tracks and increment it by 1
+    SELECT @COUNT = COUNT(*) + 1 FROM Tracks;
+
+    -- Convert @COUNT to NVARCHAR
+    DECLARE @COUNT_NVARCHAR NVARCHAR(255);
+    SET @COUNT_NVARCHAR = CONVERT(NVARCHAR(255), @COUNT);
+
+    -- Insert data into the table
+    INSERT INTO Tracks (TrackId, Station1Id, Station2Id)
+    VALUES (@COUNT_NVARCHAR, @Station1Id, @Station2Id);
+
+    INSERT INTO Fare (TrackId,Economy,BusinessClass,FirstClass)
+    VALUES (@COUNT_NVARCHAR,@Economy,@BusinessClass,@FirstClass)
+    SELECT 'TRACK ADDED SUCCESSFULLY' AS ResultMessage;
+END
+
+
+
+
+
+
+
+
+
+
+
 
 

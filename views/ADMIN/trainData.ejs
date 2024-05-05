@@ -317,7 +317,7 @@ document.getElementById('searchCarriageButton').addEventListener('click', functi
 
     })
     .catch(error => {
-        console.log('gg');
+        
       console.error('Error:', error);
     });
   });
@@ -358,6 +358,7 @@ function deleteSeat(carriageID, trainID, seatNo) {
 
 
 function editTrain(TrainId) {
+    
     window.location.href = `/editTrain?TrainID=${TrainId}`;
 }
 
