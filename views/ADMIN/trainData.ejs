@@ -279,15 +279,16 @@ document.getElementById('searchCarriageButton').addEventListener('click', functi
             row.setAttribute('data-carriage-id', entry.CarriageID);
             row.setAttribute('data-train-id', entry.TrainID);
             row.setAttribute('data-seat-no', entry.SeatNo);
-            row.innerHTML = `
+            row.innerHTML =` 
                 <td>${entry.CarriageID}</td>
                 <td>${entry.TrainID}</td>
                 <td>${entry.SeatNo}</td>
                 <td>${entry.BookingStatus}</td>
                 <td>
-                <button class="edit-btn" onclick="editSeat('${entry.CarriageID}', '${entry.TrainID}', '${entry.SeatNo}')">Edit</button>
+                <button class="edit-btn" onclick="editSeat('${entry.CarriageID}', '${entry.TrainID}', '${entryapp.SeatNo}')">Edit</button>
                 <button class="delete-btn" onclick="deleteSeat('${entry.CarriageID}', '${entry.TrainID}', '${entry.SeatNo}')">Delete</button>
-            </td>
+                            
+                </td>
                 </td>
             `;
             table.appendChild(row);
@@ -323,8 +324,8 @@ document.getElementById('searchCarriageButton').addEventListener('click', functi
   });
 
 
-  function editSeat(carriageID, trainID, seatNo) {
-    window.location.href = `/editSeat?carriageID=${carriageID}&trainID=${trainID}&seatNo=${seatNo}`;
+  function editSeat(CarriageId, trainID, seatNo) {
+    window.location.href = `/editSeat?carriageID=${carriageId}&trainID=${trainID}&seatNo=${seatNo}`;
 }
 
 function deleteSeat(carriageID, trainID, seatNo) {
@@ -397,8 +398,9 @@ function deleteTrain(TrainId) {
 }
 
 
-function editCarriage(CarriageID) {
-    window.location.href = `/editTrain?carriageID=${carriageID}`;
+function editCarriage(CarriageId) {
+    
+    window.location.href = `/editCarriage?CarriageId=${CarriageId}`;
 }
 
 function deleteCarriage(CarriageID) {
