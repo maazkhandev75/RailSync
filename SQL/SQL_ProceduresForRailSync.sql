@@ -423,6 +423,38 @@ BEGIN
     SELECT 'TRACK ADDED SUCCESSFULLY' AS ResultMessage;
 END
 
+alter PROCEDURE AddSecurity
+    @CrewId NVARCHAR(255),
+    @CrewName NVARCHAR(255),
+    @Address NVARCHAR(255),
+    @DateOfBirth DATE,
+    @StationId NVARCHAR(255)
+   AS 
+BEGIN
+    INSERT INTO Crew (CrewId,CrewName,[Address],DateOfBirth)
+    VALUES (@CrewId, @CrewName, @Address,@DateOfBirth);
+
+    Insert into [Security] (CrewId,StationId) values(@CrewId,@StationId);
+    SELECT 'GUARD ADDED SUCCESSFULLY' AS ResultMessage;
+end;
+
+exec  AddSecurity '31203412311','Daniel','Lahore,Pakistan','2000-01-01','ISB'
+
+Create PROCEDURE AddPilot
+    @CrewId NVARCHAR(255),
+    @CrewName NVARCHAR(255),
+    @Address NVARCHAR(255),
+    @DateOfBirth DATE,
+    @TrainId NVARCHAR(255)
+   AS 
+BEGIN
+    INSERT INTO Crew (CrewId,CrewName,[Address],DateOfBirth)
+    VALUES (@CrewId, @CrewName, @Address,@DateOfBirth);
+
+    Insert into [Pilot] (CrewId,TrainId) values(@CrewId,@TrainId);
+    SELECT 'GUARD ADDED SUCCESSFULLY' AS ResultMessage;
+end;
+
 
 
 

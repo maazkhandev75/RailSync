@@ -84,6 +84,50 @@ router.post('/addTrack', (req, res) => {
     });
 });
 
+router.post('/addSecurity', (req, res) => {
+    const { CrewId,CrewName,Address,DateOfBirth,StationId  } = req.body;
+
+    const request = new sql.Request(pool);
+    request.input('CrewId', sql.NVarChar, CrewId);
+    request.input('CrewName', sql.NVarChar, CrewName);
+    request.input('Address', sql.NVarChar, Address);
+    request.input('DateOfBirth', sql.Date, DateOfBirth);
+    request.input('StationId', sql.NVarChar, StationId);
+
+    request.execute('AddSecurity', (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            console.log(result.recordset);
+            Message=result.recordset;
+            res.json({ Message });
+            
+        }
+    });
+});
+router.post('/addPilot', (req, res) => {
+    const { CrewId,CrewName,Address,DateOfBirth,TrainId  } = req.body;
+
+    const request = new sql.Request(pool);
+    request.input('CrewId', sql.NVarChar, CrewId);
+    request.input('CrewName', sql.NVarChar, CrewName);
+    request.input('Address', sql.NVarChar, Address);
+    request.input('DateOfBirth', sql.Date, DateOfBirth);
+    request.input('TrainId', sql.NVarChar, TrainId);
+
+    request.execute('AddPilot', (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            console.log(result.recordset);
+            Message=result.recordset;
+            res.json({ Message });
+            
+        }
+    });
+});
 
 
   router.post('/addTrain', (req, res) => {

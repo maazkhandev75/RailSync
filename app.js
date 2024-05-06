@@ -173,15 +173,15 @@ app.get('/stationData', (req, res) => {
 app.get('/staffdata', (req, res) => {
   
   Promise.all([
-      pool.query('SELECT * FROM Crew'),
-      pool.query('SELECT * FROM Pilot'),
-      pool.query('SELECT * FROM Security')
+     
+      pool.query('SELECT * FROM Pilot as p join Crew as c on c.CrewId=p.CrewId'),
+      pool.query('SELECT * FROM Security as s join Crew as c on c.CrewId=s.CrewId')
     ])
-  .then(([CrewResult,PilotResult,SecurityResult]) => {
-      const Crew = CrewResult.recordset;
+  .then(([PilotResult,SecurityResult]) => {
+   
       const Pilot = PilotResult.recordset;
       const Security=SecurityResult.recordset;
-      res.render("./ADMIN/staffData.ejs", { Crew,Pilot,Security });
+      res.render("./ADMIN/staffData.ejs", { Pilot,Security });
   })
   .catch(err => {
       console.error(err);
@@ -222,6 +222,32 @@ app.get('/addTrack', (req, res) => {
   .then(result => {
       const Station = result.recordset;
       res.render('./ADMIN/TrackForm.ejs', {Station: Station });
+
+  })
+  .catch(err => {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  });
+});
+
+app.get('/addSecurity', (req, res) => {
+  pool.query('SELECT * FROM Station')
+  .then(result => {
+      const Station = result.recordset;
+      res.render('./ADMIN/SecurityForm.ejs', {Station: Station });
+
+  })
+  .catch(err => {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  });
+});
+
+app.get('/addPilot', (req, res) => {
+  pool.query('SELECT * FROM Train')
+  .then(result => {
+      const Train = result.recordset;
+      res.render('./ADMIN/PilotForm.ejs', {Train: Train });
 
   })
   .catch(err => {
