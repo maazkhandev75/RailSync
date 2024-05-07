@@ -46,21 +46,13 @@
               <form class="row g-3">
 
                 <div class="col-md-6">
-                    <label for="inputName5" class="form-label">TrainID</label>
-                    <input type="text" class="form-control" id="inputName5" readonly placeholder="<%= TrainID %>">
+                    <label for="TrainID" class="form-label">TrainID</label>
+                    <input type="text" class="form-control" id="TrainID" readonly placeholder="<%= TrainID %>">
                   </div>
                   <div class="col-md-6">
-                    <label for="TrackId" class="form-label">Track</label>
-                    <select id="TrackId" class="form-select">
-                        <% Track.forEach((track) => { %>
-                            <% if (track.TrackId == TrackID) { %>
-                                <option selected value="<%= track.TrackId %>"><%= track.Station1Id %> - <%= track.Station2Id %></option>
-                            <% } else { %>
-                                <option value="<%= track.TrackId %>"><%= track.Station1Id %> - <%= track.Station2Id %></option>
-                            <% } %>
-                        <% }); %>
-                    </select>
-                </div>
+                    <label for="TrackID" class="form-label">TrackID</label>
+                    <input type="text" class="form-control" id="TrackID" readonly placeholder="<%= TrackID %>">
+                  </div>
                 
                   <div class="col-md-6">
                     <label for="DepartureTime" class="form-label">DepartureTime</label>
@@ -74,7 +66,7 @@
                 <div class="text-center">
                     <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>
                     <button type="reset" class="btn btn-secondary">Reset</button>
-                  </div>
+                </div>
 
               </form><!-- End Multi Columns Form -->
 
@@ -96,8 +88,8 @@
 <script>
   document.getElementById('submitButton').addEventListener('click', function() {
       event.preventDefault();
-      const TrainId = document.getElementById('TrainId').value;
-      const TrackId = document.getElementById('TrackId').value;
+      const TrainId = document.getElementById('TrainID').placeholder;
+      const TrackId = document.getElementById('TrackID').placeholder;
       const DepartureTime = document.getElementById('DepartureTime').value;
       const ArrivalTime = document.getElementById('ArrivalTime').value;
         
@@ -111,7 +103,7 @@
     .then(response => response.json())
     .then(data => {
       const result = data.Message;
-       if(result[0].ResultMessage=='ROUTE ADDED SUCCESSFULLY')
+       if(result[0].ResultMessage=='ROUTE UPDATED SUCCESSFULLY')
           {window.location.href = '/routeData';}
         else
         {

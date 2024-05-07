@@ -128,12 +128,12 @@
                                 <td><%= i.TrackId[0] %></td>
                                 <td><%= i.Station1Id %></td>
                                 <td><%= i.Station2Id %></td>
-                                <td><%= i.DeptTime.toISOString().split('T')[0] %></td>
-                                <td><%= i.ArrivalTime.toISOString().split('T')[0] %></td>
+                                <td><%= i.DeptTime %></td>
+                                <td><%= i.ArrivalTime %></td>
                                 <td>
                                     
-                                        <button class="edit-btn" onclick="redirectToEditPage('<%= i.TrainId %>','<%= i.TrackId %>')">Edit</button>
-                                        <button class="delete-btn" onclick="deleteRow('<%= i.TrainId %>','<%= i.TrackId %>')">Delete</button>
+                                        <button class="edit-btn" onclick="redirectToEditPage('<%= i.TrainId %>','<%= i.TrackId[0] %>')">Edit</button>
+                                        <button class="delete-btn" onclick="deleteRow('<%= i.TrainId %>','<%= i.TrackId[0] %>')">Delete</button>
                                    
                                 </td>
                             </tr>

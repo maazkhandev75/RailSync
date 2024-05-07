@@ -516,16 +516,17 @@ CREATE PROCEDURE EditRoute
     @ArrivalTime DATETIME
 AS 
 BEGIN
-    IF  EXISTS (SELECT * FROM [Route] WHERE TrainId = @TrainId AND TrackId = @TrackId)
+    IF EXISTS (SELECT * FROM [Route] WHERE TrainId = @TrainId AND TrackId = @TrackId)
     BEGIN
-        INSERT INTO [Route] (TrainId, TrackId, [DeptTime], ArrivalTime)
-        VALUES (@TrainId, @TrackId, @DepartureTime, @ArrivalTime);
+        UPDATE [Route]
+        SET DeptTime=@DepartureTime, ArrivalTime=@ArrivalTime
+        WHERE TrackId = @TrackId and TrainId=@TrainId
 
-        SELECT 'ROUTE ADDED SUCCESSFULLY' AS ResultMessage;
+        SELECT 'ROUTE UPDATED SUCCESSFULLY' AS ResultMessage;
     END
     ELSE
     BEGIN
-        SELECT 'ROUTE ALREADY EXISTS' AS ResultMessage;
+        SELECT 'ROUTE DOES NOT EXISTS' AS ResultMessage;
     END
 END;
 

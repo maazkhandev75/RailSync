@@ -178,7 +178,7 @@ app.get('/routeData', (req, res) => {
   .then(result => {
  
       const Route =result.recordset;
-
+      console.log(Route);
       res.render("./ADMIN/routesData.ejs", { Route });
   })
   .catch(err => {
@@ -333,17 +333,7 @@ app.get('/editTrain', (req, res) => {
 app.get('/editRoute', (req, res) => {
   const TrainID = req.query.TrainID;
   const TrackID=req.query.TrackID;
-  pool.query('SELECT * FROM Tracks')
-      .then(result => {
-          const Station = result.recordset;
-          res.render('./ADMIN/editTrack.ejs', {TrainID,TrackID });
-
-      })
-      .catch(err => {
-          console.error(err);
-          res.status(500).send('Internal Server Error');
-      });
-  
+  res.render('./ADMIN/editRoute.ejs', {TrainID,TrackID });
 });
 
 app.get('/profile',async(req,res)=>{
