@@ -170,6 +170,25 @@ app.get('/stationData', (req, res) => {
   });
 });
 
+app.get('/routeData', (req, res) => {
+  
+
+     
+  pool.query('SELECT * FROM Route as R join Tracks as T on R.TrackId=T.TrackId')
+  .then(result => {
+ 
+      const Route =result.recordset;
+
+      res.render("./ADMIN/routesData.ejs", { Route });
+  })
+  .catch(err => {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  });
+});
+
+
+
 app.get('/staffdata', (req, res) => {
   
   Promise.all([
@@ -189,6 +208,41 @@ app.get('/staffdata', (req, res) => {
   });
 });
 
+
+app.get('/addCarriage', (req, res) => {
+     
+  pool.query('SELECT * FROM Train ')
+  .then(result => {
+      const Train =result.recordset;
+
+      res.render("./ADMIN/CarriageForm.ejs", { Train });
+  })
+  .catch(err => {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  });
+});
+
+
+
+app.get('/addRoute', (req, res) => {
+  
+  Promise.all([
+     
+      pool.query('SELECT * FROM Train'),
+      pool.query('SELECT * FROM Tracks')
+    ])
+  .then(([TrainResult,TrackResult]) => {
+   
+      const Train = TrainResult.recordset;
+      const Track=TrackResult.recordset;
+      res.render("./ADMIN/RouteForm.ejs", { Train,Track });
+  })
+  .catch(err => {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  });
+});
 
 app.get('/form', (req, res) => {
   res.render('./ADMIN/form.ejs');
@@ -259,9 +313,7 @@ app.get('/addPilot', (req, res) => {
 app.get('/addCarriage', (req, res) => {
   res.render('./ADMIN/CarriageForm.ejs');
 });
-app.get('/addSeat', (req, res) => {
-  res.render('./ADMIN/SeatForm.ejs');
-});
+
 
 app.get('/editTrain', (req, res) => {
   const TrainId = req.query.TrainID;

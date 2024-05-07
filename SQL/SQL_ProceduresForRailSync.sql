@@ -456,6 +456,60 @@ BEGIN
 end;
 
 
+CREATE PROCEDURE AddRoute
+    @TrainId NVARCHAR(255),
+    @TrackId NVARCHAR(255),
+    @DepartureTime DATETIME,
+    @ArrivalTime DATETIME
+AS 
+BEGIN
+    IF NOT EXISTS (SELECT * FROM [Route] WHERE TrainId = @TrainId AND TrackId = @TrackId)
+    BEGIN
+        INSERT INTO [Route] (TrainId, TrackId, [DeptTime], ArrivalTime)
+        VALUES (@TrainId, @TrackId, @DepartureTime, @ArrivalTime);
+
+        SELECT 'ROUTE ADDED SUCCESSFULLY' AS ResultMessage;
+    END
+    ELSE
+    BEGIN
+        SELECT 'ROUTE ALREADY EXISTS' AS ResultMessage;
+    END
+END;
+
+
+ALTER PROCEDURE AddCarriage
+    @TrainId NVARCHAR(255),
+    @CarriageId NVARCHAR(255),
+    @Type CHAR,
+    @NoOfSeats INT
+AS 
+BEGIN
+    IF NOT EXISTS (SELECT * FROM [Carriage] WHERE CarriageId = @CarriageId )
+    BEGIN
+        INSERT INTO [Carriage] (TrainId, CarriageId, [Type])
+        VALUES (@TrainId, @CarriageId, @Type);
+        
+        DECLARE @SeatID INT = 1; -- Initialize SeatID
+
+        -- Loop to insert seats
+        WHILE @SeatID <= @NoOfSeats
+        BEGIN
+            INSERT INTO [Seat] (TrainID, CarriageID, SeatNo, BookingStatus)
+            VALUES (@TrainId, @CarriageId, @SeatID, NULL);
+            SET @SeatID = @SeatID + 1; -- Increment SeatID
+        END
+
+        SELECT 'CARRIAGE ADDED SUCCESSFULLY' AS ResultMessage;
+    END
+    ELSE
+    BEGIN
+        SELECT 'CARRIAGE ALREADY EXISTS' AS ResultMessage;
+    END
+END;
+
+select * from [Seat] where CarriageID='222'
+
+
 
 
 

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/head.ejs') %>
+
+<style>
+     body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #000000;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #000000;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+     table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 2px solid rgb(66, 66, 66);
+        padding: 10px;
+        text-align: left;
+    }
+     th {
+        background-color: #000000;
+        font-weight: bold;
+        color: rgb(255, 106, 0);
+    }
+    tr:hover {
+        background-color: #262626;
+    } 
+    .edit-btn, .delete-btn {
+        padding: 5px 10px;
+        color: rgb(0, 0, 0);
+        border: none;
+        cursor: pointer;
+        border-radius: 10px;
+        transition: background-color 0.2s ease-in;
+    }
+    .delete-btn {
+        background-color: #b40c00;
+    }
+    .edit-btn{
+        background-color: #32c700;
+    }
+    .delete-btn:hover{
+        background-color: #ec1000;
+    }
+    .edit-btn:hover{
+        background-color: #40ff00;
+    }
+
+    .table-header {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .search-input {
+        flex: 1;
+        margin-right: 10px;
+        padding: 5px;
+        border-radius: 3px;
+        border: 1px solid #888888;
+        color: #ffffff;
+        background-color: #000;
+    }
+
+    .search-btn {
+        padding: 5px 10px;
+        background-color: rgb(0, 187, 211);
+        color: #000000;
+        border: none;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+
+    .search-btn:hover {
+        background-color: #52d7ff;
+    }
+</style>
+<body>
+
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/sidebar.ejs') %>
+
+    <main id="main" class="main">
+
+        <div class="pagetitle">
+        <h1>Station Meta Data</h1>
+        <nav>
+            <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="DS">Home</a></li>
+            <li class="breadcrumb-item">Tables</li>
+            <li class="breadcrumb-item active">General</li>
+            </ol>
+        </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+
+
+                <div class="container">
+                <h2>Route Data</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>TrainID</th>
+                            <th>TrackId</th>
+                            <th>DepartureStation</th>
+                            <th>ArrivalStation</th>
+                            <th>DepartureTime</th>
+                            <th>ArrivalTime</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% Route.forEach((i)=>{ %>
+                            <tr>
+                                <td><%= i.TrainId %></td>
+                                <td><%= i.TrackId[0] %></td>
+                                <td><%= i.Station1Id %></td>
+                                <td><%= i.Station2Id %></td>
+                                <td><%= i.DeptTime.toISOString().split('T')[0] %></td>
+                                <td><%= i.ArrivalTime.toISOString().split('T')[0] %></td>
+                                <td>
+                                    
+                                        <button class="edit-btn" onclick="redirectToEditPage('<%= i.TrainId %>')">Edit</button>
+                                        <button class="delete-btn" onclick="deleteRow('<%= i.TrainId %>')">Delete</button>
+                                   
+                                </td>
+                            </tr>
+                            <% }); %>
+
+
+                        <!-- More rows here -->
+                    </tbody>
+                </table>
+            </div>
+
+
+
+
+
+
+
+        </section>
+    </main>
+  <%- include('./partials/footer.ejs') %>
+  <%- include('./partials/script.ejs') %>
+
+</body>
+<script>
+
+</script>
+</html>

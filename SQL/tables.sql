@@ -79,9 +79,10 @@ CREATE TABLE [Crew] (
   [CrewId] nvarchar(255) PRIMARY KEY,
   [CrewName] nvarchar(255),
   [Address] nvarchar(255),
-  [DateOfBirth] nvarchar(255)
+  [DateOfBirth] Date
 )
 GO
+
 
 CREATE TABLE [Pilot] (
   [CrewId] nvarchar(255),
@@ -233,6 +234,15 @@ go
 alter table [user] drop column id
 
 
+insert into [ticket]
+values('122148','1234567890123',1,'202','202-1','2')
+go
+
+
+insert into [ticket]
+values('122149','1234567890123',2,'202','202-8','2')
+go
+
 
 
 select * from [User]
@@ -248,6 +258,8 @@ select * from [Security]
 select * from [Tracks]
 select * from [Seat]
 select * from [Route]
+
+DELETE FROM Tracks WHERE TrackId = '6';
 
 SELECT name
 FROM sys.objects
@@ -286,3 +298,5 @@ DELETE FROM "Ticket";
 
 update Tracks set Station1Id='ISB', Station2Id='LHR'
 where TrackId='3'
+
+SELECT * FROM Route as R join Tracks as T on R.TrackId=T.TrackId

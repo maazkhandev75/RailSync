@@ -130,6 +130,54 @@ router.post('/addPilot', (req, res) => {
 });
 
 
+router.post('/addRoute', (req, res) => {
+    const { TrainId,TrackId,DepartureTime,ArrivalTime } = req.body;
+
+    const request = new sql.Request(pool);
+
+    request.input('ArrivalTime', sql.DateTime, ArrivalTime);
+    request.input('DepartureTime', sql.DateTime, DepartureTime);
+    request.input('TrackId', sql.NVarChar, TrackId);
+    request.input('TrainId', sql.NVarChar, TrainId);
+
+    request.execute('AddRoute', (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            console.log(result.recordset);
+            Message=result.recordset;
+            res.json({ Message });
+            
+        }
+    });
+});
+
+
+router.post('/addCarriage', (req, res) => {
+    const { TrainId, CarriageId,Type, NoOfSeats} = req.body;
+
+    const request = new sql.Request(pool);
+
+    request.input('NoOfSeats', sql.Int, NoOfSeats);
+    request.input('Type', sql.Char, Type);
+    request.input('CarriageId', sql.NVarChar, CarriageId);
+    request.input('TrainId', sql.NVarChar, TrainId);
+
+    request.execute('AddCarriage', (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            console.log(result.recordset);
+            Message=result.recordset;
+            res.json({ Message });
+            
+        }
+    });
+});
+
+
   router.post('/addTrain', (req, res) => {
     const { trainId, departureStation, ArrivalStation, upDownStatus } = req.body;
 

@@ -142,8 +142,7 @@
                     </tbody>
                 </table>
             </div>
-
-
+   
 
             <div class="container">
                 <h2>Carriage Data</h2>
@@ -285,7 +284,7 @@ document.getElementById('searchCarriageButton').addEventListener('click', functi
                 <td>${entry.SeatNo}</td>
                 <td>${entry.BookingStatus}</td>
                 <td>
-                <button class="edit-btn" onclick="editSeat('${entry.CarriageID}', '${entry.TrainID}', '${entryapp.SeatNo}')">Edit</button>
+                <button class="edit-btn" onclick="editSeat('${entry.CarriageID}', '${entry.TrainID}', '${entry.SeatNo}')">Edit</button>
                 <button class="delete-btn" onclick="deleteSeat('${entry.CarriageID}', '${entry.TrainID}', '${entry.SeatNo}')">Delete</button>
                             
                 </td>
