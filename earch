@@ -1,0 +1,146 @@
+[1mdiff --git a/routes/SearchTrain.js b/routes/SearchTrain.js[m
+[1mindex 9f2cea2..2889279 100644[m
+[1m--- a/routes/SearchTrain.js[m
+[1m+++ b/routes/SearchTrain.js[m
+[36m@@ -125,7 +125,7 @@[m [mmodule.exports = function(pool) {[m
+ //   res.render('Ticket.ejs', { TicketInfo, inputClassType, userName });[m
+ // });[m
+ [m
+[31m-router.post('/PrintTicketNonStop',sessionChecker, (req, res) => {[m
+[32m+[m[32mrouter.post('/PrintTicketNonStop', (req, res) => {[m
+   console.log(req.body);[m
+     const userName = req.session.userDetails.username;[m
+     console.log(userName);[m
+[1mdiff --git a/views/ADMIN/EditTrain.ejs b/views/ADMIN/EditTrain.ejs[m
+[1mindex 9f300f3..3e61ca0 100644[m
+[1m--- a/views/ADMIN/EditTrain.ejs[m
+[1m+++ b/views/ADMIN/EditTrain.ejs[m
+[36m@@ -8,13 +8,24 @@[m
+ <%- include('./partials/header.ejs') %>[m
+ [m
+ <%- include('./partials/sidebar.ejs') %>[m
+[32m+[m[32m<style>[m
+[32m+[m[32m  /* CSS */[m
+[32m+[m[32m#inputName5 {[m
+[32m+[m[32m    /* Style the input field to make it visually distinct */[m
+[32m+[m[32m    color: #555; /* Example text color */[m
+[32m+[m[32m    background-color: #f9f9f9; /* Example background color */[m
+[32m+[m[32m    border: 1px solid #ddd; /* Example border */[m
+[32m+[m[32m    /* Add any other styles as needed */[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m</style>[m
+ <main id="main" class="main">[m
+ [m
+     <div class="pagetitle">[m
+[31m-      <h1>Form Layouts</h1>[m
+[32m+[m[32m      <h1 style="color: rgb(219, 135, 56);">Form Layouts</h1>[m
+       <nav>[m
+         <ol class="breadcrumb">[m
+[31m-          <li class="breadcrumb-item"><a href="trainData.ejs">editTrain</a></li>[m
+[32m+[m[32m          <li class="breadcrumb-item"><a href="DS">Home</a></li>[m
+           <li class="breadcrumb-item">Forms</li>[m
+           <li class="breadcrumb-item active">Layouts</li>[m
+         </ol>[m
+[36m@@ -26,18 +37,18 @@[m
+ [m
+         [m
+ [m
+[31m-          <div class="card">[m
+[32m+[m[32m          <div class="card" style="color: rgb(219, 135, 56);">[m
+             <div class="card-body">[m
+[31m-              <h5 class="card-title">Multi Columns Form</h5>[m
+[32m+[m[32m              <h5 class="card-title" style="color: rgb(219, 135, 56);" >Train Update Form</h5>[m
+ [m
+               <!-- Multi Columns Form -->[m
+               <form class="row g-3">[m
+                 <div class="col-md-6">[m
+                   <label for="inputName5" class="form-label">TrainID</label>[m
+[31m-                  <input type="text" class="form-control" id="inputName5">[m
+[32m+[m[32m                  <input type="text" class="form-control" id="inputName5" readonly placeholder="<%= TrainId %>">[m
+                 </div>[m
+                 <div class="col-md-6">[m
+[31m-                  <label for="inputState" class="form-label">Arrival Station</label>[m
+[32m+[m[32m                  <label for="inputState" class="form-label">UpDownStatus</label>[m
+                   <select id="inputState" class="form-select">[m
+                     <option selected>UP</option>[m
+                     <option>Down</option>[m
+[36m@@ -45,25 +56,23 @@[m
+                   </select>[m
+                 </div>[m
+                 <div class="col-md-6">[m
+[31m-                  <label for="inputState" class="form-label">Depature Station</label>[m
+[31m-                  <select id="inputState" class="form-select">[m
+[31m-                    <option selected>LHR</option>[m
+[31m-                    <option>ISLB</option>[m
+[31m-                    <option>KRC</option>[m
+[31m-                    <option>QUET</option>[m
+[32m+[m[32m                  <label for="inputArrivalStation" class="form-label">Arrival Station</label>[m
+[32m+[m[32m                  <select id="inputArrivalStation" class="form-select">[m
+[32m+[m[32m                    <% Station.forEach((station) => { %>[m
+[32m+[m[32m                      <option value="<%= station.StationId %>" <%= station.StationId === TrainId ? 'selected' : '' %>><%= station.StationName %></option>[m
+[32m+[m[32m                  <% }); %>[m
+                   </select>[m
+                 </div>[m
+                 <div class="col-md-6">[m
+[31m-                  <label for="inputState" class="form-label">UpDownStatus</label>[m
+[31m-                  <select id="inputState" class="form-select">[m
+[31m-                    <option selected>LHR</option>[m
+[31m-                    <option>ISLB</option>[m
+[31m-                    <option>KRC</option>[m
+[31m-                    <option>QUET</option>[m
+[32m+[m[32m                  <label for="inputDepartureStation" class="form-label">Depature Station</label>[m
+[32m+[m[32m                  <select id="inputDepartureStation" class="form-select">[m
+[32m+[m[32m                    <% Station.forEach((station) => { %>[m
+[32m+[m[32m                      <option value="<%= station.StationId %>" <%= station.StationId === TrainId ? 'selected' : '' %>><%= station.StationName %></option>[m
+[32m+[m[32m                  <% }); %>[m
+                   </select>[m
+                 </div>[m
+                 <div class="text-center">[m
+[31m-                  <button type="submit" class="btn btn-primary">Submit</button>[m
+[32m+[m[32m                  <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>[m
+                   <button type="reset" class="btn btn-secondary">Reset</button>[m
+                 </div>[m
+               </form><!-- End Multi Columns Form -->[m
+[36m@@ -83,5 +92,40 @@[m
+   <%- include('./partials/script.ejs') %>[m
+ [m
+ </body>[m
+[32m+[m[32m<script>[m
+[32m+[m[32m  document.getElementById('submitButton').addEventListener('click', function() {[m
+[32m+[m[32m      event.preventDefault();[m
+[32m+[m[32m      const trainId = document.getElementById('inputName5').placeholder;[m
+[32m+[m[32m      const departureStation = document.getElementById('inputDepartureStation').value;[m
+[32m+[m[32m      const ArrivalStation = document.getElementById('inputArrivalStation').value;[m
+[32m+[m[32m      let upDownStatus = document.getElementById('inputState').value;[m
+[32m+[m[32m      if(upDownStatus=='UP')[m
+[32m+[m[32m        upDownStatus='1';[m
+[32m+[m[32m      else[m
+[32m+[m[32m        upDownStatus='0';[m
+[32m+[m[32m      console.log('Train ID:', trainId);[m
+[32m+[m[32m      console.log('arrival Station:', ArrivalStation);[m
+[32m+[m[32m      console.log('Departure Station:', departureStation);[m
+[32m+[m[32m      console.log('UpDown Status:', upDownStatus);[m
+[32m+[m[32m      fetch('/TD/editTrain', {[m
+[32m+[m[32m      method: 'POST',[m
+[32m+[m[32m      body: JSON.stringify({ trainId,departureStation,ArrivalStation,upDownStatus }),[m
+[32m+[m[32m        headers: {[m
+[32m+[m[32m            'Content-Type': 'application/json'[m
+[32m+[m[32m        }[m
+[32m+[m[32m    })[m
+[32m+[m[32m    .then(response => response.json())[m
+[32m+[m[32m    .then(data => {[m
+[32m+[m[32m       console.log(data);[m
+[32m+[m[32m       window.location.href = '/traindata';[m
+[32m+[m
+[32m+[m[32m    })[m
+[32m+[m[32m    .catch(error => {[m
+[32m+[m[41m       [m
+[32m+[m[32m      console.error('Error:', error);[m
+[32m+[m[32m    });[m
+[32m+[m[32m      // You can perform further actions here, such as sending the data to the server via fetch() or XMLHttpRequest[m
+[32m+[m[32m  });[m
+[32m+[m[32m</script>[m
+ [m
+ </html>[m
+\ No newline at end of file[m
