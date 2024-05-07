@@ -125,7 +125,7 @@ module.exports = function(pool) {
 //   res.render('Ticket.ejs', { TicketInfo, inputClassType, userName });
 // });
 
-router.post('/PrintTicketNonStop',sessionChecker, (req, res) => {
+router.post('/PrintTicketNonStop', (req, res) => {
   console.log(req.body);
     const userName = req.session.userDetails.username;
     console.log(userName);
