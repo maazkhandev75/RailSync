@@ -132,8 +132,8 @@
                                 <td><%= i.ArrivalTime.toISOString().split('T')[0] %></td>
                                 <td>
                                     
-                                        <button class="edit-btn" onclick="redirectToEditPage('<%= i.TrainId %>')">Edit</button>
-                                        <button class="delete-btn" onclick="deleteRow('<%= i.TrainId %>')">Delete</button>
+                                        <button class="edit-btn" onclick="redirectToEditPage('<%= i.TrainId %>','<%= i.TrackId %>')">Edit</button>
+                                        <button class="delete-btn" onclick="deleteRow('<%= i.TrainId %>','<%= i.TrackId %>')">Delete</button>
                                    
                                 </td>
                             </tr>
@@ -158,6 +158,9 @@
 
 </body>
 <script>
+function redirectToEditPage(TrainId, TrackId) {
+    window.location.href = `/editRoute?TrainID=${TrainId}&TrackID=${TrackId}`;
+}
 
 </script>
 </html>

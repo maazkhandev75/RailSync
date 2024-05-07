@@ -509,7 +509,25 @@ END;
 
 select * from [Seat] where CarriageID='222'
 
+CREATE PROCEDURE EditRoute
+    @TrainId NVARCHAR(255),
+    @TrackId NVARCHAR(255),
+    @DepartureTime DATETIME,
+    @ArrivalTime DATETIME
+AS 
+BEGIN
+    IF  EXISTS (SELECT * FROM [Route] WHERE TrainId = @TrainId AND TrackId = @TrackId)
+    BEGIN
+        INSERT INTO [Route] (TrainId, TrackId, [DeptTime], ArrivalTime)
+        VALUES (@TrainId, @TrackId, @DepartureTime, @ArrivalTime);
 
+        SELECT 'ROUTE ADDED SUCCESSFULLY' AS ResultMessage;
+    END
+    ELSE
+    BEGIN
+        SELECT 'ROUTE ALREADY EXISTS' AS ResultMessage;
+    END
+END;
 
 
 

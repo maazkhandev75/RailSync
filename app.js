@@ -330,6 +330,22 @@ app.get('/editTrain', (req, res) => {
   
 });
 
+app.get('/editRoute', (req, res) => {
+  const TrainID = req.query.TrainID;
+  const TrackID=req.query.TrackID;
+  pool.query('SELECT * FROM Tracks')
+      .then(result => {
+          const Station = result.recordset;
+          res.render('./ADMIN/editTrack.ejs', {TrainID,TrackID });
+
+      })
+      .catch(err => {
+          console.error(err);
+          res.status(500).send('Internal Server Error');
+      });
+  
+});
+
 app.get('/profile',async(req,res)=>{
   const cnic=req.session.userDetails.cnic;
   try{

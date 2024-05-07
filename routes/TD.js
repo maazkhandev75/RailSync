@@ -202,6 +202,26 @@ router.post('/addCarriage', (req, res) => {
 
 
 
+router.post('/editRoute', (req, res) => {
+    const { trainId, departureStation, ArrivalStation, upDownStatus } = req.body;
+
+    const request = new sql.Request(pool);
+    request.input('TRAINID', sql.NVarChar, trainId);
+    request.input('DEPARTURESTATION', sql.NVarChar, departureStation);
+    request.input('ARRIVALSTATION', sql.NVarChar, ArrivalStation);
+    request.input('UPDOWNSTATUS', sql.NVarChar, upDownStatus);
+
+    request.execute('EditRoute', (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            res.json({ message: 'Track updated successfully' });
+            
+        }
+    });
+});
+
 
   router.post('/editTrain', (req, res) => {
     const { trainId, departureStation, ArrivalStation, upDownStatus } = req.body;
