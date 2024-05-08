@@ -152,19 +152,21 @@ app.get('/showTicketsOfUser', async (req, res) => {
     {
 		  console.log('Tickets found!');
 		  const Tickets = result.recordset; 
-      //console.log(Tickets)
+      console.log(Tickets)
       const ticketsUpcoming = [];
       const ticketsPrevious = [];
       const currentTime = new Date();
-
+      console.log(currentTime);
       Tickets.forEach((ticket) => {
-        if(ticket.Deptime < currentTime)
+
+        const deptTime=new Date(ticket.deptTime);
+        if(deptTime >= currentTime)
         {
-          ticketsPrevious.push(ticket);
+          ticketsUpcoming.push(ticket);
         }
         else
         {
-          ticketsUpcoming.push(ticket);
+          ticketsPrevious.push(ticket);
         }
       });
 
