@@ -405,23 +405,25 @@ alter PROCEDURE InsertTrack
     @FirstClass FLOAT
 AS 
 BEGIN
-    DECLARE @COUNT INT;
+    if(Not exists(select * from [Tracks] where Station1Id=@Station1Id and Station2Id=@Station2Id))
+    BEGIN
 
-    -- Get the count of existing tracks and increment it by 1
-    SELECT @COUNT = COUNT(*) + 1 FROM Tracks;
-
-    -- Convert @COUNT to NVARCHAR
     DECLARE @COUNT_NVARCHAR NVARCHAR(255);
-    SET @COUNT_NVARCHAR = CONVERT(NVARCHAR(255), @COUNT);
+    select @COUNT_NVARCHAR=(TrackId) from [Tracks]
+    SET @COUNT_NVARCHAR = CONVERT(NVARCHAR(255), CONVERT(int,@COUNT_NVARCHAR)+1);
 
-    -- Insert data into the table
     INSERT INTO Tracks (TrackId, Station1Id, Station2Id)
     VALUES (@COUNT_NVARCHAR, @Station1Id, @Station2Id);
 
     INSERT INTO Fare (TrackId,Economy,BusinessClass,FirstClass)
     VALUES (@COUNT_NVARCHAR,@Economy,@BusinessClass,@FirstClass)
     SELECT 'TRACK ADDED SUCCESSFULLY' AS ResultMessage;
-END
+    END
+    ELSE
+    BEGIN
+        SELECT 'TRACK ALREADY EXISTS' AS ResultMessage;
+    END
+END;
 
 alter PROCEDURE AddSecurity
     @CrewId NVARCHAR(255),
