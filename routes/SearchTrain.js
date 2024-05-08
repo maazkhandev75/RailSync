@@ -1,10 +1,20 @@
 const express = require('express');
 const router=express.Router();
 var sql=require('mssql');
+const sessionChecker = (req, res, next) => {
+  if (req.session && req.session.user) {
+      // If session exists and user is authenticated
+      next();
+  } else {
+      // If session doesn't exist or user is not authenticated
+      res.redirect('login'); // Redirect to login page or any other route
+  }
+};
 
 module.exports = function(pool) {
   
     router.post('/',(req,res)=>{
+      console.log(req.body);
     var St1=req.body.fromCity;
     var St2=req.body.toCity;
     var tripDate=req.body.journeyDate;
@@ -138,7 +148,7 @@ router.post('/PrintTicketNonStop', (req, res) => {
     else{
         TicketAvailInfo=result.recordset[0];
         console.log(TicketAvailInfo);
-        if(TicketAvailInfo.length!=0){
+        if(TicketAvailInfo != undefined){
           const TicketInfoReq= new sql.Request(pool);
         TicketInfoReq.input('FoundCarriage',sql.NVarChar(30),TicketAvailInfo.CarriageId);
         TicketInfoReq.input('TrainId',sql.NVarChar(30),req.body.selectedTrainID);
@@ -161,7 +171,8 @@ router.post('/PrintTicketNonStop', (req, res) => {
       });
     }
     else{
-      alert("NO SEAT AVAILABLE");
+         res.send("No Seat Available");
+
     }
   }
 })
@@ -190,80 +201,80 @@ router.post('/ConfirmNonStopTicket',(req,res)=>{
 });
 
 
-router.post('/PrintTicketsWithStopsDetails', (req, res) => {
-  console.log(req.body);
-  const userName = ""; // Assuming this variable will be used later in the code
-  let inputClassType = "";
-  const selectedClass = req.body[req.body.length - 1].selectedClass;
+// router.post('/PrintTicketsWithStopsDetails', (req, res) => {
+//   console.log(req.body);
+//   const userName = ""; // Assuming this variable will be used later in the code
+//   let inputClassType = "";
+//   const selectedClass = req.body[req.body.length - 1].selectedClass;
 
-  let TicketInfo = [];
+//   let TicketInfo = [];
 
-  req.body.pop();
+//   req.body.pop();
 
-  if (selectedClass === "Economy") {
-    inputClassType = "E";
-  } else if (selectedClass === "Business") {
-    inputClassType = "B";
-  } else if (selectedClass === "First Class") {
-    inputClassType = "F";
-  }
+//   if (selectedClass === "Economy") {
+//     inputClassType = "E";
+//   } else if (selectedClass === "Business") {
+//     inputClassType = "B";
+//   } else if (selectedClass === "First Class") {
+//     inputClassType = "F";
+//   }
 
-  const promises = req.body.map(i => {
-    const InputTrackId = i.TrackID;
+//   const promises = req.body.map(i => {
+//     const InputTrackId = i.TrackID;
 
-    const request = new sql.Request(pool);
-    request.input('TrainId', sql.NVarChar(30), i.TrainID);
-    request.input('TrackId', sql.NVarChar(30), i.TrackID);
-    request.input('Class', sql.NVarChar(30), inputClassType);
+//     const request = new sql.Request(pool);
+//     request.input('TrainId', sql.NVarChar(30), i.TrainID);
+//     request.input('TrackId', sql.NVarChar(30), i.TrackID);
+//     request.input('Class', sql.NVarChar(30), inputClassType);
 
-    return new Promise((resolve, reject) => {
-      request.execute('BookTicket', (err, result) => {
-        if (err) {
-          console.log(err);
-          reject(err);
-        } else {
-          let TicketAvailInfo =[];
-           TicketAvailInfo=result.recordset[0];
-          console.log(TicketAvailInfo);
+//     return new Promise((resolve, reject) => {
+//       request.execute('BookTicket', (err, result) => {
+//         if (err) {
+//           console.log(err);
+//           reject(err);
+//         } else {
+//           let TicketAvailInfo =[];
+//            TicketAvailInfo=result.recordset[0];
+//           console.log(result);
+//           //if(result == undefined) res.send("No Ticket Found");
+//           if (TicketAvailInfo != undefined) {
+//             const TicketInfoReq = new sql.Request(pool);
+//             TicketInfoReq.input('FoundCarriage', sql.NVarChar(30), TicketAvailInfo.CarriageId);
+//             TicketInfoReq.input('TrainId', sql.NVarChar(30), i.TrainID);
+//             TicketInfoReq.input('FoundSeat', sql.Int, TicketAvailInfo.SeatNo);
+//             TicketInfoReq.input('TrackId', sql.NVarChar(30), InputTrackId);
+//             console.log(InputTrackId);
 
-          if (TicketAvailInfo.length != 0) {
-            const TicketInfoReq = new sql.Request(pool);
-            TicketInfoReq.input('FoundCarriage', sql.NVarChar(30), TicketAvailInfo.CarriageId);
-            TicketInfoReq.input('TrainId', sql.NVarChar(30), i.TrainID);
-            TicketInfoReq.input('FoundSeat', sql.Int, TicketAvailInfo.SeatNo);
-            TicketInfoReq.input('TrackId', sql.NVarChar(30), InputTrackId);
-            console.log(InputTrackId);
+//             TicketInfoReq.execute('GetTicketInfo', (err, result2) => {
+//               if (err) {
+//                 console.error(err);
+//                 reject(err);
+//               } else {
+//                 console.log("seat details are: ");
+//                 console.log(result2);
 
-            TicketInfoReq.execute('GetTicketInfo', (err, result2) => {
-              if (err) {
-                console.error(err);
-                reject(err);
-              } else {
-                console.log("seat details are: ");
-                console.log(result2);
+//                 TicketInfo.push(result2.recordset);
+//                 resolve();
+//               }
+//             });
+//           } else {
+//             resolve();
+//           }
+//         }
+//       });
+//     });
+//   });
 
-                TicketInfo.push(result2.recordset);
-                resolve();
-              }
-            });
-          } else {
-            resolve();
-          }
-        }
-      });
-    });
-  });
-
-  Promise.all(promises)
-    .then(() => {
-      console.log(TicketInfo);
-      //res.render('Ticket.ejs', { TicketInfo, inputClassType, userName });
-      res.json(TicketInfo);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
-    });
-});
+//   Promise.all(promises)
+//     .then(() => {
+//       console.log(TicketInfo);
+//       //res.render('Ticket.ejs', { TicketInfo, inputClassType, userName });
+//       res.json(TicketInfo);
+//     })
+//     .catch(err => {
+//       console.error(err);
+//       res.status(500).send('Internal Server Error');
+//     });
+// });
   return router;
 };

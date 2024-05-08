@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/head.ejs') %>
+
+<body>
+
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/sidebar.ejs') %>
+<style>
+  /* CSS */
+#inputName5 {
+    /* Style the input field to make it visually distinct */
+    color: #555; /* Example text color */
+    background-color: #f9f9f9; /* Example background color */
+    border: 1px solid #ddd; /* Example border */
+    /* Add any other styles as needed */
+}
+
+</style>
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1 style="color: rgb(219, 135, 56);">Form Layouts</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="DS">Home</a></li>
+          <li class="breadcrumb-item">Forms</li>
+          <li class="breadcrumb-item active">Layouts</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+    <section class="section">
+      <div class="row">
+
+
+        
+
+          <div class="card" style="color: rgb(219, 135, 56);">
+            <div class="card-body">
+              <h5 class="card-title" style="color: rgb(219, 135, 56);" >Add Route</h5>
+
+              <!-- Multi Columns Form -->
+
+              <form class="row g-3">
+
+                <div class="col-md-6">
+                    <label for="TrainId" class="form-label">TrainID</label>
+                    <select id="TrainId" class="form-select">
+                      <% Train.forEach((train) => { %>
+                        <option value="<%= train.TrainId %>"><%= train.TrainId %></option>
+                    <% }); %>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="TrackId" class="form-label">Track</label>
+                    <select id="TrackId" class="form-select">
+                        <% Track.forEach((track) => { %>
+                            <option value="<%= track.TrackId %>"><%= track.Station1Id %> - <%= track.Station2Id %></option>
+                        <% }); %>
+                    </select>
+
+                </div>
+                  <div class="col-md-6">
+                    <label for="DepartureTime" class="form-label">DepartureTime</label>
+                    <input type="datetime-local" class="form-control" id="DepartureTime">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="ArrivalTime" class="form-label">ArrivalTime</label>
+                    <input type="datetime-local" class="form-control" id="ArrivalTime">
+                  </div>
+
+                <div class="text-center">
+                    <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-secondary">Reset</button>
+                  </div>
+
+              </form><!-- End Multi Columns Form -->
+
+            </div>
+          </div>
+
+
+        </div>
+
+    </section>
+
+  </main><!-- End #main -->
+
+
+  <%- include('./partials/footer.ejs') %>
+  <%- include('./partials/script.ejs') %>
+
+</body>
+<script>
+  document.getElementById('submitButton').addEventListener('click', function() {
+      event.preventDefault();
+      const TrainId = document.getElementById('TrainId').value;
+      const TrackId = document.getElementById('TrackId').value;
+      const DepartureTime = document.getElementById('DepartureTime').value;
+      const ArrivalTime = document.getElementById('ArrivalTime').value;
+        
+      fetch('/TD/addRoute', {
+      method: 'POST',
+      body: JSON.stringify({ TrainId,TrackId,DepartureTime,ArrivalTime }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+      const result = data.Message;
+       if(result[0].ResultMessage=='ROUTE ADDED SUCCESSFULLY')
+          {window.location.href = '/routeData';}
+        else
+        {
+          console.log(result[0].ResultMessage);
+          alert(result[0].ResultMessage);
+        }
+
+    })
+    .catch(error => {
+       
+      console.error('Error:', error);
+    });
+      // You can perform further actions here, such as sending the data to the server via fetch() or XMLHttpRequest
+  });
+</script>
+
+</html>

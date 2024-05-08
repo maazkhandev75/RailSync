@@ -142,8 +142,7 @@
                     </tbody>
                 </table>
             </div>
-
-
+   
 
             <div class="container">
                 <h2>Carriage Data</h2>
@@ -279,7 +278,7 @@ document.getElementById('searchCarriageButton').addEventListener('click', functi
             row.setAttribute('data-carriage-id', entry.CarriageID);
             row.setAttribute('data-train-id', entry.TrainID);
             row.setAttribute('data-seat-no', entry.SeatNo);
-            row.innerHTML = `
+            row.innerHTML =` 
                 <td>${entry.CarriageID}</td>
                 <td>${entry.TrainID}</td>
                 <td>${entry.SeatNo}</td>
@@ -287,7 +286,8 @@ document.getElementById('searchCarriageButton').addEventListener('click', functi
                 <td>
                 <button class="edit-btn" onclick="editSeat('${entry.CarriageID}', '${entry.TrainID}', '${entry.SeatNo}')">Edit</button>
                 <button class="delete-btn" onclick="deleteSeat('${entry.CarriageID}', '${entry.TrainID}', '${entry.SeatNo}')">Delete</button>
-            </td>
+                            
+                </td>
                 </td>
             `;
             table.appendChild(row);
@@ -317,14 +317,14 @@ document.getElementById('searchCarriageButton').addEventListener('click', functi
 
     })
     .catch(error => {
-        console.log('gg');
+        
       console.error('Error:', error);
     });
   });
 
 
-  function editSeat(carriageID, trainID, seatNo) {
-    window.location.href = `/editSeat?carriageID=${carriageID}&trainID=${trainID}&seatNo=${seatNo}`;
+  function editSeat(CarriageId, trainID, seatNo) {
+    window.location.href = `/editSeat?carriageID=${carriageId}&trainID=${trainID}&seatNo=${seatNo}`;
 }
 
 function deleteSeat(carriageID, trainID, seatNo) {
@@ -358,6 +358,7 @@ function deleteSeat(carriageID, trainID, seatNo) {
 
 
 function editTrain(TrainId) {
+    
     window.location.href = `/editTrain?TrainID=${TrainId}`;
 }
 
@@ -396,8 +397,9 @@ function deleteTrain(TrainId) {
 }
 
 
-function editCarriage(CarriageID) {
-    window.location.href = `/editTrain?carriageID=${carriageID}`;
+function editCarriage(CarriageId) {
+    
+    window.location.href = `/editCarriage?CarriageId=${CarriageId}`;
 }
 
 function deleteCarriage(CarriageID) {

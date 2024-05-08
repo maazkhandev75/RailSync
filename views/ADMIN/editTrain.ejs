@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <%- include('./partials/head.ejs') %>
-
 <body>
-
 <%- include('./partials/header.ejs') %>
 
 <%- include('./partials/sidebar.ejs') %>
@@ -17,7 +14,6 @@
     border: 1px solid #ddd; /* Example border */
     /* Add any other styles as needed */
 }
-
 </style>
 <main id="main" class="main">
 
@@ -29,13 +25,8 @@
           <li class="breadcrumb-item">Forms</li>
           <li class="breadcrumb-item active">Layouts</li>
         </ol>
-      </nav>
-    </div><!-- End Page Title -->
-    <section class="section">
-      <div class="row">
 
 
-        
 
           <div class="card" style="color: rgb(219, 135, 56);">
             <div class="card-body">
@@ -45,7 +36,7 @@
               <form class="row g-3">
                 <div class="col-md-6">
                   <label for="inputName5" class="form-label">TrainID</label>
-                  <input type="text" class="form-control" id="inputName5" >
+                  <input type="text" class="form-control" id="inputName5" readonly placeholder="<%= TrainId %>">
                 </div>
                 <div class="col-md-6">
                   <label for="inputState" class="form-label">UpDownStatus</label>
@@ -59,43 +50,32 @@
                   <label for="inputArrivalStation" class="form-label">Arrival Station</label>
                   <select id="inputArrivalStation" class="form-select">
                     <% Station.forEach((station) => { %>
-                      <option value="<%= station.StationId %>"><%= station.StationName %></option>
+                      <option value="<%= station.StationId %>" <%= station.StationId === TrainId ? 'selected' : '' %>><%= station.StationName %></option>
                   <% }); %>
+                  <label for="inputState" class="form-label">Depature Station</label>
                   </select>
                 </div>
                 <div class="col-md-6">
                   <label for="inputDepartureStation" class="form-label">Depature Station</label>
                   <select id="inputDepartureStation" class="form-select">
-                  <% Station.forEach((station) => { %>
-                    <option value="<%= station.StationId %>"><%= station.StationName %></option>
-                <% }); %>
-              </select>
+                    <% Station.forEach((station) => { %>
+                      <option value="<%= station.StationId %>" <%= station.StationId === TrainId ? 'selected' : '' %>><%= station.StationName %></option>
+                  <% }); %>
+                  </select>
                 </div>
                 <div class="text-center">
                   <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>
+
                   <button type="reset" class="btn btn-secondary">Reset</button>
                 </div>
               </form><!-- End Multi Columns Form -->
-
-            </div>
-          </div>
-
-
-        </div>
-
-    </section>
-
-  </main><!-- End #main -->
-
-
-  <%- include('./partials/footer.ejs') %>
   <%- include('./partials/script.ejs') %>
 
 </body>
 <script>
   document.getElementById('submitButton').addEventListener('click', function() {
       event.preventDefault();
-      const trainId = document.getElementById('inputName5').value;
+      const trainId = document.getElementById('inputName5').placeholder;
       const departureStation = document.getElementById('inputDepartureStation').value;
       const ArrivalStation = document.getElementById('inputArrivalStation').value;
       let upDownStatus = document.getElementById('inputState').value;
@@ -107,7 +87,7 @@
       console.log('arrival Station:', ArrivalStation);
       console.log('Departure Station:', departureStation);
       console.log('UpDown Status:', upDownStatus);
-      fetch('/TD/addTrain', {
+      fetch('/TD/editTrain', {
       method: 'POST',
       body: JSON.stringify({ trainId,departureStation,ArrivalStation,upDownStatus }),
         headers: {
@@ -116,15 +96,8 @@
     })
     .then(response => response.json())
     .then(data => {
-      const result = data.Message;
-       if(result[0].ResultMessage=='TRAIN ADDED SUCCESSFULLY')
-          {window.location.href = '/traindata';}
-        else
-        {
-          console.log(result[0].ResultMessage);
-          alert(result[0].ResultMessage);
-        }
-
+       console.log(data);
+       window.location.href = '/traindata';
     })
     .catch(error => {
        

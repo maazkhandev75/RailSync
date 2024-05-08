@@ -102,7 +102,6 @@ app.get('/SearchTrainform', (req, res) => {
       });
 });
 
-
 app.get('/admin', (req, res) => {
   pool.query('SELECT * FROM Train')
       .then(result => {
@@ -202,7 +201,7 @@ app.get('/stationData', (req, res) => {
   // Execute both queries asynchronously
   Promise.all([
     requestStation.query('SELECT * FROM Station'),
-    requestTrack.query('SELECT * FROM Tracks')
+    requestTrack.query('SELECT * FROM Tracks join Fare on Tracks.TrackId=Fare.TrackId')
   ])
   .then(results => {
     const Station = results[0].recordset;
@@ -217,18 +216,16 @@ app.get('/stationData', (req, res) => {
   });
 });
 
-app.get('/staffdata', (req, res) => {
+app.get('/routeData', (req, res) => {
+  
 
-  Promise.all([
-      pool.query('SELECT * FROM Crew'),
-      pool.query('SELECT * FROM Pilot'),
-      pool.query('SELECT * FROM Security')
-    ])
-  .then(([CrewResult,PilotResult,SecurityResult]) => {
-      const Crew = CrewResult.recordset;
-      const Pilot = PilotResult.recordset;
-      const Security=SecurityResult.recordset;
-      res.render("./ADMIN/staffData.ejs", { Crew,Pilot,Security });
+     
+  pool.query('SELECT * FROM Route as R join Tracks as T on R.TrackId=T.TrackId')
+  .then(result => {
+ 
+      const Route =result.recordset;
+      console.log(Route);
+      res.render("./ADMIN/routesData.ejs", { Route });
   })
   .catch(err => {
       console.error(err);
@@ -236,6 +233,62 @@ app.get('/staffdata', (req, res) => {
   });
 });
 
+
+
+app.get('/staffdata', (req, res) => {
+  
+  Promise.all([
+     
+      pool.query('SELECT * FROM Pilot as p join Crew as c on c.CrewId=p.CrewId'),
+      pool.query('SELECT * FROM Security as s join Crew as c on c.CrewId=s.CrewId')
+    ])
+  .then(([PilotResult,SecurityResult]) => {
+   
+      const Pilot = PilotResult.recordset;
+      const Security=SecurityResult.recordset;
+      res.render("./ADMIN/staffData.ejs", { Pilot,Security });
+  })
+  .catch(err => {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  });
+});
+
+
+app.get('/addCarriage', (req, res) => {
+     
+  pool.query('SELECT * FROM Train ')
+  .then(result => {
+      const Train =result.recordset;
+
+      res.render("./ADMIN/CarriageForm.ejs", { Train });
+  })
+  .catch(err => {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  });
+});
+
+
+
+app.get('/addRoute', (req, res) => {
+  
+  Promise.all([
+     
+      pool.query('SELECT * FROM Train'),
+      pool.query('SELECT * FROM Tracks')
+    ])
+  .then(([TrainResult,TrackResult]) => {
+   
+      const Train = TrainResult.recordset;
+      const Track=TrackResult.recordset;
+      res.render("./ADMIN/RouteForm.ejs", { Train,Track });
+  })
+  .catch(err => {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  });
+});
 
 app.get('/form', (req, res) => {
   res.render('./ADMIN/form.ejs');
@@ -246,9 +299,88 @@ app.get('/staffData', (req, res) => {
 });
 
 app.get('/addTrain', (req, res) => {
-  res.render('./ADMIN/trainForm.ejs');
+  pool.query('SELECT * FROM Station')
+      .then(result => {
+          const Station = result.recordset;
+
+          res.render('./ADMIN/trainForm.ejs', {  Station: Station });
+
+      })
+      .catch(err => {
+          console.error(err);
+          res.status(500).send('Internal Server Error');
+      });
+  
 });
 
+app.get('/addStation', (req, res) => {
+  res.render('./ADMIN/stationForm.ejs');
+});
+
+app.get('/addTrack', (req, res) => {
+  pool.query('SELECT * FROM Station')
+  .then(result => {
+      const Station = result.recordset;
+      res.render('./ADMIN/TrackForm.ejs', {Station: Station });
+
+  })
+  .catch(err => {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  });
+});
+
+app.get('/addSecurity', (req, res) => {
+  pool.query('SELECT * FROM Station')
+  .then(result => {
+      const Station = result.recordset;
+      res.render('./ADMIN/SecurityForm.ejs', {Station: Station });
+
+  })
+  .catch(err => {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  });
+});
+
+app.get('/addPilot', (req, res) => {
+  pool.query('SELECT * FROM Train')
+  .then(result => {
+      const Train = result.recordset;
+      res.render('./ADMIN/PilotForm.ejs', {Train: Train });
+
+  })
+  .catch(err => {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  });
+});
+
+app.get('/addCarriage', (req, res) => {
+  res.render('./ADMIN/CarriageForm.ejs');
+});
+
+
+app.get('/editTrain', (req, res) => {
+  const TrainId = req.query.TrainID;
+  pool.query('SELECT * FROM Station')
+      .then(result => {
+          const Station = result.recordset;
+          res.render('./ADMIN/editTrain.ejs', { TrainId: TrainId, Station: Station });
+
+      })
+      .catch(err => {
+          console.error(err);
+          res.status(500).send('Internal Server Error');
+      });
+  
+});
+
+app.get('/editRoute', (req, res) => {
+  const TrainID = req.query.TrainID;
+  const TrackID=req.query.TrackID;
+  res.render('./ADMIN/editRoute.ejs', {TrainID,TrackID });
+});
 
 app.get('/profile',async(req,res)=>{
   const cnic=req.session.userDetails.cnic;
@@ -260,6 +392,7 @@ app.get('/profile',async(req,res)=>{
     if (result.returnValue === 0 && result.recordset.length>0) {
 
       const userCredentials = {
+         userId: result.recordset[0].Id,
          username: result.recordset[0].UserName,
          password: result.recordset[0].Password,
          cnic: result.recordset[0].CNIC,
@@ -304,7 +437,7 @@ app.post('/bookTicketNonStop', (req, res) => {
     else{
         TicketAvailInfo=result.recordset[0];
         console.log(TicketAvailInfo);
-        if(TicketAvailInfo.length!=0){
+        if(TicketAvailInfo.length!= undefined){
           const TicketInfoReq= new sql.Request(pool);
         TicketInfoReq.input('FoundCarriage',sql.NVarChar(30),TicketAvailInfo.CarriageId);
         TicketInfoReq.input('TrainId',sql.NVarChar(30),req.body.selectedTrainID);
@@ -326,6 +459,9 @@ app.post('/bookTicketNonStop', (req, res) => {
         res.render('Ticket',{TicketInfo,inputClassType,userName});
       });
     } 
+    else{
+        res.send("No Avaiailable Seat Found");
+    }
   }
   })
 });
@@ -341,7 +477,6 @@ app.use('/TD',SearchCarriage(pool));
 app.use('/', sessionRouter);    //for testing session
 app.use('/profileUpdate',profileUpdateRouter(pool))
 app.use('/passwordChange',passwordChangeRouter(pool))
-
 
 //app.use('/bookedTickets',bookedTicketsRouter(pool));
 

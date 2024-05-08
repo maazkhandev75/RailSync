@@ -108,7 +108,7 @@
 
 
                 <div class="container">
-                <h2>Crew Data</h2>
+                <h2>Pilot Data</h2>
                 <table>
                     <thead>
                         <tr>
@@ -116,79 +116,63 @@
                             <th>CrewName</th>
                             <th>Address</th>
                             <th>DateOfBirth</th>
+                            <th>TrainID</th>
                             <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% Crew.forEach((i)=>{ %>
-                            <tr>
-                                <td><%= i.CrewId %></td>
-                                <td><%= i.CrewName %></td>
-                                <td><%= i.Address %></td>
-                                <td><%= i.DateOfBirth %></td>
-                               
-                            </tr>
-                            <% }); %>
-
-
-                        <!-- More rows here -->
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="container">
-                <h2>Pilot Data</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>CrewId</th>
-                            <th>TrainId</th>
-                           <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <% Pilot.forEach((i)=>{ %>
                             <tr>
-                                <td><%= i.CrewId %></td>
+                                <td><%= i.CrewId[0] %></td>
+                                <td><%= i.CrewName %></td>
+                                <td><%= i.Address %></td>
+                                <td><%= i.DateOfBirth.toISOString().split('T')[0] %></td>
                                 <td><%= i.TrainId %></td>
-                              
+                                <td>
+                                    <button class="edit-btn" onclick="editSecurity('<%= i.CrewId %>')">Edit</button>
+                                    <button class="delete-btn" onclick="deleteSecurity('<%= i.CrewId %>')">Delete</button>
+                                </td>
                             </tr>
                             <% }); %>
-
-
-                        <!-- More rows here -->
-                    </tbody>
+                        </tbody>
                 </table>
+
             </div>
-
-
-        
             <div class="container">
-                <h2>Security Data</h2>
-                <table>
-                    <thead>
+            <h2>Security Data</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>CrewId</th>
+                        <th>CrewName</th>
+                        <th>Address</th>
+                        <th>DateOfBirth</th>
+                        <th>StationID</th>
+                        <th>Actions</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <% Security.forEach((i)=>{ %>
                         <tr>
-                            <th>CrewId</th>
-                            <th>StationId</th>
-                            <th>Actions</th>
+                            <td><%= i.CrewId[0] %></td>
+                            <td><%= i.CrewName %></td>
+                            <td><%= i.Address %></td>
+                            <td><%= i.DateOfBirth.toISOString().split('T')[0] %></td>
+                            <td><%= i.StationId %></td>
+                            <td>
+                            <button class="edit-btn" onclick="editSecurity('<%= i.CrewId %>')">Edit</button>
+                            <button class="delete-btn" onclick="deleteSecurity('<%= i.CrewId %>')">Delete</button>
+                        </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <% Security.forEach((i)=>{ %>
-                            <tr>
-                                <td><%= i.CrewId %></td>
-                                <td><%= i.StationId %></td>
-                               
-                               
-                            </tr>
-                            <% }); %>
+                        <% }); %>
 
 
-                        <!-- More rows here -->
-                    </tbody>
-                </table>
+                    <!-- More rows here -->
+                </tbody>
+            </table>
             </div>
-
+       
 
           
         </section>

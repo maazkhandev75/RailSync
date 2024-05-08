@@ -108,26 +108,32 @@
 
 
                 <div class="container">
-                <h2>Station Data</h2>
+                <h2>Route Data</h2>
                 <table>
                     <thead>
                         <tr>
-                            <th>StationID</th>
-                            <th>StationName</th>
-                            <th>Address</th>
+                            <th>TrainID</th>
+                            <th>TrackId</th>
+                            <th>DepartureStation</th>
+                            <th>ArrivalStation</th>
+                            <th>DepartureTime</th>
+                            <th>ArrivalTime</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <% Station.forEach((i)=>{ %>
+                        <% Route.forEach((i)=>{ %>
                             <tr>
-                                <td><%= i.StationId %></td>
-                                <td><%= i.StationName %></td>
-                                <td><%= i.Address %></td>
+                                <td><%= i.TrainId %></td>
+                                <td><%= i.TrackId[0] %></td>
+                                <td><%= i.Station1Id %></td>
+                                <td><%= i.Station2Id %></td>
+                                <td><%= i.DeptTime %></td>
+                                <td><%= i.ArrivalTime %></td>
                                 <td>
                                     
-                                        <button class="edit-btn" onclick="redirectToEditPage('<%= i.StationId %>')">Edit</button>
-                                        <button class="delete-btn" onclick="deleteRow('<%= i.StationId %>')">Delete</button>
+                                        <button class="edit-btn" onclick="redirectToEditPage('<%= i.TrainId %>','<%= i.TrackId[0] %>')">Edit</button>
+                                        <button class="delete-btn" onclick="deleteRow('<%= i.TrainId %>','<%= i.TrackId[0] %>')">Delete</button>
                                    
                                 </td>
                             </tr>
@@ -141,43 +147,6 @@
 
 
 
-            <div class="container">
-                <h2>Track Data</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>TrackID</th>
-                            <th>StationID</th>
-                            <th>StationID</th>
-                            <th>Economy</th>
-                            <th>BusinessClass</th>
-                            <th>FirstClass</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% Track.forEach((i)=>{ %>
-                            <tr>
-                                <td><%= i.TrackId[0] %></td>
-                                <td><%= i.Station1Id %></td>
-                                <td><%= i.Station2Id %></td>
-                                <td><%= i.Economy %></td>
-                                <td><%= i.BusinessClass %></td>
-                                <td><%= i.FirstClass %></td>
-                                <td>
-                                    
-                                        <button class="edit-btn" onclick="redirectToEditPage('<%= i.TrackId %>')">Edit</button>
-                                        <button class="delete-btn" onclick="deleteRow('<%= i.TrackId %>')">Delete</button>
-                                  
-                                </td>
-                            </tr>
-                            <% }); %>
-
-
-                        <!-- More rows here -->
-                    </tbody>
-                </table>
-            </div>
 
 
 
@@ -189,6 +158,9 @@
 
 </body>
 <script>
+function redirectToEditPage(TrainId, TrackId) {
+    window.location.href = `/editRoute?TrainID=${TrainId}&TrackID=${TrackId}`;
+}
 
 </script>
 </html>

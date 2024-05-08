@@ -39,38 +39,23 @@
 
           <div class="card" style="color: rgb(219, 135, 56);">
             <div class="card-body">
-              <h5 class="card-title" style="color: rgb(219, 135, 56);" >Train Update Form</h5>
+              <h5 class="card-title" style="color: rgb(219, 135, 56);" >Add Station Form</h5>
 
               <!-- Multi Columns Form -->
               <form class="row g-3">
                 <div class="col-md-6">
-                  <label for="inputName5" class="form-label">TrainID</label>
-                  <input type="text" class="form-control" id="inputName5" >
+                  <label for="StationID" class="form-label">StationID</label>
+                  <input type="text" class="form-control" id="StationID" >
                 </div>
                 <div class="col-md-6">
-                  <label for="inputState" class="form-label">UpDownStatus</label>
-                  <select id="inputState" class="form-select">
-                    <option selected>UP</option>
-                    <option>Down</option>
-
-                  </select>
-                </div>
-                <div class="col-md-6">
-                  <label for="inputArrivalStation" class="form-label">Arrival Station</label>
-                  <select id="inputArrivalStation" class="form-select">
-                    <% Station.forEach((station) => { %>
-                      <option value="<%= station.StationId %>"><%= station.StationName %></option>
-                  <% }); %>
-                  </select>
-                </div>
-                <div class="col-md-6">
-                  <label for="inputDepartureStation" class="form-label">Depature Station</label>
-                  <select id="inputDepartureStation" class="form-select">
-                  <% Station.forEach((station) => { %>
-                    <option value="<%= station.StationId %>"><%= station.StationName %></option>
-                <% }); %>
-              </select>
-                </div>
+                    <label for="StationName" class="form-label">Station Name</label>
+                    <input type="text" class="form-control" id="StationName" >
+                  </div>
+                  <div class="col-md-12">
+                    <label for="StationAddress" class="form-label">Station Address</label>
+                    <input type="text" class="form-control" id="StationAddress" >
+                  </div>
+                
                 <div class="text-center">
                   <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>
                   <button type="reset" class="btn btn-secondary">Reset</button>
@@ -95,21 +80,13 @@
 <script>
   document.getElementById('submitButton').addEventListener('click', function() {
       event.preventDefault();
-      const trainId = document.getElementById('inputName5').value;
-      const departureStation = document.getElementById('inputDepartureStation').value;
-      const ArrivalStation = document.getElementById('inputArrivalStation').value;
-      let upDownStatus = document.getElementById('inputState').value;
-      if(upDownStatus=='UP')
-        upDownStatus='1';
-      else
-        upDownStatus='0';
-      console.log('Train ID:', trainId);
-      console.log('arrival Station:', ArrivalStation);
-      console.log('Departure Station:', departureStation);
-      console.log('UpDown Status:', upDownStatus);
-      fetch('/TD/addTrain', {
+      const StationID = document.getElementById('StationID').value;
+      const StationName = document.getElementById('StationName').value;
+      const StationAddress=document.getElementById('StationAddress').value;
+
+      fetch('/TD/addStation', {
       method: 'POST',
-      body: JSON.stringify({ trainId,departureStation,ArrivalStation,upDownStatus }),
+      body: JSON.stringify({ StationID,StationName,StationAddress }),
         headers: {
             'Content-Type': 'application/json'
         }
@@ -117,8 +94,8 @@
     .then(response => response.json())
     .then(data => {
       const result = data.Message;
-       if(result[0].ResultMessage=='TRAIN ADDED SUCCESSFULLY')
-          {window.location.href = '/traindata';}
+       if(result[0].ResultMessage=='STATION ADDED SUCCESSFULLY')
+          {window.location.href = '/stationData';}
         else
         {
           console.log(result[0].ResultMessage);

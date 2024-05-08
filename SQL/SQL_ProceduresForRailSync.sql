@@ -338,3 +338,207 @@ alter table [Ticket] drop  column date
 alter table [ticket] add  Date_and_Time DATETIME
 
 
+--------EditTrain
+CREATE PROCEDURE EditTrain
+    @TRAINID NVARCHAR(255),
+    @DEPARTURESTATION NVARCHAR(255),
+    @ARRIVALSTATION NVARCHAR(255),
+    @UPDOWNSTATUS CHAR
+AS 
+BEGIN
+    IF EXISTS (SELECT * FROM Train WHERE TrainId = @TRAINID)
+    BEGIN
+        UPDATE Train 
+        SET DeptStation = @DEPARTURESTATION, 
+            ArrivalStation = @ARRIVALSTATION, 
+            UpDownStatus = @UPDOWNSTATUS 
+        WHERE TrainId = @TRAINID;
+    END
+END
+
+exec EditTrain '206','ISB','QUET','1'
+
+CREATE PROCEDURE AddTrain
+    @TRAINID NVARCHAR(255),
+    @DEPARTURESTATION NVARCHAR(255),
+    @ARRIVALSTATION NVARCHAR(255),
+    @UPDOWNSTATUS CHAR
+AS 
+BEGIN
+    IF NOT EXISTS (SELECT * FROM Train WHERE TrainId = @TRAINID)
+    BEGIN
+        INSERT INTO Train (TrainId, StationName, DeptStation, ArrivalStation)
+        VALUES (@TRAINID, @UPDOWNSTATUS, @DEPARTURESTATION, @ARRIVALSTATION);
+        SELECT 'TRAIN ADDED SUCCESSFULLY' AS ResultMessage; -- Return success message
+    END
+    ELSE
+    BEGIN
+        SELECT 'ID ALREADY EXISTS' AS ResultMessage; -- Return message indicating ID already exists
+    END
+END
+
+
+CREATE PROCEDURE AddStation
+    @STATIONID NVARCHAR(255),
+    @STATIONNAME NVARCHAR(255),
+    @STATIONADDRESS NVARCHAR(255)
+AS 
+BEGIN
+    IF NOT EXISTS (SELECT * FROM Station WHERE StationId = @STATIONID)
+    BEGIN
+        INSERT INTO Station (StationId, StationName, [Address])
+        VALUES (@STATIONID, @STATIONNAME, @STATIONADDRESS);
+        SELECT 'STATION ADDED SUCCESSFULLY' AS ResultMessage; -- Return success message
+    END
+    ELSE
+    BEGIN
+        SELECT 'ID ALREADY EXISTS' AS ResultMessage; -- Return message indicating ID already exists
+    END
+END
+
+
+alter PROCEDURE InsertTrack
+    @Station1Id NVARCHAR(255),
+    @Station2Id NVARCHAR(255),
+    @Economy FLOAT,
+    @BusinessClass float,
+    @FirstClass FLOAT
+AS 
+BEGIN
+    if(Not exists(select * from [Tracks] where Station1Id=@Station1Id and Station2Id=@Station2Id))
+    BEGIN
+
+    DECLARE @COUNT_NVARCHAR NVARCHAR(255);
+    select @COUNT_NVARCHAR=(TrackId) from [Tracks]
+    SET @COUNT_NVARCHAR = CONVERT(NVARCHAR(255), CONVERT(int,@COUNT_NVARCHAR)+1);
+
+    INSERT INTO Tracks (TrackId, Station1Id, Station2Id)
+    VALUES (@COUNT_NVARCHAR, @Station1Id, @Station2Id);
+
+    INSERT INTO Fare (TrackId,Economy,BusinessClass,FirstClass)
+    VALUES (@COUNT_NVARCHAR,@Economy,@BusinessClass,@FirstClass)
+    SELECT 'TRACK ADDED SUCCESSFULLY' AS ResultMessage;
+    END
+    ELSE
+    BEGIN
+        SELECT 'TRACK ALREADY EXISTS' AS ResultMessage;
+    END
+END;
+
+alter PROCEDURE AddSecurity
+    @CrewId NVARCHAR(255),
+    @CrewName NVARCHAR(255),
+    @Address NVARCHAR(255),
+    @DateOfBirth DATE,
+    @StationId NVARCHAR(255)
+   AS 
+BEGIN
+    INSERT INTO Crew (CrewId,CrewName,[Address],DateOfBirth)
+    VALUES (@CrewId, @CrewName, @Address,@DateOfBirth);
+
+    Insert into [Security] (CrewId,StationId) values(@CrewId,@StationId);
+    SELECT 'GUARD ADDED SUCCESSFULLY' AS ResultMessage;
+end;
+
+exec  AddSecurity '31203412311','Daniel','Lahore,Pakistan','2000-01-01','ISB'
+
+Create PROCEDURE AddPilot
+    @CrewId NVARCHAR(255),
+    @CrewName NVARCHAR(255),
+    @Address NVARCHAR(255),
+    @DateOfBirth DATE,
+    @TrainId NVARCHAR(255)
+   AS 
+BEGIN
+    INSERT INTO Crew (CrewId,CrewName,[Address],DateOfBirth)
+    VALUES (@CrewId, @CrewName, @Address,@DateOfBirth);
+
+    Insert into [Pilot] (CrewId,TrainId) values(@CrewId,@TrainId);
+    SELECT 'GUARD ADDED SUCCESSFULLY' AS ResultMessage;
+end;
+
+
+CREATE PROCEDURE AddRoute
+    @TrainId NVARCHAR(255),
+    @TrackId NVARCHAR(255),
+    @DepartureTime DATETIME,
+    @ArrivalTime DATETIME
+AS 
+BEGIN
+    IF NOT EXISTS (SELECT * FROM [Route] WHERE TrainId = @TrainId AND TrackId = @TrackId)
+    BEGIN
+        INSERT INTO [Route] (TrainId, TrackId, [DeptTime], ArrivalTime)
+        VALUES (@TrainId, @TrackId, @DepartureTime, @ArrivalTime);
+
+        SELECT 'ROUTE ADDED SUCCESSFULLY' AS ResultMessage;
+    END
+    ELSE
+    BEGIN
+        SELECT 'ROUTE ALREADY EXISTS' AS ResultMessage;
+    END
+END;
+
+
+ALTER PROCEDURE AddCarriage
+    @TrainId NVARCHAR(255),
+    @CarriageId NVARCHAR(255),
+    @Type CHAR,
+    @NoOfSeats INT
+AS 
+BEGIN
+    IF NOT EXISTS (SELECT * FROM [Carriage] WHERE CarriageId = @CarriageId )
+    BEGIN
+        INSERT INTO [Carriage] (TrainId, CarriageId, [Type])
+        VALUES (@TrainId, @CarriageId, @Type);
+        
+        DECLARE @SeatID INT = 1; -- Initialize SeatID
+
+        -- Loop to insert seats
+        WHILE @SeatID <= @NoOfSeats
+        BEGIN
+            INSERT INTO [Seat] (TrainID, CarriageID, SeatNo, BookingStatus)
+            VALUES (@TrainId, @CarriageId, @SeatID, NULL);
+            SET @SeatID = @SeatID + 1; -- Increment SeatID
+        END
+
+        SELECT 'CARRIAGE ADDED SUCCESSFULLY' AS ResultMessage;
+    END
+    ELSE
+    BEGIN
+        SELECT 'CARRIAGE ALREADY EXISTS' AS ResultMessage;
+    END
+END;
+
+select * from [Seat] where CarriageID='222'
+
+CREATE PROCEDURE EditRoute
+    @TrainId NVARCHAR(255),
+    @TrackId NVARCHAR(255),
+    @DepartureTime DATETIME,
+    @ArrivalTime DATETIME
+AS 
+BEGIN
+    IF EXISTS (SELECT * FROM [Route] WHERE TrainId = @TrainId AND TrackId = @TrackId)
+    BEGIN
+        UPDATE [Route]
+        SET DeptTime=@DepartureTime, ArrivalTime=@ArrivalTime
+        WHERE TrackId = @TrackId and TrainId=@TrainId
+
+        SELECT 'ROUTE UPDATED SUCCESSFULLY' AS ResultMessage;
+    END
+    ELSE
+    BEGIN
+        SELECT 'ROUTE DOES NOT EXISTS' AS ResultMessage;
+    END
+END;
+
+
+
+
+
+
+
+
+
+
+

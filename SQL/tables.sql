@@ -79,9 +79,10 @@ CREATE TABLE [Crew] (
   [CrewId] nvarchar(255) PRIMARY KEY,
   [CrewName] nvarchar(255),
   [Address] nvarchar(255),
-  [DateOfBirth] nvarchar(255)
+  [DateOfBirth] Date
 )
 GO
+
 
 CREATE TABLE [Pilot] (
   [CrewId] nvarchar(255),
@@ -130,13 +131,13 @@ GO
 ALTER TABLE [Ticket] ADD FOREIGN KEY ([SeatNo]) REFERENCES [Seat] ([SeatNo])
 GO
 
-ALTER TABLE [Carriage] ADD FOREIGN KEY ([TrainId]) REFERENCES [Train] ([TrainId])
+ALTER TABLE [Carriage] ADD FOREIGN KEY ([TrainId]) REFERENCES [Train] ([TrainId]) ON UPDATE CASCADE
 GO
 
-ALTER TABLE [Seat] ADD FOREIGN KEY ([CarriageID]) REFERENCES [Carriage] ([CarriageId])
+ALTER TABLE [Seat] ADD FOREIGN KEY ([CarriageID]) REFERENCES [Carriage] ([CarriageId]) ON UPDATE CASCADE
 GO
 
-ALTER TABLE [Seat] ADD FOREIGN KEY ([TrainID]) REFERENCES [Train] ([TrainId])
+ALTER TABLE [Seat] ADD FOREIGN KEY ([TrainID]) REFERENCES [Train] ([TrainId]) ON UPDATE CASCADE
 GO
 
 ALTER TABLE [Fare] ADD FOREIGN KEY ([TrackId]) REFERENCES [Tracks] ([TrackId])
@@ -153,6 +154,9 @@ ADD CONSTRAINT FK_Ticket_Seat
 FOREIGN KEY ([CarriageId], [TrainId], [SeatNo])
 REFERENCES [Seat] ([CarriageID], [TrainID], [SeatNo]);
 
+insert [Ticket] values ('3512389230239',5,'101','202','122121')
+INSERT INTO Ticket (CNIC, SeatNo,TrainId,CarriageId,TicketId) values ('3512389230239',5,'101','202','122121')
+SET IDENTITY_INSERT Ticket OFF;
 ALTER TABLE [Payment] ADD FOREIGN KEY ([CNIC]) REFERENCES [User] ([CNIC])
 GO
 
@@ -206,6 +210,9 @@ FROM
 WHERE
     parent_object_id = OBJECT_ID('Ticket');
 
+ALTER TABLE Seat
+DROP CONSTRAINT FK__Seat__CarriageID__151B244E;
+
 EXEC sp_rename 'Ticket.carriageId', 'CarriageId', 'COLUMN';
 
 ALTER TABLE [Seat]
@@ -215,7 +222,7 @@ UNIQUE ([CarriageID], [TrainID], [SeatNo]);
 SELECT name
 FROM sys.objects
 WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT'
-AND parent_object_id = OBJECT_ID('Ticket');
+AND parent_object_id = OBJECT_ID('Seat');
 
 delete from [user]
 where userName='Muhammad Hassan Javed'
@@ -226,6 +233,15 @@ go
 
 alter table [user] drop column id
 
+
+insert into [ticket]
+values('122148','1234567890123',1,'202','202-1','2')
+go
+
+
+insert into [ticket]
+values('122149','1234567890123',2,'202','202-8','2')
+go
 
 
 
@@ -257,3 +273,45 @@ select * from [Security]
 select * from [Tracks]
 select * from [Seat]
 select * from [Route]
+
+DELETE FROM Tracks WHERE TrackId = '6';
+
+SELECT name
+FROM sys.objects
+WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT'
+    AND parent_object_id = OBJECT_ID('Ticket');
+ 
+insert [Tracks] values ('6','QUET','LHR')
+insert [Station] values ('QUET','Quetta','Quetta Pakistan')
+insert [Train] values ('206','1','LHR','QUET')
+alter Proc insertTicket 
+@CNIC nvarchar(255),
+@Seat int,
+@CarriageId nvarchar(255),
+@TrackId nvarchar(255),
+@TrainId nvarchar(255)
+as 
+insert into Ticket(CNIC,SeatNo,TrainId,CarriageId,trackId)
+values(@CNIC,@Seat,@TrainId,@CarriageId,@TrackId)
+
+insertTicket  '3512389230239',22,'202','5','101'
+
+SELECT COLUMN_NAME, DATA_TYPE
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'Ticket'
+
+SELECT
+  COLUMN_NAME,
+  DATA_TYPE,
+  CHARACTER_MAXIMUM_LENGTH AS MaxLength,
+  ISNULL(NUMERIC_PRECISION, 0) AS NumericPrecision,
+  ISNULL(NUMERIC_SCALE, 0) AS NumericScale
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'Ticket'
+
+DELETE FROM "Ticket";
+
+update Tracks set Station1Id='ISB', Station2Id='LHR'
+where TrackId='3'
+
+SELECT * FROM Route as R join Tracks as T on R.TrackId=T.TrackId
