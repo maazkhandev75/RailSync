@@ -336,6 +336,15 @@ app.get('/editRoute', (req, res) => {
   res.render('./ADMIN/editRoute.ejs', {TrainID,TrackID });
 });
 
+app.get('/editTrack', (req, res) => {
+
+  const TrackID=req.query.TrackID;
+  const Economy=req.query.Economy;
+  const BusinessClass=req.query.BusinessClass;
+  const FirstClass=req.query.FirstClass;
+  res.render('./ADMIN/editTrack.ejs', {TrackID,Economy,BusinessClass,FirstClass });
+});
+
 app.get('/profile',async(req,res)=>{
   const cnic=req.session.userDetails.cnic;
   try{

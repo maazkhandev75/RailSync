@@ -166,8 +166,8 @@
                                 <td><%= i.FirstClass %></td>
                                 <td>
                                     
-                                        <button class="edit-btn" onclick="redirectToEditPage('<%= i.TrackId %>')">Edit</button>
-                                        <button class="delete-btn" onclick="deleteRow('<%= i.TrackId %>')">Delete</button>
+                                    <button class="edit-btn" onclick="editTrack('<%= i.TrackId %>','<%= i.Economy %>','<%= i.BusinessClass %>','<%= i.FirstClass %>')">Edit</button>
+                                    <button class="delete-btn" onclick="deleteRow('<%= i.TrackId %>')">Delete</button>
                                   
                                 </td>
                             </tr>
@@ -189,6 +189,9 @@
 
 </body>
 <script>
-
+function editTrack(TrackId,Economy,BusinessClass,FirstClass)
+{
+    window.location.href = `/editTrack?TrackID=${TrackId[0]}&Economy=${Economy}&BusinessClass=${BusinessClass}&FirstClass=${FirstClass}`;
+}
 </script>
 </html>
