@@ -116,10 +116,10 @@ GO
 ALTER TABLE [Security] ADD FOREIGN KEY ([StationId]) REFERENCES [Station] ([StationId])
 GO
 
-ALTER TABLE [Tracks] ADD FOREIGN KEY ([Station1Id]) REFERENCES [Station] ([StationId])
+ALTER TABLE [Tracks] ADD CONSTRAINT[Update2] FOREIGN KEY ([Station1Id]) REFERENCES [Station] ([StationId]) on delete cascade
 GO
 
-ALTER TABLE [Tracks] ADD FOREIGN KEY ([Station2Id]) REFERENCES [Station] ([StationId])
+ALTER TABLE [Tracks] ADD constraint FK_TRACKS_STATION2 FOREIGN KEY ([Station2Id]) REFERENCES [Station] ([StationId]) on delete cascade on update cascade
 GO
 
 ALTER TABLE [Route] ADD FOREIGN KEY ([TrackId]) REFERENCES [Tracks] ([TrackId])
@@ -181,8 +181,8 @@ GO
 ALTER TABLE [Ticket]
 DROP CONSTRAINT FK__Ticket__TrainId__607251E5;
 
-ALTER TABLE [Ticket]
-DROP CONSTRAINT FK__Ticket__Carriage__6166761E;
+ALTER TABLE [Tracks]
+DROP CONSTRAINT FK_TRACKS_STATION1;
 
 ALTER TABLE [User]
 DROP CONSTRAINT PK__User__3214EC072F032F7B;
@@ -208,7 +208,7 @@ SELECT
 FROM
     sys.foreign_keys
 WHERE
-    parent_object_id = OBJECT_ID('Ticket');
+    parent_object_id = OBJECT_ID('Tracks');
 
 ALTER TABLE Seat
 DROP CONSTRAINT FK__Seat__CarriageID__151B244E;
@@ -222,7 +222,26 @@ UNIQUE ([CarriageID], [TrainID], [SeatNo]);
 SELECT name
 FROM sys.objects
 WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT'
-AND parent_object_id = OBJECT_ID('Seat');
+AND parent_object_id = OBJECT_ID('Ticket');
+
+
+SELECT 
+    fk.name AS ForeignKeyName,
+    OBJECT_NAME(fk.parent_object_id) AS TableName,
+    COL_NAME(fkc.parent_object_id, fkc.parent_column_id) AS ColumnName,
+    OBJECT_NAME(fk.referenced_object_id) AS ReferencedTableName,
+    COL_NAME(fkc.referenced_object_id, fkc.referenced_column_id) AS ReferencedColumnName,
+    fk.delete_referential_action_desc AS OnDeleteAction,
+    fk.update_referential_action_desc AS OnUpdateAction
+FROM 
+    sys.foreign_keys AS fk
+INNER JOIN 
+    sys.foreign_key_columns AS fkc ON fk.object_id = fkc.constraint_object_id
+WHERE 
+    fk.name = 'FK__Ticket__trackId__0FEC5ADD'
+
+
+
 
 delete from [user]
 where userName='Muhammad Hassan Javed'

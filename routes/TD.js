@@ -291,16 +291,31 @@ router.post('/editSeat', (req, res) => {
     });
 });
 
-  router.delete('/deleteSeat', (req, res) => {
-    const { carriageID, trainID, seatNo } = req.query;
+router.delete('/deleteStation', (req, res) => {
+    const { StationId } = req.query;
 
-    // Perform deletion operation in the database using carriageID, trainID, and seatNo
-    // Replace this with your database deletion logic
-
-    // Respond with success or failure
-    res.sendStatus(200); // Success
-    // res.sendStatus(500); // Failure
+    const request = new sql.Request(pool);
+    request.input('StationId', sql.NVarChar, StationId);
+    request.execute('DeleteStation', (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+           let Message=result.recordset;
+            Message=Message[0];
+            console.log(Message);
+            if (Message.ResultMessage === 'Success') {
+                console.log('Station deleted successfully');
+                return res.sendStatus(200);
+            } else {
+                console.error('Failed to delete station:');
+                return res.status(500).send('Failed to delete station');
+            }
+        }
+    });
 });
+
+
 router.delete('/deleteTrain', (req, res) => {
     const TrainID = req.query;
 

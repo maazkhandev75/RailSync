@@ -409,15 +409,17 @@ BEGIN
     BEGIN
 
     DECLARE @COUNT_NVARCHAR NVARCHAR(255);
-    select @COUNT_NVARCHAR=(TrackId) from [Tracks]
-    SET @COUNT_NVARCHAR = CONVERT(NVARCHAR(255), CONVERT(int,@COUNT_NVARCHAR)+1);
+    SET @COUNT_NVARCHAR = SUBSTRING(CONVERT(NVARCHAR(255), NEWID()), 1, 10);
 
-    INSERT INTO Tracks (TrackId, Station1Id, Station2Id)
+
+   INSERT INTO Tracks (TrackId, Station1Id, Station2Id)
     VALUES (@COUNT_NVARCHAR, @Station1Id, @Station2Id);
 
     INSERT INTO Fare (TrackId,Economy,BusinessClass,FirstClass)
     VALUES (@COUNT_NVARCHAR,@Economy,@BusinessClass,@FirstClass)
-    SELECT 'TRACK ADDED SUCCESSFULLY' AS ResultMessage;
+
+    select 'TRACK ADDED SUCCESSFULLY' as ResultMessage
+    
     END
     ELSE
     BEGIN
@@ -425,6 +427,8 @@ BEGIN
     END
 END;
 
+exec InsertTrack 'PESH','ISL',500,1000,2000
+select * from [Tracks]
 alter PROCEDURE AddSecurity
     @CrewId NVARCHAR(255),
     @CrewName NVARCHAR(255),
@@ -580,27 +584,73 @@ AS
 BEGIN
     DECLARE @Status CHAR;
 
-    IF EXISTS(SELECT @Status = BookingStatus FROM [Seat] WHERE TrainID = @TrainID AND CarriageID = @CarriageID AND SeatNo = @SeatNo)
+    IF EXISTS(SELECT BookingStatus FROM [Seat] WHERE TrainID = @TrainID AND CarriageID = @CarriageID AND SeatNo = @SeatNo)
     BEGIN
+        SELECT @Status = BookingStatus FROM [Seat] WHERE TrainID = @TrainID AND CarriageID = @CarriageID AND SeatNo = @SeatNo;
+
         IF (@Status IS NULL)
         BEGIN
             UPDATE [Seat] SET BookingStatus = 'B' 
             WHERE TrainID = @TrainID AND CarriageID = @CarriageID AND SeatNo = @SeatNo;
             SET @Status = 'B';
-            SELECT @Status AS BookingStatus ,'BOOKED' AS ResultMessage;
+            SELECT @Status AS BookingStatus, 'BOOKED' AS ResultMessage;
         END
         ELSE
         BEGIN
             UPDATE [Seat] SET BookingStatus = NULL
             WHERE TrainID = @TrainID AND CarriageID = @CarriageID AND SeatNo = @SeatNo;
             SET @Status = NULL;
-            SELECT @Status AS BookingStatus,'UNBOOKED' AS ResultMessage;
+            SELECT @Status AS BookingStatus, 'UNBOOKED' AS ResultMessage;
         END
     END
     ELSE
     BEGIN
         SELECT 'SEAT DOES NOT EXIST' AS ResultMessage;
     END
+END;
+
+
+alter PROCEDURE DeleteStation
+    @StationId NVARCHAR(255)
+    AS 
+    BEGIN
+    if(exists(select * from [Station] where StationId=@StationId))
+    BEGIN
+    delete [Station] where StationId=@StationId
+    SELECT 'Success' AS ResultMessage;
+    END
+    else 
+    begin
+        SELECT 'Fail' AS ResultMessage;
+    end
+    END;
+select * from [Station]
+delete [Station] where StationId='PESH'
+alter TRIGGER DeletingStation
+ON [Station]
+INSTEAD OF DELETE
+AS 
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @StationId NVARCHAR(255);
+    DECLARE @TrackId NVARCHAR(255);
+
+    SELECT @StationId = deleted.StationId FROM deleted;
+    Update [Train] set DeptStation=NULL where DeptStation=@StationId
+    Update [Train] set ArrivalStation=NULL where ArrivalStation=@StationId
+
+    WHILE EXISTS (SELECT * FROM [Tracks] WHERE Station1Id = @StationId OR Station2Id = @StationId)
+    BEGIN
+        SELECT TOP 1 @TrackId = TrackId FROM [Tracks] WHERE Station1Id = @StationId OR Station2Id = @StationId;
+        
+        
+        DELETE FROM [Fare] WHERE TrackId=@TrackId;
+        DELETE FROM [Tracks] WHERE TrackId = @TrackId;
+        
+    END
+
+     DELETE FROM Station WHERE StationId = @StationId
 END;
 
 
