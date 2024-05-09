@@ -152,7 +152,7 @@ GO
 ALTER TABLE [Ticket]
 ADD CONSTRAINT FK_Ticket_Seat
 FOREIGN KEY ([CarriageId], [TrainId], [SeatNo])
-REFERENCES [Seat] ([CarriageID], [TrainID], [SeatNo]);
+REFERENCES [Seat] ([CarriageID], [TrainID], [SeatNo]) on UPDATE CASCADE on delete set NULL
 
 insert [Ticket] values ('3512389230239',5,'101','202','122121')
 INSERT INTO Ticket (CNIC, SeatNo,TrainId,CarriageId,TicketId) values ('3512389230239',5,'101','202','122121')

@@ -129,7 +129,7 @@
                                 <td><%= i.DateOfBirth.toISOString().split('T')[0] %></td>
                                 <td><%= i.TrainId %></td>
                                 <td>
-                                    <button class="edit-btn" onclick="editPilot('<%= i.CrewId[0] %>')">Edit</button>
+                                    <button class="edit-btn" onclick="editPilot('<%= i.CrewId[0] %>','<%= i.CrewName %>','<%= i.Address %>')">Edit</button>
                                     <button class="delete-btn" onclick="deletePilot('<%= i.CrewId[0] %>')">Delete</button>
                                 </td>
                             </tr>
@@ -161,7 +161,7 @@
                             <td><%= i.DateOfBirth.toISOString().split('T')[0] %></td>
                             <td><%= i.StationId %></td>
                             <td>
-                            <button class="edit-btn" onclick="editSecurity('<%= i.CrewId[0] %>')">Edit</button>
+                            <button class="edit-btn" onclick="editSecurity('<%= i.CrewId[0] %>','<%= i.CrewName %>','<%= i.Address %>')">Edit</button>
                             <button class="delete-btn" onclick="deleteSecurity('<%= i.CrewId[0] %>')">Delete</button>
                         </td>
                         </tr>
@@ -235,7 +235,14 @@ function deletePilot(CrewId) {
         });
     }
 }
-
+function editSecurity(CrewId,CrewName,Address)
+{
+    window.location.href = `/editSecurity?CrewId=${CrewId}&CrewName=${CrewName}&Address=${Address}`;
+}
+function editPilot(CrewId,CrewName,Address)
+{
+    window.location.href = `/editPilot?CrewId=${CrewId}&CrewName=${CrewName}&Address=${Address}`;
+}
 
 </script>
 </html>

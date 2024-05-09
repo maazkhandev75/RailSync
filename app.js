@@ -394,6 +394,38 @@ app.get('/editRoute', (req, res) => {
   res.render('./ADMIN/editRoute.ejs', {TrainID,TrackID });
 });
 
+app.get('/editSecurity', (req, res) => {
+  const CrewId = req.query.CrewId;
+  const CrewName = req.query.CrewName;
+  const Address = req.query.Address;
+  console.log(CrewId,CrewName,Address);
+  pool.query('SELECT * FROM Station')
+  .then(result => {
+      const Station = result.recordset;
+      res.render('./ADMIN/editSecurity.ejs', {CrewId,CrewName,Address,Station });
+  })
+  .catch(err => {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  });
+  
+});
+
+app.get('/editPilot', (req, res) => {
+  const CrewId = req.query.CrewId;
+  const CrewName = req.query.CrewName;
+  const Address = req.query.Address;
+  pool.query('SELECT * FROM Train')
+  .then(result => {
+      const Train = result.recordset;
+      res.render('./ADMIN/editPilot.ejs', {CrewId,CrewName,Address,Train });
+  })
+  .catch(err => {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+  });
+});
+
 app.get('/editTrack', (req, res) => {
 
   const TrackID=req.query.TrackID;
