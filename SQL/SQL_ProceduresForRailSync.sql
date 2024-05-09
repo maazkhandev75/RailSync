@@ -742,4 +742,21 @@ create PROCEDURE DeleteRoute
         SELECT 'Fail' AS ResultMessage;
     end
     END;
-    select * from [Route]
+
+
+    create PROCEDURE DeleteCrew
+    @CrewId NVARCHAR(255)
+
+    AS 
+    BEGIN
+    if(exists(select * from [Crew] where CrewId=@CrewId ))
+    BEGIN
+    delete [Crew] where CrewId=@CrewId;
+    SELECT 'Success' AS ResultMessage;
+    END
+    else 
+    begin
+        SELECT 'Fail' AS ResultMessage;
+    end
+    END;
+ 

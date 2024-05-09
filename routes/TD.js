@@ -366,6 +366,32 @@ router.delete('/deleteRoute', (req, res) => {
 });
 
 
+router.delete('/deleteCrew', (req, res) => {
+    const { CrewId} = req.query;
+    console.log(CrewId)
+    const request = new sql.Request(pool);
+    request.input('CrewId', sql.NVarChar, CrewId);
+
+    request.execute('DeleteCrew', (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+           let Message=result.recordset;
+            Message=Message[0];
+            console.log(Message);
+            if (Message.ResultMessage === 'Success') {
+                console.log('Crew deleted successfully');
+                return res.sendStatus(200);
+            } else {
+                console.error('Failed to delete Track:');
+                return res.status(500).send('Failed to delete station');
+            }
+        }
+    });
+});
+
+
 
 router.delete('/deleteTrain', (req, res) => {
     const TrainID = req.query;
