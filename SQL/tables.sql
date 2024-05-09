@@ -245,6 +245,21 @@ go
 
 
 
+CREATE TABLE [Ticket] (
+  [CNIC] nvarchar(255),
+  [SeatNo] int,
+  [TrainId] NVARCHAR(255),
+  [CarriageId] NVARCHAR(255),
+  [trackId] NVARCHAR(255),
+  [TicketId] nvarchar(255) PRIMARY KEY
+)
+
+insert into Ticket
+values('3520297089087',1,'KhiExpress','KhiExpressCarriage','1')
+go
+
+
+
 select * from [User]
 select * from [Ticket]
 select * from [Crew]
