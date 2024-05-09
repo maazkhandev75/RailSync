@@ -30,7 +30,7 @@
 }
 
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Ubuntu", sans-serif;
   background: #000000;
   color: #ffffff;
 }
@@ -71,7 +71,8 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Nunito", sans-serif;
+  /* font-family: "Nunito", sans-serif; */
+  font-family: 'Ubuntu', sans-serif;
 }
 
 /*--------------------------------------------------------------
@@ -281,7 +282,8 @@ h6 {
   font-size: 18px;
   font-weight: 500;
   color: #012970;
-  font-family: "Poppins", sans-serif;
+  /* font-family: "Poppins", sans-serif; */
+  font-family: 'Ubuntu', sans-serif;
 }
 
 .card-title span {
@@ -302,7 +304,8 @@ h6 {
 /* Alerts */
 .alert-heading {
   font-weight: 500;
-  font-family: "Poppins", sans-serif;
+  /* font-family: "Poppins", sans-serif; */
+  font-family: 'Ubuntu', sans-serif;
   font-size: 20px;
 }
 
@@ -364,7 +367,8 @@ h6 {
 /* Breadcrumbs */
 .breadcrumb {
   font-size: 14px;
-  font-family: "Nunito", sans-serif;
+  /* font-family: "Nunito", sans-serif; */
+  font-family: 'Ubuntu', sans-serif;
   color: #7e7e7e;
   font-weight: 600;
 }
@@ -442,7 +446,7 @@ h6 {
 
 .header .toggle-sidebar-btn {
   font-size: 32px;
-  padding-left: 870px;    /* we have to adjust for smaller screens */
+  padding-left: 876px;    /* we have to adjust for smaller screens */
   cursor: pointer;
   color: #ffffff;
 }
@@ -482,7 +486,8 @@ h6 {
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #dfdfdf transparent;
-  box-shadow: 0px 0px 20px rgba(250, 154, 0, 0.1);
+   /* box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.1);  */
+  box-shadow: none;
   background-color: #111111;
 }
 
@@ -875,13 +880,13 @@ h6 {
 # Profie Page
 --------------------------------------------------------------*/
 .profile .profile-card img {
-  max-width: 120px;
+  max-width: 100px;
 }
 
 .profile .profile-card h2 {
   font-size: 24px;
   font-weight: 700;
-  color: rgb(182, 182, 182);
+  color: #df5104;
   margin: 10px 0 0 0;
 }
 
@@ -932,7 +937,15 @@ h6 {
   color: rgba(255, 255, 255, 0.6);
 }
 
-
+.custom-btn{
+  background-color: #0080cb;
+  font-weight: 700;
+  transition: color 0.75s, background-color 0.75s;
+	
+}
+.custom-btn:hover{
+  background-color: rgb(70, 193, 255);
+}
 
 /*--------------------------------------------------------------
 # F.A.Q Page
@@ -1114,3 +1127,120 @@ h6 {
   color: rgb(210, 210, 210)
 }
 
+
+
+/* _____________________responsiveness__________________ */
+
+@media (max-width: 1234px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 840px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 940px;
+  }
+}
+
+@media (max-width: 1181px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 900px;
+  }
+}
+
+@media (max-width: 1141px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 870px;
+  }
+}
+
+@media (max-width: 1110px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 830px;
+  }
+}
+
+@media (max-width: 1074px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 790px;
+  }
+}
+
+@media (max-width: 1030px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 720px;
+  }
+}
+
+@media (max-width: 975px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 670px;
+  }
+}
+
+@media (max-width: 916px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 630px;
+  }
+}
+
+@media (max-width: 866px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 580px;
+  }
+}
+
+@media (max-width: 814px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 490px;
+  }
+}
+
+@media (max-width: 726px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 450px;
+  }
+}
+
+@media (max-width: 686px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 400px;
+  }
+}
+
+@media (max-width: 686px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 370px;
+  }
+}
+
+@media (max-width: 615px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 330px;
+  }
+}
+
+@media (max-width: 565px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 270px;
+  }
+}
+
+@media (max-width: 505px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 240px;
+  }
+}
+
+@media (max-width: 479px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 170px;
+  }
+}
+
+@media (max-width: 450px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 100px;
+  }
+}
