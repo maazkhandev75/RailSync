@@ -32,41 +32,42 @@ module.exports = function(pool) {
       }
       else{
          Trains=result.recordset;
+         console.log("NON STOP TRAIN FOUND :");
         console.log(Trains);
       }
-    });
     
     const CTErequest= new sql.Request(pool);
     CTErequest.input('SearchDate',sql.DateTime,tripDate);
     CTErequest.input('Search_from_Station',sql.NVarChar,St1);
     CTErequest.input('Search_to_Station',sql.NVarChar,St2);
-    CTErequest.execute('SearchTrainWithStops',(err,result)=>{
+    CTErequest.execute('SearchTrainWithOneStop',(err,result)=>{
       if(err){
       console.error(err);
       res.status(500).send('Internal Server Error');
       }
       else{
          TrainsWithStops=result.recordset;
+         console.log(" STOP TRAIN FOUND :");
         console.log(result);
-      }
-       if(Trains.length!==0 && TrainsWithStops.length!==0)
-       TrainsWithStops = TrainsWithStops.filter(train => !Trains.some(t => t.TrainId === train.TrainId));
       
-      if (TrainsWithStops.length <=0){
-        TrainsWithStops = [];
-        res.render("TrainResult", { Trains, TrainsWithStops });
-    }
-      else{
-      if(TrainsWithStops[0].DeptStation ==St1 && TrainsWithStops[TrainsWithStops.length - 1].ArrivalStation==St2) 
-        res.render("TrainResult", { Trains, TrainsWithStops });
-      else {
-        TrainsWithStops = [];
-        res.render("TrainResult", { Trains, TrainsWithStops });
+    //    if(Trains.length!==0 && TrainsWithStops.length!==0)
+    //    TrainsWithStops = TrainsWithStops.filter(train => !Trains.some(t => t.TrainId === train.TrainId));
+      
+    //   if (TrainsWithStops.length <=0){
+    //     TrainsWithStops = [];
+    //     res.render("TrainResult", { Trains, TrainsWithStops });
+    // }
+    //   else{
+    //   if(TrainsWithStops[0].DeptStation ==St1 && TrainsWithStops[TrainsWithStops.length - 1].ArrivalStation==St2) 
+    //     res.render("TrainResult", { Trains, TrainsWithStops });
+    //   else {
+    //     TrainsWithStops = [];
+    //     res.render("TrainResult", { Trains, TrainsWithStops });
+    //   }
+         res.render("TrainResult", { Trains, TrainsWithStops });
       }
-      }
-  
-       
-    })
+      });
+    });
   });
 
   
