@@ -219,7 +219,66 @@ on R.TrainId=CTEtable.TrainId
 join Fare as F on F.TrackId=CTEtable.TrackId
 AND CONVERT(date, R.ArrivalTime) = CONVERT(date, @SearchDate)
 
+-----------------Procedure to searchtrainwith one stop--------------
+create procedure [dbo].[SearchTrainWithOneStop] @Search_from_Station nvarchar(30),@Search_to_Station nvarchar(30), @SearchDate datetime
+as
+with my_cte as (
+    SELECT
+        T.TrainId,
+        Tr.TrackId,
+        Tr.Station1Id AS fromStation,
+        Tr.Station2Id AS toStation
+    FROM
+        [Train] AS T
+    JOIN
+        [Route] AS R ON R.TrainId = T.TrainId
+    JOIN
+        [Tracks] AS Tr ON Tr.TrackId = R.TrackId
+    JOIN
+        Fare AS F ON F.TrackId = Tr.TrackId
+    WHERE
+        Tr.Station1Id=(select StationId from Station where Station.StationName=@Search_from_Station) and Tr.Station2Id<> (select StationId from Station where Station.StationName=@Search_to_Station)
+),
+second_cte as(
+SELECT
+        T.TrainId,
+        Tr.TrackId,
+        Tr.Station1Id AS fromStation,
+        Tr.Station2Id AS toStation
+    FROM
+        [Train] AS T
+    JOIN
+        [Route] AS R ON R.TrainId = T.TrainId
+    JOIN
+        [Tracks] AS Tr ON Tr.TrackId = R.TrackId
+    JOIN
+        Fare AS F ON F.TrackId = Tr.TrackId
+	JOIN my_cte as PrevRoute on PrevRoute.toStation=Tr.Station1Id
+    WHERE
+        Tr.Station2Id= (select StationId from Station where Station.StationName=@Search_to_Station)
+		)
+, union_cte as
+(select * from my_cte union select * from second_cte
+)
+,FinalRoute as(
+select U1.TrainId,U1.TrackId,U1.fromStation,U1.toStation
+from union_cte as U1, union_cte as U2
+where U1.toStation=U2.fromStation
+union
+select U1.TrainId,U1.TrackId,U1.fromStation,U1.toStation
+from union_cte as U1, union_cte as U2
+where U1.fromStation=U2.toStation)
 
+
+select T.TrainId,T.UpDownStatus as UPStatus ,CTEtable.TrackId as TrackId,(select StationName from Station where StationId=fromStation) as DeptStation,(select StationName from Station where StationId=toStation) as ArrivalStation,DeptTime,ArrivalTime,Economy,BusinessClass,FirstClass
+FROM FinalRoute as CTEtable
+join [Route] as R
+on R.TrainId=CTEtable.TrainId and R.TrackId=CTEtable.TrackId
+join [Train] as T on T.TrainId=R.TrainId 
+join Fare as F on F.TrackId=R.TrackId
+
+
+exec SearchTrainWithOneStop 'Karachi Cannt','Islamabad','2024-08-05'
 ---------------------Procedure to Search non Stops----------------------
 ALTER PROCEDURE [dbo].[SearchForTrains] @fromStation nvarchar(30), @toStation nvarchar(30), @SearchDate datetime
 as

@@ -138,6 +138,20 @@ app.get('/ticketsData', (req, res) => {
       });
 });
 
+app.get('/faq', (req, res) => {
+  
+  try
+  {
+  res.render("./USER/faq.ejs");
+  }
+  catch(error)
+  {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  };
+  
+
+});
 
 app.get('/showTicketsOfUser', async (req, res) => {
   const cnic = req.session.userDetails.cnic;
