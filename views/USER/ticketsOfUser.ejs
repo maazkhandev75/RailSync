@@ -179,7 +179,7 @@
             <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="userDash">Home</a></li>
             <li class="breadcrumb-item">Pages</li>
-            <li class="breadcrumb-item active">User Tickets</li>
+            <li class="breadcrumb-item active">My Bookings</li>
             </ol>
         </nav>
         </div><!-- End Page Title -->
@@ -188,7 +188,7 @@
 
 
             <div class="container">
-                <h2>Upcoming Tickets</h2>
+                <h2>Current Bookings</h2>
                 <table>
                     <thead>
                         <tr>
@@ -197,6 +197,8 @@
                             <th>TotalPrice</th>
                             <th>DeptTime</th>
                             <th>RefundStatus</th>
+                            <th>Action</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -207,6 +209,9 @@
 								<td><%= ticket.TotalPrice %></td>
                                 <td><%= ticket.DeptTime %></td>
                                 <td><%= ticket.RefundStatus %></td>
+                                <td>
+                                    <button class="edit-btn">refund</button>
+                                </td>
                             </tr>
                         <% }); %>
 
@@ -218,7 +223,7 @@
 
 
             <div class="container">
-                <h2>Previous Tickets</h2>
+                <h2>Previous Bookings</h2>
                 <table>
                     <thead>
                         <tr>
@@ -227,6 +232,7 @@
                             <th>TotalPrice</th>
                             <th>DeptTime</th>
                             <th>RefundStatus</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -237,6 +243,9 @@
 								<td><%= ticket.TotalPrice %></td>
                                 <td><%= ticket.DeptTime %></td>
                                 <td><%= ticket.RefundStatus %></td>
+                                <td>
+                                    <button class="edit-btn">refund</button>
+                                </td>
                             </tr>
                         <% }); %>
 

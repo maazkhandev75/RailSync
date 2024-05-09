@@ -101,7 +101,7 @@ BEGIN
 
 	IF EXISTS (SELECT 1 FROM [Ticket] WHERE  CNIC = @CNIC)
 	BEGIN
-		SELECT T.TicketId, T.SeatNo, P.TotalPrice, P.RefundStatus, R.DeptTime FROM [Ticket] as T JOIN [Payment] as P on P.TicketId = T.TicketId  JOIN [Route] as R on ( R.TrainId=T.TrainId AND R.TrackId=T.trackId )WHERE  T.CNIC = @CNIC
+		SELECT T.TicketId, T.SeatNo, P.TotalPrice, P.RefundStatus, R.DeptTime FROM [Ticket] as T JOIN [Payment] as P on P.TicketId = T.TicketId  JOIN [Route] as R on ( R.TrainId=T.TrainId AND R.TrackId=T.trackId ) WHERE  T.CNIC = @CNIC
 	END
 	ELSE
 	BEGIN
@@ -111,10 +111,7 @@ BEGIN
 	END
 END
 
-
-
 drop proc ShowBookedTickets
-
 
 --------PROCEDURE FOR CANCEL TICKET OF USER-------
 CREATE PROCEDURE CancelTicket
@@ -382,7 +379,7 @@ VALUES(NEWID(),'0CD8799B-6898-4682-8C22-75A6C7224DA0',1,'KHI','LHR','2025-3-13')
 
 SELECT * FROM [Ticket]
 
-ShowBookedTickets '0CD8799B-6898-4682-8C22-75A6C7224DA0'
+ShowBookedTickets '3520297089087'
 
 update  [Ticket]
 set date_and_time='2024-2-1 10:13:02'

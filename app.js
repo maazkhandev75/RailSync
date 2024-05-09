@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const sql=require('mssql');
 const fs = require('fs');
+const nodemailer = require('nodemailer');
 
 // Create an instance of the Express application
 const app = express();
@@ -37,6 +38,82 @@ function isAuthenticated(req, res, next)
 }
 
 
+const sendEmail = async (name, email, subject, message) => {
+  // Create a transporter object using the default SMTP transport
+  let transporter = nodemailer.createTransport({
+    service: 'gmail', // e.g., 'gmail', 'hotmail', etc.
+    auth: {
+      user: 'your_email@example.com', // Your email address
+      pass: 'your_email_password' // Your email password or app password if using Gmail
+    }
+  });
+
+  // Email content
+  let mailOptions = {
+    from: 'your_email@example.com',
+    to: 'maazkhan75555@gmail.com', // Your email address where you want to receive messages
+    subject: subject,
+    text: `Name: ${name}\nEmail: ${email}\n\nMessage: ${message}`
+  };
+
+  // Send email
+  await transporter.sendMail(mailOptions);
+};
+
+// app.post('/contact', (req, res) => {
+//   //console.log('testing123');
+//   const { name, email, subject, message } = req.body;
+
+//   console.log(name);
+
+//   // Call the sendEmail function to send the email
+//   sendEmail(name, email, subject, message)
+//     .then(() => {
+//       console.log('Email sent successfully');
+//       res.render('./USER/dashboard.ejs'); // Render a success page or redirect to another page
+//     })
+//     .catch((error) => {
+//       console.error('Error sending email:', error);
+//       res.render('./USER/dashboard.ejs'); // Render an error page
+//     });
+// });
+
+
+
+app.post('/contact', (req, res) => {
+  try {
+    // Log the entire request body
+    console.log('Request Body:', req.body);
+
+    // Extract form data
+    const { name, email, subject, message } = req.body;
+
+    // Log form data for debugging
+    console.log('Name:', name);
+    console.log('Email:', email);
+    console.log('Subject:', subject);
+    console.log('Message:', message);
+
+    // Call the sendEmail function to send the email
+    sendEmail(name, email, subject, message)
+      .then(() => {
+        console.log('Email sent successfully');
+        res.render('./USER/dashboard.ejs'); // Render a success page or redirect to another page
+      })
+      .catch((error) => {
+        console.error('Error sending email:', error);
+        res.render('./USER/dashboard.ejs'); // Render an error page
+      });
+  } catch (error) {
+    console.error('Error processing request:', error);
+    res.status(500).send('An error occurred while processing the request');
+  }
+});
+
+
+// Body parser middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 //importing routers
 const signupRouter = require('./routes/signup')
@@ -49,8 +126,6 @@ const sessionRouter = require('./routes/testSession');
 const profileUpdateRouter = require('./routes/profileUpdate');
 const passwordChangeRouter = require('./routes/passwordChange');
 
-
-//const bookedTicketsRouter = require('./routes/bookedTickets');
 
 const { Console } = require('console');
 const { render } = require('ejs');
@@ -208,7 +283,7 @@ app.get('/showTicketsOfUser', isAuthenticated, async (req, res) => {
       const ticketsUpcoming = [];
       const ticketsPrevious = [];
       const currentTime = new Date();
-      console.log(currentTime);
+      // console.log(currentTime);
       Tickets.forEach((ticket) => {
 
         const deptTime=new Date(ticket.deptTime);
@@ -240,6 +315,10 @@ app.get('/showTicketsOfUser', isAuthenticated, async (req, res) => {
 
 app.get('/ds', (req, res) => {
   res.render('./ADMIN/dashboard.ejs');
+});
+
+app.get('/contact', (req, res) => {
+  res.render('./USER/contact.ejs');
 });
 
 app.get('/userDash', isAuthenticated, (req,res)=>{
@@ -535,13 +614,6 @@ app.use('/TD',SearchCarriage(pool));
 app.use('/', sessionRouter);    //for testing session
 app.use('/profileUpdate',profileUpdateRouter(pool))
 app.use('/passwordChange',passwordChangeRouter(pool))
-
-//app.use('/bookedTickets',bookedTicketsRouter(pool));
-
-
-// Configure middleware
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 
 // Catch 404 and forward to error handler
