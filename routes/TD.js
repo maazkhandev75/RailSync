@@ -246,6 +246,51 @@ router.post('/editRoute', (req, res) => {
     });
 });
 
+
+router.post('/editFare', (req, res) => {
+    const { TrackId,Economy,BusinessClass,FirstClass } = req.body;
+
+    const request = new sql.Request(pool);
+    request.input('TrackId', sql.NVarChar, TrackId);
+    request.input('Economy', sql.Float, Economy);
+    request.input('BusinessClass', sql.Float, BusinessClass);
+    request.input('FirstClass', sql.Float, FirstClass);
+
+
+    request.execute('EditFare', (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            console.log(result.recordset);
+            Message=result.recordset;
+            res.json({ Message });
+            
+        }
+    });
+});
+
+router.post('/editSeat', (req, res) => {
+    const { CarriageID, TrainID, SeatNo} = req.body;
+
+    const request = new sql.Request(pool);
+    request.input('CarriageID', sql.NVarChar, CarriageID);
+    request.input('TrainID', sql.NVarChar, TrainID);
+    request.input('SeatNo', sql.Int, SeatNo);
+   
+    request.execute('EditSeat', (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            Message=result.recordset;
+            console.log(Message);
+            res.json({ Message });
+            
+        }
+    });
+});
+
   router.delete('/deleteSeat', (req, res) => {
     const { carriageID, trainID, seatNo } = req.query;
 

@@ -39,28 +39,27 @@
 
           <div class="card" style="color: rgb(219, 135, 56);">
             <div class="card-body">
-              <h5 class="card-title" style="color: rgb(219, 135, 56);" >Edit Route</h5>
+              <h5 class="card-title" style="color: rgb(219, 135, 56);" >Edit Track</h5>
 
               <!-- Multi Columns Form -->
 
               <form class="row g-3">
 
-                <div class="col-md-6">
-                    <label for="TrainID" class="form-label">TrainID</label>
-                    <input type="text" class="form-control" id="TrainID" readonly placeholder="<%= TrainID %>">
-                  </div>
                   <div class="col-md-6">
                     <label for="TrackID" class="form-label">TrackID</label>
                     <input type="text" class="form-control" id="TrackID" readonly placeholder="<%= TrackID %>">
                   </div>
-                
                   <div class="col-md-6">
-                    <label for="DepartureTime" class="form-label">DepartureTime</label>
-                    <input type="datetime-local" class="form-control" id="DepartureTime">
+                    <label for="Economy" class="form-label">Economy Price</label>
+                    <input type="text" class="form-control" id="Economy" placeholder="<%= Economy %>" >
                   </div>
                   <div class="col-md-6">
-                    <label for="ArrivalTime" class="form-label">ArrivalTime</label>
-                    <input type="datetime-local" class="form-control" id="ArrivalTime">
+                    <label for="BusinessClass" class="form-label">BusinessClass Price</label>
+                    <input type="text" class="form-control" id="BusinessClass" placeholder="<%= BusinessClass %>" >
+                  </div>
+                  <div class="col-md-6">
+                    <label for="FirstClass" class="form-label">FirstClass Price</label>
+                    <input type="text" class="form-control" id="FirstClass" placeholder="<%= FirstClass %>" >
                   </div>
 
                 <div class="text-center">
@@ -88,14 +87,16 @@
 <script>
   document.getElementById('submitButton').addEventListener('click', function() {
       event.preventDefault();
-      const TrainId = document.getElementById('TrainID').placeholder;
       const TrackId = document.getElementById('TrackID').placeholder;
-      const DepartureTime = document.getElementById('DepartureTime').value;
-      const ArrivalTime = document.getElementById('ArrivalTime').value;
+      const Economy = document.getElementById('Economy').value !== '' ? document.getElementById('Economy').value : document.getElementById('Economy').placeholder;
+        const BusinessClass = document.getElementById('BusinessClass').value !== '' ? document.getElementById('BusinessClass').value : document.getElementById('BusinessClass').placeholder;
+        const FirstClass = document.getElementById('FirstClass').value !== '' ? document.getElementById('FirstClass').value : document.getElementById('FirstClass').placeholder;
+
+    console.log(BusinessClass);
         
-      fetch('/TD/editRoute', {
+      fetch('/TD/editFare', {
       method: 'POST',
-      body: JSON.stringify({ TrainId,TrackId,DepartureTime,ArrivalTime }),
+      body: JSON.stringify({ TrackId,Economy,BusinessClass,FirstClass }),
         headers: {
             'Content-Type': 'application/json'
         }
@@ -103,8 +104,8 @@
     .then(response => response.json())
     .then(data => {
       const result = data.Message;
-       if(result[0].ResultMessage=='ROUTE UPDATED SUCCESSFULLY')
-          {window.location.href = '/routeData';}
+       if(result[0].ResultMessage=='FARE UPDATED SUCCESSFULLY')
+          {window.location.href = '/stationData';}
         else
         {
           console.log(result[0].ResultMessage);

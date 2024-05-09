@@ -281,11 +281,10 @@ document.getElementById('searchCarriageButton').addEventListener('click', functi
             row.innerHTML =` 
                 <td>${entry.CarriageID}</td>
                 <td>${entry.TrainID}</td>
-                <td>${entry.SeatNo}</td>
+                <td >${entry.SeatNo}</td>
                 <td>${entry.BookingStatus}</td>
                 <td>
-                <button class="edit-btn" onclick="editSeat('${entry.CarriageID}', '${entry.TrainID}', '${entry.SeatNo}')">Edit</button>
-                <button class="delete-btn" onclick="deleteSeat('${entry.CarriageID}', '${entry.TrainID}', '${entry.SeatNo}')">Delete</button>
+                <button class="edit-btn" onclick="editSeat('${entry.CarriageID}', '${entry.TrainID}', '${entry.SeatNo}')">BOOK/UNBOOK</button>
                             
                 </td>
                 </td>
@@ -323,8 +322,36 @@ document.getElementById('searchCarriageButton').addEventListener('click', functi
   });
 
 
-  function editSeat(CarriageId, trainID, seatNo) {
-    window.location.href = `/editSeat?carriageID=${carriageId}&trainID=${trainID}&seatNo=${seatNo}`;
+  function editSeat(CarriageID, TrainID, SeatNo) {
+    fetch('/TD/editSeat', {
+        method: 'POST',
+        body: JSON.stringify({ CarriageID, TrainID, SeatNo }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const table = document.getElementById('Seats');
+        const rows = table.querySelectorAll('tr');
+        const result = data.Message[0];
+
+        rows.forEach(row => {
+        const seatNo = row.getAttribute('data-seat-no');
+
+        if (result.ResultMessage !== 'SEAT DOES NOT EXIST') {
+            if (seatNo === SeatNo) {
+                if(result.BookingStatus ==null)
+                    row.querySelector('td:nth-child(4)').textContent = 'null';
+                else 
+                    row.querySelector('td:nth-child(4)').textContent = result.BookingStatus;
+            }
+        }
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 
 function deleteSeat(carriageID, trainID, seatNo) {

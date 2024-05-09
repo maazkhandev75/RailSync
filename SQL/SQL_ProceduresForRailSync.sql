@@ -492,16 +492,23 @@ alter PROCEDURE AddSecurity
     @StationId NVARCHAR(255)
    AS 
 BEGIN
+    if(not exists(select * from [Crew] where CrewId=@CrewId))
+    BEGIN
     INSERT INTO Crew (CrewId,CrewName,[Address],DateOfBirth)
     VALUES (@CrewId, @CrewName, @Address,@DateOfBirth);
 
     Insert into [Security] (CrewId,StationId) values(@CrewId,@StationId);
     SELECT 'GUARD ADDED SUCCESSFULLY' AS ResultMessage;
-end;
+    end
+    else 
+    BEGIN
+        SELECT 'GUARD NOT ADDED SUCCESSFULLY' AS ResultMessage;
+    END
+    end;
 
 exec  AddSecurity '31203412311','Daniel','Lahore,Pakistan','2000-01-01','ISB'
 
-Create PROCEDURE AddPilot
+alter PROCEDURE AddPilot
     @CrewId NVARCHAR(255),
     @CrewName NVARCHAR(255),
     @Address NVARCHAR(255),
@@ -509,12 +516,19 @@ Create PROCEDURE AddPilot
     @TrainId NVARCHAR(255)
    AS 
 BEGIN
+    if(not exists(select * from [Crew] where CrewId=@CrewId))
+    BEGIN
     INSERT INTO Crew (CrewId,CrewName,[Address],DateOfBirth)
     VALUES (@CrewId, @CrewName, @Address,@DateOfBirth);
 
     Insert into [Pilot] (CrewId,TrainId) values(@CrewId,@TrainId);
     SELECT 'GUARD ADDED SUCCESSFULLY' AS ResultMessage;
-end;
+    end
+    else 
+    BEGIN
+        SELECT 'GUARD NOT ADDED SUCCESSFULLY' AS ResultMessage;
+    END
+    end;
 
 
 CREATE PROCEDURE AddRoute
@@ -595,8 +609,58 @@ END;
 
 
 
+Create PROCEDURE EditFare
+    @TrackId NVARCHAR(255),
+    @Economy FLOAT,
+    @BusinessClass float,
+    @FirstClass FLOAT
+AS 
+BEGIN
+    if( exists(select * from [Fare] where TrackId=@TrackId ))
+    BEGIN
 
+    update [Fare] set Economy=@Economy,BusinessClass=@BusinessClass,FirstClass=@FirstClass 
+    where TrackId=@TrackId;
+    SELECT 'FARE UPDATED SUCCESSFULLY' AS ResultMessage;
+    END
+    ELSE
+    BEGIN
+        SELECT 'FARE NOT EXISTS' AS ResultMessage;
+    END
+END;
 
+exec EditFare '4',500,1200,3000;
+
+CREATE PROCEDURE EditSeat
+    @SeatNo INT,
+    @CarriageID NVARCHAR(255),
+    @TrainID NVARCHAR(255)
+AS 
+BEGIN
+    DECLARE @Status CHAR;
+
+    IF EXISTS(SELECT @Status = BookingStatus FROM [Seat] WHERE TrainID = @TrainID AND CarriageID = @CarriageID AND SeatNo = @SeatNo)
+    BEGIN
+        IF (@Status IS NULL)
+        BEGIN
+            UPDATE [Seat] SET BookingStatus = 'B' 
+            WHERE TrainID = @TrainID AND CarriageID = @CarriageID AND SeatNo = @SeatNo;
+            SET @Status = 'B';
+            SELECT @Status AS BookingStatus ,'BOOKED' AS ResultMessage;
+        END
+        ELSE
+        BEGIN
+            UPDATE [Seat] SET BookingStatus = NULL
+            WHERE TrainID = @TrainID AND CarriageID = @CarriageID AND SeatNo = @SeatNo;
+            SET @Status = NULL;
+            SELECT @Status AS BookingStatus,'UNBOOKED' AS ResultMessage;
+        END
+    END
+    ELSE
+    BEGIN
+        SELECT 'SEAT DOES NOT EXIST' AS ResultMessage;
+    END
+END;
 
 
 

@@ -139,6 +139,52 @@ app.get('/ticketsData', (req, res) => {
 });
 
 
+app.get('/showTicketsOfUser', async (req, res) => {
+  const cnic = req.session.userDetails.cnic;
+	  try {
+		// Call the stored procedure to fetch booked tickets
+		const result = await pool.request()
+		  .input('CNIC', sql.NVarChar(255), cnic)
+		  .execute('ShowBookedTickets');
+	
+		if (result.returnValue === 0) 
+    {
+		  console.log('Tickets found!');
+		  const Tickets = result.recordset; 
+      console.log(Tickets)
+      const ticketsUpcoming = [];
+      const ticketsPrevious = [];
+      const currentTime = new Date();
+      console.log(currentTime);
+      Tickets.forEach((ticket) => {
+
+        const deptTime=new Date(ticket.deptTime);
+        if(deptTime >= currentTime)
+        {
+          ticketsUpcoming.push(ticket);
+        }
+        else
+        {
+          ticketsPrevious.push(ticket);
+        }
+      });
+
+      // Assuming this is how your ticket data is structured
+		  res.render('./USER/ticketsOfUser.ejs',{ticketsPrevious,ticketsUpcoming}); 
+      // Send ticket data as JSON response
+		} 
+    else
+    {
+		  throw new Error('Failed to retrieve tickets');
+		} 
+	  } 
+    catch (error)
+    {
+		console.error('Error retrieving tickets:', error);
+		res.status(500).send('Failed to retrieve tickets');
+	  }
+});
+
 app.get('/ds', (req, res) => {
   res.render('./ADMIN/dashboard.ejs');
 });
@@ -334,6 +380,15 @@ app.get('/editRoute', (req, res) => {
   const TrainID = req.query.TrainID;
   const TrackID=req.query.TrackID;
   res.render('./ADMIN/editRoute.ejs', {TrainID,TrackID });
+});
+
+app.get('/editTrack', (req, res) => {
+
+  const TrackID=req.query.TrackID;
+  const Economy=req.query.Economy;
+  const BusinessClass=req.query.BusinessClass;
+  const FirstClass=req.query.FirstClass;
+  res.render('./ADMIN/editTrack.ejs', {TrackID,Economy,BusinessClass,FirstClass });
 });
 
 app.get('/profile',async(req,res)=>{
