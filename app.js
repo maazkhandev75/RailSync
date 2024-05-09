@@ -220,8 +220,6 @@ app.get('/stationData', (req, res) => {
   .then(results => {
     const Station = results[0].recordset;
     const Track = results[1].recordset;
-    console.log(Station);
-    console.log(Track);
     res.render('./ADMIN/stationData.ejs', { Station:Station, Track:Track });
   })
   .catch(err => {
