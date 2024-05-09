@@ -20,6 +20,24 @@ app.use(session({
   saveUninitialized: false
 }));
 
+
+
+function isAuthenticated(req, res, next)
+{
+  if(req.session.userDetails && req.session.userDetails.cnic){
+    //user is authenticated proceed with the request
+    next();
+  }
+  else 
+  {
+     //redirect an error page
+    console.log('Forbidden: access denied because of authentication bypass!');
+    res.redirect('/errorOfSession');
+  }
+}
+
+
+
 //importing routers
 const signupRouter = require('./routes/signup')
 const loginRouter = require('./routes/login')
@@ -35,6 +53,7 @@ const passwordChangeRouter = require('./routes/passwordChange');
 //const bookedTicketsRouter = require('./routes/bookedTickets');
 
 const { Console } = require('console');
+const { render } = require('ejs');
 
 //configuring a connection pool for MSSQL using the mssql module and connecting to the database
 const sqlConfig = {
@@ -60,6 +79,7 @@ pool.connect((err)=>{
   }
 })
 
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'),path.join(__dirname, 'views/ADMIN'),path.join(__dirname, 'views/ADMIN/partials'),path.join(__dirname, 'views/USER'),path.join(__dirname, 'views/USER/partials'));
 app.set('view engine', 'ejs');
@@ -74,19 +94,23 @@ app.use(express.static(path.join(__dirname, 'public')));  //set up your Express 
 // Define a route to render an ejs/html page
 app.get('/home',(req,res)=>{
 res.render('home.ejs');
-})
+});
 
 app.get('/decisionPg',(req,res)=>{
 res.render('decision.ejs');
-})
+});
 
 app.get('/signupForm',(req,res)=>{
 res.render('signup.ejs');
-})
+});
 
 app.get('/loginForm',(req,res)=>{
   res.render('login.ejs');
-})
+});
+
+app.get('/errorOfSession',(req,res)=>{
+  res.render('errorSession.ejs');
+});
 
 
 app.get('/SearchTrainform', (req, res) => {
@@ -138,8 +162,7 @@ app.get('/ticketsData', (req, res) => {
       });
 });
 
-app.get('/faq', (req, res) => {
-  
+app.get('/faq', (req, res) => {  
   try
   {
   res.render("./USER/faq.ejs");
@@ -149,11 +172,27 @@ app.get('/faq', (req, res) => {
     console.error(err);
     res.status(500).send('Internal Server Error');
   };
-  
+});
+
+app.get('/logout',(req,res)=>{
+
+  req.session.destroy(err => {
+
+    if(err){
+      console.error('error destroying session: ',err);
+    }
+    else
+    {
+       res.redirect('/home');
+    }
+  });
 
 });
 
-app.get('/showTicketsOfUser', async (req, res) => {
+
+
+
+app.get('/showTicketsOfUser', isAuthenticated, async (req, res) => {
   const cnic = req.session.userDetails.cnic;
 	  try {
 		// Call the stored procedure to fetch booked tickets
@@ -203,7 +242,7 @@ app.get('/ds', (req, res) => {
   res.render('./ADMIN/dashboard.ejs');
 });
 
-app.get('/userDash',(req,res)=>{
+app.get('/userDash', isAuthenticated, (req,res)=>{
   const userData = req.session.userDetails;
   res.render('./USER/dashboard.ejs',{userData});
   })
@@ -229,8 +268,6 @@ app.get('/stationData', (req, res) => {
 });
 
 app.get('/routeData', (req, res) => {
-  
-
      
   pool.query('SELECT * FROM Route as R join Tracks as T on R.TrackId=T.TrackId')
   .then(result => {
@@ -435,7 +472,7 @@ app.get('/editTrack', (req, res) => {
   res.render('./ADMIN/editTrack.ejs', {TrackID,Economy,BusinessClass,FirstClass });
 });
 
-app.get('/profile',async(req,res)=>{
+app.get('/profile', isAuthenticated, async(req,res)=>{
   const cnic=req.session.userDetails.cnic;
   try{
     const result = await pool.request()
@@ -537,22 +574,33 @@ app.use('/passwordChange',passwordChangeRouter(pool))
 // Configure middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-// catch 404 and forward to error handler
+
+
+// Catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
-
-// error handler
+// Error handler for 404 errors
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
+  if (err.status === 404) {
+    res.status(404).render('error404');
+  } else {
+    next(err);
+  }
+});
+
+// Error handler for other errors (500 and any other status codes)
+app.use(function(err, req, res, next) {
+  // Set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
+  // Render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error500');
 });
+
 
 // Export the app and pool objects
 module.exports = { app, pool };

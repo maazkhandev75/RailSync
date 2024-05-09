@@ -29,8 +29,9 @@ body{
 
 /* Darken the background color of input fields filled by Chrome autofill */
 input:-webkit-autofill {
-    /* color: rgb(213, 0, 0) important; Change the text color to ensure visibility */
-    -webkit-box-shadow: 0 0 0px 1000px #656565 inset !important; /* Change the shadow color to match your dark theme */
+    background-color: rgb(30, 30, 30) !important; /* Dark gray background */
+    color: rgb(89, 255, 0) !important; /* White text */
+    -webkit-box-shadow: 0 0 0px 9000px rgb(44, 44, 44) inset !important; /* Change the shadow color to match your dark theme */
 }
 
 .container_topLvl{
