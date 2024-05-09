@@ -683,8 +683,7 @@ alter PROCEDURE DeleteStation
         SELECT 'Fail' AS ResultMessage;
     end
     END;
-select * from [Station]
-delete [Station] where StationId='PESH'
+
 alter TRIGGER DeletingStation
 ON [Station]
 INSTEAD OF DELETE
@@ -713,5 +712,84 @@ BEGIN
 END;
 
 
+alter PROCEDURE DeleteTrack
+    @TrackId NVARCHAR(255)
+    AS 
+    BEGIN
+    if(exists(select * from [Tracks] where TrackId=@TrackId))
+    BEGIN
+    delete [Tracks] where TrackId=@TrackId
+    SELECT 'Success' AS ResultMessage;
+    END
+    else 
+    begin
+        SELECT 'Fail' AS ResultMessage;
+    end
+    END;
+
+create PROCEDURE DeleteRoute
+    @TrackId NVARCHAR(255),
+    @TrainId NVARCHAR(255)
+    AS 
+    BEGIN
+    if(exists(select * from [Route] where TrackId=@TrackId and @TrainId=TrainId))
+    BEGIN
+    delete [Route] where TrackId=@TrackId and @TrainId=TrainId;
+    SELECT 'Success' AS ResultMessage;
+    END
+    else 
+    begin
+        SELECT 'Fail' AS ResultMessage;
+    end
+    END;
 
 
+    create PROCEDURE DeleteCrew
+    @CrewId NVARCHAR(255)
+
+    AS 
+    BEGIN
+    if(exists(select * from [Crew] where CrewId=@CrewId ))
+    BEGIN
+    delete [Crew] where CrewId=@CrewId;
+    SELECT 'Success' AS ResultMessage;
+    END
+    else 
+    begin
+        SELECT 'Fail' AS ResultMessage;
+    end
+    END;
+
+
+    create PROCEDURE DeleteTrain
+    @TrainId NVARCHAR(255)
+
+    AS 
+    BEGIN
+    if(exists(select * from [Train] where TrainId=@TrainId ))
+    BEGIN
+    delete [Train] where TrainId=@TrainId;
+    SELECT 'Success' AS ResultMessage;
+    END
+    else 
+    begin
+        SELECT 'Fail' AS ResultMessage;
+    end
+    END;
+
+    create PROCEDURE DeleteCarriage
+    @CarriageId NVARCHAR(255)
+    AS 
+    BEGIN
+    if(exists(select * from [Carriage] where CarriageId=@CarriageId ))
+    BEGIN
+    delete [Carriage] where CarriageId=@CarriageId;
+    SELECT 'Success' AS ResultMessage;
+    END
+    else 
+    begin
+        SELECT 'Fail' AS ResultMessage;
+    end
+    END;
+   
+ 

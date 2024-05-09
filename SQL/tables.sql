@@ -87,14 +87,14 @@ GO
 CREATE TABLE [Pilot] (
   [CrewId] nvarchar(255),
   [TrainId] nvarchar(255),
-  PRIMARY KEY ([CrewId], [TrainId])
+
 )
 GO
 
 CREATE TABLE [Security] (
   [CrewId] nvarchar(255),
   [StationId] nvarchar(255),
-  PRIMARY KEY ([CrewId], [StationId])
+
 )
 GO
 
@@ -110,7 +110,7 @@ GO
 ALTER TABLE [Pilot] ADD FOREIGN KEY ([CrewId]) REFERENCES [Crew] ([CrewId])
 GO
 
-ALTER TABLE [Security] ADD FOREIGN KEY ([CrewId]) REFERENCES [Crew] ([CrewId])
+ALTER TABLE [Security] ADD CONSTRAINT FK_CREW_ID FOREIGN KEY ([CrewId]) REFERENCES [Crew] ([CrewId])
 GO
 
 ALTER TABLE [Security] ADD FOREIGN KEY ([StationId]) REFERENCES [Station] ([StationId])
@@ -180,8 +180,7 @@ GO
 
 --------------- UPDATES -------------------------------
 
-ALTER TABLE [Ticket]
-DROP CONSTRAINT FK__Ticket__TrainId__607251E5;
+
 
 ALTER TABLE [Tracks]
 DROP CONSTRAINT FK_TRACKS_STATION1;
@@ -224,8 +223,7 @@ UNIQUE ([CarriageID], [TrainID], [SeatNo]);
 SELECT name
 FROM sys.objects
 WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT'
-AND parent_object_id = OBJECT_ID('Ticket');
-
+AND parent_object_id = OBJECT_ID('Security');
 
 SELECT 
     fk.name AS ForeignKeyName,
@@ -240,8 +238,10 @@ FROM
 INNER JOIN 
     sys.foreign_key_columns AS fkc ON fk.object_id = fkc.constraint_object_id
 WHERE 
-    fk.name = 'FK__Ticket__trackId__0FEC5ADD'
+    fk.name = 'FK__Security__Statio__220B0B18'
 
+ALTER TABLE [Security]
+DROP CONSTRAINT FK__Security__CrewId__2116E6DF;
 
 
 

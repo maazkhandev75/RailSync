@@ -122,15 +122,15 @@
                     </thead>
                     <tbody>
                         <% Pilot.forEach((i)=>{ %>
-                            <tr>
+                            <tr data-pilot-id="<%= i.CrewId[0] %>">
                                 <td><%= i.CrewId[0] %></td>
                                 <td><%= i.CrewName %></td>
                                 <td><%= i.Address %></td>
                                 <td><%= i.DateOfBirth.toISOString().split('T')[0] %></td>
                                 <td><%= i.TrainId %></td>
                                 <td>
-                                    <button class="edit-btn" onclick="editSecurity('<%= i.CrewId %>')">Edit</button>
-                                    <button class="delete-btn" onclick="deleteSecurity('<%= i.CrewId %>')">Delete</button>
+                                    <button class="edit-btn" onclick="editPilot('<%= i.CrewId[0] %>')">Edit</button>
+                                    <button class="delete-btn" onclick="deletePilot('<%= i.CrewId[0] %>')">Delete</button>
                                 </td>
                             </tr>
                             <% }); %>
@@ -154,15 +154,15 @@
                 </thead>
                 <tbody>
                     <% Security.forEach((i)=>{ %>
-                        <tr>
+                        <tr data-security-id="<%= i.CrewId[0] %>">
                             <td><%= i.CrewId[0] %></td>
                             <td><%= i.CrewName %></td>
                             <td><%= i.Address %></td>
                             <td><%= i.DateOfBirth.toISOString().split('T')[0] %></td>
                             <td><%= i.StationId %></td>
                             <td>
-                            <button class="edit-btn" onclick="editSecurity('<%= i.CrewId %>')">Edit</button>
-                            <button class="delete-btn" onclick="deleteSecurity('<%= i.CrewId %>')">Delete</button>
+                            <button class="edit-btn" onclick="editSecurity('<%= i.CrewId[0] %>')">Edit</button>
+                            <button class="delete-btn" onclick="deleteSecurity('<%= i.CrewId[0] %>')">Delete</button>
                         </td>
                         </tr>
                         <% }); %>
@@ -182,4 +182,61 @@
 
 </body>
 <script>
+function deleteSecurity(CrewId) {
+    if (confirm('Are you sure you want to delete this CREW?')) {
+       console.log(CrewId);
+        fetch(`/TD/deleteCrew?CrewId=${CrewId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                // Remove the corresponding row from the HTML table
+                const rowToDelete = document.querySelector(`tr[data-security-id="${CrewId}"]`);
+                if (rowToDelete) {
+                    rowToDelete.remove();
+                } else {
+                    console.error('Failed to find the row to delete.');
+                }
+            } else {
+                console.error('Failed to delete Crew');
+                alert('Failed to delete station. Please try again later.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again later.');
+        });
+    }
+}
+
+function deletePilot(CrewId) {
+    if (confirm('Are you sure you want to delete this CREW?')) {
+       console.log(CrewId);
+        fetch(`/TD/deleteCrew?CrewId=${CrewId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                // Remove the corresponding row from the HTML table
+                const rowToDelete = document.querySelector(`tr[data-pilot-id="${CrewId}"]`);
+                if (rowToDelete) {
+                    rowToDelete.remove();
+                } else {
+                    console.error('Failed to find the row to delete.');
+                }
+            } else {
+                console.error('Failed to delete Crew');
+                alert('Failed to delete station. Please try again later.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again later.');
+        });
+    }
+}
+
+
+</script>
+</html>
 
