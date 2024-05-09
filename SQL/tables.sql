@@ -222,7 +222,7 @@ UNIQUE ([CarriageID], [TrainID], [SeatNo]);
 SELECT name
 FROM sys.objects
 WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT'
-AND parent_object_id = OBJECT_ID('Ticket');
+AND parent_object_id = OBJECT_ID('Fare');
 
 
 SELECT 
@@ -238,7 +238,7 @@ FROM
 INNER JOIN 
     sys.foreign_key_columns AS fkc ON fk.object_id = fkc.constraint_object_id
 WHERE 
-    fk.name = 'FK__Ticket__trackId__0FEC5ADD'
+    fk.name = 'FK_fARE_Track'
 
 
 

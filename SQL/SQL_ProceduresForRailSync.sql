@@ -683,8 +683,7 @@ alter PROCEDURE DeleteStation
         SELECT 'Fail' AS ResultMessage;
     end
     END;
-select * from [Station]
-delete [Station] where StationId='PESH'
+
 alter TRIGGER DeletingStation
 ON [Station]
 INSTEAD OF DELETE
@@ -713,5 +712,34 @@ BEGIN
 END;
 
 
+alter PROCEDURE DeleteTrack
+    @TrackId NVARCHAR(255)
+    AS 
+    BEGIN
+    if(exists(select * from [Tracks] where TrackId=@TrackId))
+    BEGIN
+    delete [Tracks] where TrackId=@TrackId
+    SELECT 'Success' AS ResultMessage;
+    END
+    else 
+    begin
+        SELECT 'Fail' AS ResultMessage;
+    end
+    END;
 
-
+create PROCEDURE DeleteRoute
+    @TrackId NVARCHAR(255),
+    @TrainId NVARCHAR(255)
+    AS 
+    BEGIN
+    if(exists(select * from [Route] where TrackId=@TrackId and @TrainId=TrainId))
+    BEGIN
+    delete [Route] where TrackId=@TrackId and @TrainId=TrainId;
+    SELECT 'Success' AS ResultMessage;
+    END
+    else 
+    begin
+        SELECT 'Fail' AS ResultMessage;
+    end
+    END;
+    select * from [Route]

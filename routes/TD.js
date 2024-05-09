@@ -315,6 +315,57 @@ router.delete('/deleteStation', (req, res) => {
     });
 });
 
+router.delete('/deleteTrack', (req, res) => {
+    const { TrackId } = req.query;
+    console.log(TrackId)
+    const request = new sql.Request(pool);
+    request.input('TrackId', sql.NVarChar, TrackId);
+    request.execute('DeleteTrack', (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+           let Message=result.recordset;
+            Message=Message[0];
+            console.log(Message);
+            if (Message.ResultMessage === 'Success') {
+                console.log('Track deleted successfully');
+                return res.sendStatus(200);
+            } else {
+                console.error('Failed to delete Track:');
+                return res.status(500).send('Failed to delete station');
+            }
+        }
+    });
+});
+
+
+router.delete('/deleteRoute', (req, res) => {
+    const { TrainId,TrackId } = req.query;
+    console.log(TrackId)
+    const request = new sql.Request(pool);
+    request.input('TrackId', sql.NVarChar, TrackId);
+    request.input('TrainId', sql.NVarChar, TrainId);
+    request.execute('DeleteRoute', (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+           let Message=result.recordset;
+            Message=Message[0];
+            console.log(Message);
+            if (Message.ResultMessage === 'Success') {
+                console.log('Track deleted successfully');
+                return res.sendStatus(200);
+            } else {
+                console.error('Failed to delete Track:');
+                return res.status(500).send('Failed to delete station');
+            }
+        }
+    });
+});
+
+
 
 router.delete('/deleteTrain', (req, res) => {
     const TrainID = req.query;
