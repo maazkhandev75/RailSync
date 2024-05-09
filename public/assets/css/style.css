@@ -94,6 +94,7 @@ h6 {
 --------------------------------------------------------------*/
 .pagetitle {
   margin-bottom: 10px;
+  margin-top: 2em;
 }
 
 .pagetitle h1 {
@@ -252,6 +253,13 @@ h6 {
   border-color: #d3d3d4;
 }
 
+.faq-container{
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
+}
+
+
 /* Card */
 .card {
   margin-bottom: 30px;
@@ -277,7 +285,7 @@ h6 {
 }
 
 .card-title span {
-  color: #899bbd;
+  color: #0098f0;
   font-size: 14px;
   font-weight: 400;
 }
@@ -310,7 +318,7 @@ h6 {
 
 /* Accordion */
 .accordion-item {
-  border: 1px solid #ebeef4;
+  border: 1px solid rgb(57, 57, 57);
 }
 
 .accordion-button:focus {
@@ -319,8 +327,8 @@ h6 {
 }
 
 .accordion-button:not(.collapsed) {
-  color: #012970;
-  background-color: #f6f9ff;
+  color: #e1e1e1;
+  background-color: #000000;
 }
 
 .accordion-flush .accordion-button {
@@ -331,14 +339,27 @@ h6 {
 
 .accordion-flush .accordion-button:not(.collapsed) {
   box-shadow: none;
-  color: #4154f1;
+  color: rgb(255, 102, 0);
 }
 
 .accordion-flush .accordion-body {
   padding: 0 0 15px 0;
-  color: #3e4f6f;
+  color: #29c9ff;
   font-size: 15px;
 }
+
+
+
+.dark-custom-card-theme{
+  background-color: #151515;
+  color: #fff;
+}
+.faq-body{
+  background-color: #171717;
+}
+
+
+
 
 /* Breadcrumbs */
 .breadcrumb {

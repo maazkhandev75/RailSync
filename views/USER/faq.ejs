@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/head.ejs') %>
+
+
+<body>
+
+  <%- include('./partials/header.ejs') %>
+  <%- include('./partials/sidebar.ejs') %>
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Frequently Asked Questions</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="userDash">Home</a></li>
+          <li class="breadcrumb-item">Pages</li>
+          <li class="breadcrumb-item active">FAQs</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section faq">
+
+      <div class="faq-container">
+        <div class="row">
+          <div class="col-lg-11">
+  
+            <!-- F.A.Q Group 1 -->
+            <div class="card">
+              <div class="card-body faq-body">
+                <!-- <h5 class="card-title">FAQs about RailSync</h5> -->
+  
+                <div class="accordion accordion-flush" id="faq-group-1">
+  
+                  <div class="accordion-item dark-custom-card-theme">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed dark-custom-card-theme" data-bs-target="#faqsOne-1" type="button" data-bs-toggle="collapse">
+                        How do I create an account on RAILSYNC?
+                      </button>
+                    </h2>
+                    <div id="faqsOne-1" class="accordion-collapse collapse dark-custom-card-theme" data-bs-parent="#faq-group-1">
+                      <div class="accordion-body">
+                        To create an account on RAILSYNC, simply navigate to the Sign Up page and fill out the required information. Once submitted, you will receive a confirmation email to activate your account.
+                      </div>
+                    </div>
+                  </div>
+  
+                  <div class="accordion-item dark-custom-card-theme">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed dark-custom-card-theme" data-bs-target="#faqsOne-2" type="button" data-bs-toggle="collapse">
+                        How can I book a train ticket on RAILSYNC?
+                      </button>
+                    </h2>
+                    <div id="faqsOne-2" class="accordion-collapse collapse" data-bs-parent="#faq-group-1">
+                      <div class="accordion-body">
+                        To book a train ticket, log in to your RAILSYNC account, navigate to the Ticket Booking page, search for trains, select your desired route and date, and proceed with the booking process.
+                      </div>
+                    </div>
+                  </div>
+  
+                  <div class="accordion-item dark-custom-card-theme">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed dark-custom-card-theme" data-bs-target="#faqsOne-3" type="button" data-bs-toggle="collapse">
+                        How can I contribute to the development of RAILSYNC?
+                      </button>
+                    </h2>
+                    <div id="faqsOne-3" class="accordion-collapse collapse" data-bs-parent="#faq-group-1">
+                      <div class="accordion-body">
+                        If you're interested in contributing to the development of RAILSYNC, please check out our GitHub repository and feel free to submit pull requests or raise issues. We welcome contributions from the community to enhance the functionality and user experience of our platform.
+                      </div>
+                    </div>
+                  </div>
+  
+                  <div class="accordion-item dark-custom-card-theme">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed dark-custom-card-theme" data-bs-target="#faqsOne-4" type="button" data-bs-toggle="collapse">
+                        Is my personal information secure on RAILSYNC?
+                      </button>
+                    </h2>
+                    <div id="faqsOne-4" class="accordion-collapse collapse" data-bs-parent="#faq-group-1">
+                      <div class="accordion-body">
+                        Yes, RAILSYNC prioritizes the security and privacy of user data. We utilize encryption and follow best practices to protect your personal information. Your data is only used for the purpose of ticket booking and will not be shared with third parties without your consent.
+                      </div>
+                    </div>
+                  </div>
+  
+                  <div class="accordion-item dark-custom-card-theme">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed dark-custom-card-theme" data-bs-target="#faqsOne-5" type="button" data-bs-toggle="collapse">
+                        Can I cancel or modify my booked tickets?
+                      </button>
+                    </h2>
+                    <div id="faqsOne-5" class="accordion-collapse collapse" data-bs-parent="#faq-group-1">
+                      <div class="accordion-body">
+                        Yes, you can cancel or modify your booked tickets through the "My Bookings" section of your account. Please note that cancellation and modification policies may vary based on the terms and conditions of the ticket.
+                      </div>
+                    </div>
+                  </div>
+  
+                </div>
+  
+              </div>
+            </div><!-- End F.A.Q Group 1 -->
+  
+          </div>
+  
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <%- include('./partials/footer.ejs') %>
+  <%- include('./partials/script.ejs') %>
+
+</body>
+
+</html>
