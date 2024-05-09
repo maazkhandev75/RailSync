@@ -393,26 +393,58 @@ router.delete('/deleteCrew', (req, res) => {
 
 
 
-router.delete('/deleteTrain', (req, res) => {
-    const TrainID = req.query;
-
-    // Perform deletion operation in the database using carriageID, trainID, and seatNo
-    // Replace this with your database deletion logic
-    
-    // Respond with success or failure
-    res.sendStatus(200); // Success
-    // res.sendStatus(500); // Failure
-});
 router.delete('/deleteCarriage', (req, res) => {
-    const CarriageID    = req.query;
+    const { CarriageId} = req.query;
+    console.log(CarriageId)
+    const request = new sql.Request(pool);
+    request.input('CarriageId', sql.NVarChar, CarriageId);
 
-    // Perform deletion operation in the database using carriageID, trainID, and seatNo
-    // Replace this with your database deletion logic
-    
-    // Respond with success or failure
-    res.sendStatus(200); // Success
-    // res.sendStatus(500); // Failure
+    request.execute('DeleteCarriage', (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+           let Message=result.recordset;
+            Message=Message[0];
+            console.log(Message);
+            if (Message.ResultMessage === 'Success') {
+                console.log('Carriage deleted successfully');
+                return res.sendStatus(200);
+            } else {
+                console.error('Failed to delete Carriage:');
+                return res.status(500).send('Failed to delete station');
+            }
+        }
+    });
 });
+
+router.delete('/deleteTrain', (req, res) => {
+    const { TrainId} = req.query;
+    console.log(TrainId)
+    const request = new sql.Request(pool);
+    request.input('TrainId', sql.NVarChar, TrainId);
+
+    request.execute('DeleteTrain', (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+           let Message=result.recordset;
+            Message=Message[0];
+            console.log(Message);
+            if (Message.ResultMessage === 'Success') {
+                console.log('Train deleted successfully');
+                return res.sendStatus(200);
+            } else {
+                console.error('Failed to delete Train:');
+                return res.status(500).send('Failed to delete station');
+            }
+        }
+    });
+});
+
+
+
 
 
 

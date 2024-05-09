@@ -759,4 +759,37 @@ create PROCEDURE DeleteRoute
         SELECT 'Fail' AS ResultMessage;
     end
     END;
+
+
+    create PROCEDURE DeleteTrain
+    @TrainId NVARCHAR(255)
+
+    AS 
+    BEGIN
+    if(exists(select * from [Train] where TrainId=@TrainId ))
+    BEGIN
+    delete [Train] where TrainId=@TrainId;
+    SELECT 'Success' AS ResultMessage;
+    END
+    else 
+    begin
+        SELECT 'Fail' AS ResultMessage;
+    end
+    END;
+
+    create PROCEDURE DeleteCarriage
+    @CarriageId NVARCHAR(255)
+    AS 
+    BEGIN
+    if(exists(select * from [Carriage] where CarriageId=@CarriageId ))
+    BEGIN
+    delete [Carriage] where CarriageId=@CarriageId;
+    SELECT 'Success' AS ResultMessage;
+    END
+    else 
+    begin
+        SELECT 'Fail' AS ResultMessage;
+    end
+    END;
+   
  
