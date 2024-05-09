@@ -175,6 +175,8 @@ GO
 ALTER TABLE [Train] ADD FOREIGN KEY ([ArrivalStation]) REFERENCES [Station] ([StationId])
 GO
 
+ALTER TABLE [Ticket] ADD FOREIGN KEY ([TrackId]) REFERENCES [Tracks] ([TrackId]) ON DELETE SET NULL
+GO
 
 --------------- UPDATES -------------------------------
 
@@ -257,6 +259,8 @@ CREATE TABLE [Ticket] (
 insert into Ticket
 values('3520297089087',1,'KhiExpress','KhiExpressCarriage','1')
 go
+
+sp_help ticket
 
 
 
