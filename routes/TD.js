@@ -291,6 +291,54 @@ router.post('/editSeat', (req, res) => {
     });
 });
 
+
+router.post('/editSecurity', (req, res) => {
+    const { CrewId,CrewName,Address,StationId} = req.body;
+
+    const request = new sql.Request(pool);
+    request.input('CrewId', sql.NVarChar, CrewId);
+    request.input('CrewName', sql.NVarChar, CrewName);
+    request.input('Address', sql.NVarChar, Address);
+    request.input('StationId', sql.NVarChar, StationId);
+   
+   
+    request.execute('EditSecurity', (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            Message=result.recordset;
+            console.log(Message);
+            res.json({ Message });
+            
+        }
+    });
+});
+
+router.post('/editPilot', (req, res) => {
+    const { CrewId,CrewName,Address,TrainId} = req.body;
+
+    const request = new sql.Request(pool);
+    request.input('CrewId', sql.NVarChar, CrewId);
+    request.input('CrewName', sql.NVarChar, CrewName);
+    request.input('Address', sql.NVarChar, Address);
+    request.input('TrainId', sql.NVarChar, TrainId);
+   console.log(CrewId,CrewName,Address,TrainId);
+   
+    request.execute('EditPilot', (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            Message=result.recordset;
+            console.log(Message);
+            res.json({ Message });
+            
+        }
+    });
+});
+
+
 router.delete('/deleteStation', (req, res) => {
     const { StationId } = req.query;
 

@@ -39,40 +39,37 @@
 
           <div class="card" style="color: rgb(219, 135, 56);">
             <div class="card-body">
-              <h5 class="card-title" style="color: rgb(219, 135, 56);" >Add Pilot Guard</h5>
+              <h5 class="card-title" style="color: rgb(219, 135, 56);" >Edit Security</h5>
 
               <!-- Multi Columns Form -->
+
               <form class="row g-3">
-                <div class="col-md-4">
-                    <label for="CrewId" class="form-label">CNIC</label>
-                    <input type="text" class="form-control" id="CrewId" >
+
+                  <div class="col-md-6">
+                    <label for="CrewId" class="form-label">CrewId</label>
+                    <input type="text" class="form-control" id="CrewId" readonly placeholder="<%= CrewId %>">
                   </div>
-                  <div class="col-md-4">
-                    <label for="Name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="Name" >
+                  <div class="col-md-6">
+                    <label for="CrewName" class="form-label">CrewName</label>
+                    <input type="text" class="form-control" id="CrewName" placeholder="<%= CrewName %>" >
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-6">
                     <label for="Address" class="form-label">Address</label>
-                    <input type="text" class="form-control" id="Address" >
+                    <input type="text" class="form-control" id="Address" placeholder="<%= Address %>" >
                   </div>
-                  <div class="col-md-4">
-                    <label for="DateOfBirth" class="form-label">DateOfBirth</label>
-                    <input type="date" class="form-control" id="DateOfBirth">
+                  <div class="col-md-6">
+                    <label for="inputDepartureStation" class="form-label">Station</label>
+                    <select id="inputDepartureStation" class="form-select">
+                      <% Station.forEach((station) => { %>
+                        <option value="<%= station.StationId %>"><%= station.StationName %></option>
+                    <% }); %>
+                    </select>
                   </div>
 
-
-                <div class="col-md-4">
-                  <label for="inputStartStation" class="form-label">TrainID</label>
-                  <select id="inputStartStation" class="form-select">
-                    <% Train.forEach((Train) => { %>
-                      <option value="<%= Train.TrainId %>"><%= Train.TrainId %></option>
-                  <% }); %>
-                  </select>
-                </div>
                 <div class="text-center">
                     <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>
                     <button type="reset" class="btn btn-secondary">Reset</button>
-                  </div>
+                </div>
 
               </form><!-- End Multi Columns Form -->
 
@@ -94,15 +91,16 @@
 <script>
   document.getElementById('submitButton').addEventListener('click', function() {
       event.preventDefault();
-      const CrewId = document.getElementById('CrewId').value;
-      const CrewName = document.getElementById('Name').value;
-      const Address = document.getElementById('Address').value;
-      const DateOfBirth = document.getElementById('DateOfBirth').value;
-      const TrainId = document.getElementById('inputStartStation').value;
+      const CrewId = document.getElementById('CrewId').placeholder;
+      const CrewName = document.getElementById('CrewName').value !== '' ? document.getElementById('CrewName').value : document.getElementById('CrewName').placeholder;
+        const Address = document.getElementById('Address').value !== '' ? document.getElementById('Address').value : document.getElementById('Address').placeholder;
+        const StationId = document.getElementById('inputDepartureStation').value;
+
+    console.log(StationId);
         
-      fetch('/TD/addPilot', {
+      fetch('/TD/editSecurity', {
       method: 'POST',
-      body: JSON.stringify({ CrewId,CrewName,Address,DateOfBirth,TrainId }),
+      body: JSON.stringify({ CrewId,CrewName,Address,StationId }),
         headers: {
             'Content-Type': 'application/json'
         }
@@ -110,7 +108,7 @@
     .then(response => response.json())
     .then(data => {
       const result = data.Message;
-       if(result[0].ResultMessage=='GUARD ADDED SUCCESSFULLY')
+       if(result[0].ResultMessage=='CREW UPDATED SUCCESSFULLY')
           {window.location.href = '/staffdata';}
         else
         {

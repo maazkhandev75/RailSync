@@ -630,7 +630,48 @@ BEGIN
     END
 END;
 
-exec EditFare '4',500,1200,3000;
+alter PROCEDURE EditSecurity
+    @CrewId NVARCHAR(255),
+    @CrewName NVARCHAR(255),
+    @Address NVARCHAR(255),
+    @StationId NVARCHAR(255)
+AS 
+BEGIN
+    if( exists(select * from [Crew] where CrewId=@CrewId ))
+    BEGIN
+
+    update [Crew] set CrewName=@CrewName,[Address]=@Address
+    where CrewId=@CrewId;
+    update [Security] set StationId=@StationId where CrewId=@CrewId;
+    SELECT 'CREW UPDATED SUCCESSFULLY' AS ResultMessage;
+    END
+    ELSE
+    BEGIN
+        SELECT 'CREW NOT EXISTS' AS ResultMessage;
+    END
+END;
+
+
+alter PROCEDURE EditPilot
+    @CrewId NVARCHAR(255),
+    @CrewName NVARCHAR(255),
+    @Address NVARCHAR(255),
+    @TrainId NVARCHAR(255)
+AS 
+BEGIN
+    if( exists(select * from [Crew] where CrewId=@CrewId ))
+    BEGIN
+
+    update [Crew] set CrewName=@CrewName,[Address]=@Address
+    where CrewId=@CrewId;
+    update [Pilot] set TrainId=@TrainId where CrewId=@CrewId;
+    SELECT 'CREW UPDATED SUCCESSFULLY' AS ResultMessage;
+    END
+    ELSE
+    BEGIN
+        SELECT 'CREW NOT EXISTS' AS ResultMessage;
+    END
+END;
 
 CREATE PROCEDURE EditSeat
     @SeatNo INT,
