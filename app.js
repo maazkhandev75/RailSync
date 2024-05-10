@@ -89,10 +89,17 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));   //true
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));  //set up your Express server to serve static files from public directory..( thats why we have used absolute paths everywhere then )
 
+
+
+app.post('/sendEmail', (req, res )=>{
+  //send email
+  console.log('Data: ', req.body);
+  res.json({ message: 'Message recieved!!'})
+});
 
 // Define a route to render an ejs/html page
 app.get('/home',(req,res)=>{
