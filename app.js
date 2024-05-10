@@ -38,6 +38,7 @@ function isAuthenticated(req, res, next)
 }
 
 
+
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -413,30 +414,6 @@ app.get('/addPilot', (req, res) => {
 
 app.get('/addCarriage', (req, res) => {
   res.render('./ADMIN/CarriageForm.ejs');
-});
-
-
-app.post('/UnbookTicket', (req, res) => {
-  const TrainId = req.query.TrainID;
-  const CarriageId = req.query.CarriageId;
-  const SeatNo = req.query.SeatNo;
-  const TicketId = req.query.TicketId;
-  request.input('CarriageId', sql.NVarChar, CarriageId);
-  request.input('SeatNo', sql.Int, SeatNo);
-  request.input('TicketId', sql.NVarChar, TicketId);
-  request.input('TrainId', sql.NVarChar, TrainId);
-
-  request.execute('CancelTicket', (err, result) => {
-      if (err) {
-          console.error(err);
-          res.status(500).send('Internal Server Error');
-      } else {
-          console.log(result.recordset);
-          Message=result.recordset;
-          res.json({ Message });
-          
-      }
-  });
 });
 
 

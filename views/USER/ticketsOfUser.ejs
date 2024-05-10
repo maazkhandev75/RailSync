@@ -244,8 +244,8 @@
                                 <td><%= ticket.DeptTime %></td>
                                 <td><%= ticket.RefundStatus %></td>
                                 <td>
-                                    <button class="edit-btn" onclick="editSeat('<%=ticket.TicketId%>', '<%=ticket.TrainId%>','<%=ticket.CarriageId%>','<%= ticket.SeatNo %>')">BOOK/UNBOOK</button>
-                                </td>.SeatNo}
+                                    <button class="edit-btn">refund</button>
+                                </td>
                             </tr>
                         <% }); %>
 
@@ -262,30 +262,6 @@
 
 </body>
 <script>
-  function editSeat(TicketId,CarriageID, TrainID, SeatNo) {
-    fetch('/UnbookTicket', {
-        method: 'POST',
-        body: JSON.stringify({TicketId, CarriageID, TrainID, SeatNo }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        const table = document.getElementById('Seats');
-        const rows = table.querySelectorAll('tr');
-        const result = data.Message[0];
 
-        rows.forEach(row => {
-
-        if (result.ResultMessage == 'UNBOOKED SUCCESSFULLY') {
-           alert(result.ResultMessage);
-        }
-        });
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
 </script>
 </html>

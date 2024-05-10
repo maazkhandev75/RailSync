@@ -11,28 +11,9 @@ const sessionChecker = (req, res, next) => {
   }
 };
 
-
-function isAuthenticated(req, res, next)
-{
-  if(req.session.userDetails && req.session.userDetails.cnic){
-    //user is authenticated proceed with the request
-    next();
-  }
-  else 
-  {
-     //redirect an error page
-    console.log('Forbidden: access denied because of authentication bypass!');
-    res.redirect('/errorOfSession');
-  }
-}
-
-
-
-
-
 module.exports = function(pool) {
   
-    router.post('/', (req,res)=>{
+    router.post('/',(req,res)=>{
       console.log(req.body);
     var St1=req.body.fromCity;
     var St2=req.body.toCity;
@@ -145,7 +126,7 @@ module.exports = function(pool) {
 //   res.render('Ticket.ejs', { TicketInfo, inputClassType, userName });
 // });
 
-router.post('/PrintTicketNonStop',isAuthenticated ,(req, res) => {
+router.post('/PrintTicketNonStop', (req, res) => {
   console.log(req.body);
     const userName = req.session.userDetails.username;
     console.log(userName);
@@ -199,7 +180,7 @@ router.post('/PrintTicketNonStop',isAuthenticated ,(req, res) => {
 });
 
 
-router.post('/ConfirmNonStopTicket',isAuthenticated, (req,res)=>{
+router.post('/ConfirmNonStopTicket',(req,res)=>{
   
   console.log(req.body);
   let AddTicket= new sql.Request(pool);
