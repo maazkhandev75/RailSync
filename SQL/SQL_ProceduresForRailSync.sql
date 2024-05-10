@@ -114,25 +114,31 @@ END
 drop proc ShowBookedTickets
 
 --------PROCEDURE FOR CANCEL TICKET OF USER-------
-CREATE PROCEDURE CancelTicket
-	@CNIC nvarchar(255)
+alter PROCEDURE CancelTicket
+	@TicketId nvarchar(255),
+    @TrainId nvarchar(255),
+    @CarriageId NVARCHAR(255),
+    @SeatNo NVARCHAR(255)
+
 AS 
 BEGIN	
 	SET NOCOUNT ON;
 
-	IF EXISTS (SELECT 1 FROM [Ticket] WHERE  CNIC = @CNIC)
+	IF EXISTS (SELECT 1 FROM [Ticket] WHERE  TicketId = @TicketId)
 	BEGIN
 	
-		DELETE FROM [Ticket] WHERE  CNIC = @CNIC
+		update [Seat] set BookingStatus=null where SeatNo=@SeatNo and TrainId=@TrainId and CarriageId=@CarriageId;
+        select 'UNBOOKED SUCCESSFULLY' as ResultMessage
 	END
 	ELSE
 	BEGIN
 		-- Return error message if no ticket of user found
-		RAISERROR ('no ticket of user found!', 16, 1);
-		RETURN -1;
+		        select 'UNBOOKED UNSUCCESSFULLY' as ResultMessage
+
 	END
 END
 
+exec CancelTicket '7','KhiExpressNS','KhiExpressNSCarriage__3',1
 drop proc CancelTicket
 
 ---------------Procedure to Search Train recursively-=----------------
