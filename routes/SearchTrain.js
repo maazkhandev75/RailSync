@@ -18,7 +18,8 @@ module.exports = function(pool) {
     var St1=req.body.fromCity;
     var St2=req.body.toCity;
     var tripDate=req.body.journeyDate;
-    
+   // let temp=tripDate.toISOString().split('T');
+  //  console.log(temp);
     const request= new sql.Request(pool);
     request.input('SearchDate',sql.DateTime,tripDate);
     request.input('fromStation',sql.NVarChar,St1);
