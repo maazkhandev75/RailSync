@@ -209,9 +209,10 @@
 								<td><%= ticket.TotalPrice %></td>
                                 <td><%= ticket.DeptTime %></td>
                                 <td><%= ticket.RefundStatus %></td>
+                                
                                 <td>
-                                    <button class="edit-btn">refund</button>
-                                </td>
+                                    <button class="edit-btn" onclick="editSeat('<%=ticket.TicketId[0]%>', '<%=ticket.TrainId%>','<%=ticket.CarriageId%>','<%= ticket.SeatNo %>')">UNBOOK</button>
+                                </td>.SeatNo}
                             </tr>
                         <% }); %>
 
@@ -232,20 +233,18 @@
                             <th>TotalPrice</th>
                             <th>DeptTime</th>
                             <th>RefundStatus</th>
-                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <% ticketsPrevious.forEach((ticket)=>{ %>
                             <tr>
-                                <td><%= ticket.TicketId %></td>
+                                <td><%= ticket.TicketId[0] %></td>
                                 <td><%= ticket.SeatNo %></td>
 								<td><%= ticket.TotalPrice %></td>
                                 <td><%= ticket.DeptTime %></td>
                                 <td><%= ticket.RefundStatus %></td>
-                                <td>
-                                    <button class="edit-btn" onclick="editSeat('<%=ticket.TicketId%>', '<%=ticket.TrainId%>','<%=ticket.CarriageId%>','<%= ticket.SeatNo %>')">BOOK/UNBOOK</button>
-                                </td>.SeatNo}
+                                
+                            
                             </tr>
                         <% }); %>
 

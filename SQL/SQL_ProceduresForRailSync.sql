@@ -93,7 +93,7 @@ END
 
 
 --------PROCEDURE FOR SHOWING BOOKED TICKETS OF USER-------
-CREATE PROCEDURE ShowBookedTickets
+alter PROCEDURE ShowBookedTickets
 	@CNIC nvarchar(255)
 AS 
 BEGIN	
@@ -101,8 +101,8 @@ BEGIN
 
 	IF EXISTS (SELECT 1 FROM [Ticket] WHERE  CNIC = @CNIC)
 	BEGIN
-		SELECT T.TicketId, T.SeatNo, P.TotalPrice, P.RefundStatus, R.DeptTime FROM [Ticket] as T JOIN [Payment] as P on P.TicketId = T.TicketId  JOIN [Route] as R on ( R.TrainId=T.TrainId AND R.TrackId=T.trackId ) WHERE  T.CNIC = @CNIC
-	END
+		SELECT * FROM [Ticket] as T JOIN [Payment] as P on P.TicketId = T.TicketId where T.CNIC=@CNIC;
+    END
 	ELSE
 	BEGIN
 		-- Return error message if no ticket of user found

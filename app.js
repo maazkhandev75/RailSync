@@ -38,6 +38,7 @@ function isAuthenticated(req, res, next)
 }
 
 
+
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -156,6 +157,7 @@ app.get('/ticketsData', (req, res) => {
   pool.query('SELECT * FROM Ticket ')
       .then(result => {
           const Tickets = result.recordset;
+          console.log(Tickets);
           res.render("./ADMIN/ticketsData.ejs", { Tickets });
       })
       .catch(err => {
@@ -163,6 +165,22 @@ app.get('/ticketsData', (req, res) => {
           res.status(500).send('Internal Server Error');
       });
 });
+
+
+app.get('/usersData', (req, res) => {
+  pool.query('SELECT * FROM [User]')
+      .then(result => {
+          const Users = result.recordset;
+          console.log(Users);
+          res.render("./ADMIN/usersData.ejs", { Users });
+      })
+      .catch(err => {
+          console.error(err);
+          res.status(500).send('Internal Server Error');
+      });
+});
+
+
 
 app.get('/faq', (req, res) => {  
   try

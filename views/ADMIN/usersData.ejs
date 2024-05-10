@@ -174,12 +174,12 @@
     <main id="main" class="main">
 
         <div class="pagetitle">
-        <h1>All Tickets</h1>
+        <h1>All users</h1>
         <nav>
             <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="userDash">Home</a></li>
+            <li class="breadcrumb-item"><a href="ds">Home</a></li>
             <li class="breadcrumb-item">Tables</li>
-            <li class="breadcrumb-item active">All Tickets</li>
+            <li class="breadcrumb-item active">All Users</li>
             </ol>
         </nav>
         </div><!-- End Page Title -->
@@ -188,30 +188,23 @@
 
 
                 <div class="container">
-                <h2>Tickets</h2>
+                <h2>Users</h2>
                 <table>
                     <thead>
                         <tr>
-                            <th>ticketId</th>
-                            <th>cnic</th>
-                            <th>seatNo</th>
-                            <th>trainId</th>
-                            <th>carriageId</th>
-							<th>Actions</th>
+                            <th>CNIC</th>
+                            <th>Username</th>
+                            <th>Password</th>
+                            <th>PhoneNo</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <% Tickets.forEach((ticket)=>{ %>
+                        <% Users.forEach((user)=>{ %>
                             <tr>
-                                <td><%= ticket.TicketId %></td>
-                                <td><%= ticket.CNIC %></td>
-                                <td><%= ticket.SeatNo %></td>
-                                <td><%= ticket.TrainId %></td>
-                                <td><%= ticket.CarriageId %></td>
-                                <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
-                                </td>
+                                <td><%= user.CNIC %></td>
+                                <td><%= user.UserName %></td>
+                                <td><%= user.Password %></td>
+                                <td><%= user.PhoneNo %></td>
                             </tr>
                             <% }); %>
 
