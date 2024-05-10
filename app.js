@@ -214,16 +214,16 @@ app.get('/logout',(req,res)=>{
 
 app.get('/showTicketsOfUser', isAuthenticated, async (req, res) => {
   const cnic = req.session.userDetails.cnic;
-	  try {
-		// Call the stored procedure to fetch booked tickets
-		const result = await pool.request()
-		  .input('CNIC', sql.NVarChar(255), cnic)
-		  .execute('ShowBookedTickets');
-	
-		if (result.returnValue === 0) 
+    try {
+    // Call the stored procedure to fetch booked tickets
+    const result = await pool.request()
+      .input('CNIC', sql.NVarChar(255), cnic)
+      .execute('ShowBookedTickets');
+  
+    if (result.returnValue === 0) 
     {
-		  console.log('Tickets found!');
-		  const Tickets = result.recordset; 
+      console.log('Tickets found!');
+      const Tickets = result.recordset; 
       console.log(Tickets)
       const ticketsUpcoming = [];
       const ticketsPrevious = [];
@@ -243,19 +243,19 @@ app.get('/showTicketsOfUser', isAuthenticated, async (req, res) => {
       });
 
       // Assuming this is how your ticket data is structured
-		  res.render('./USER/ticketsOfUser.ejs',{ticketsPrevious,ticketsUpcoming}); 
+      res.render('./USER/ticketsOfUser.ejs',{ticketsPrevious,ticketsUpcoming}); 
       // Send ticket data as JSON response
-		} 
+    } 
     else
     {
-		  throw new Error('Failed to retrieve tickets');
-		} 
-	  } 
+      throw new Error('Failed to retrieve tickets');
+    } 
+    } 
     catch (error)
     {
-		console.error('Error retrieving tickets:', error);
-		res.status(500).send('Failed to retrieve tickets');
-	  }
+    console.error('Error retrieving tickets:', error);
+    res.status(500).send('Failed to retrieve tickets');
+    }
 });
 
 app.get('/ds', (req, res) => {
@@ -435,14 +435,16 @@ app.get('/addCarriage', (req, res) => {
 
 
 app.post('/UnbookTicket', (req, res) => {
-  const TrainId = req.query.TrainID;
-  const CarriageId = req.query.CarriageId;
-  const SeatNo = req.query.SeatNo;
-  const TicketId = req.query.TicketId;
-  request.input('CarriageId', sql.NVarChar, CarriageId);
+  console.log(req.body);
+  const TrainId = req.body.TrainID;
+  const CarriageId = req.body.CarriageID;
+  const SeatNo = req.body.SeatNo;
+  const TicketId = req.body.TicketId;
+  const request = new sql.Request(pool);
+  request.input('CarriageId', sql.NVarChar(255), CarriageId);
   request.input('SeatNo', sql.Int, SeatNo);
-  request.input('TicketId', sql.NVarChar, TicketId);
-  request.input('TrainId', sql.NVarChar, TrainId);
+  request.input('TicketId', sql.Int, TicketId);
+  request.input('TrainId', sql.NVarChar(255), TrainId);
 
   request.execute('CancelTicket', (err, result) => {
       if (err) {
