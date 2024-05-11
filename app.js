@@ -10,9 +10,14 @@ const sql=require('mssql');
 const fs = require('fs');
 const nodemailer = require('nodemailer');
 
+
 // Create an instance of the Express application
 const app = express();
 const port=4000;   //our port
+
+
+//app.post -> to send data to server
+//app.get -> to receive data from server
 
 // Configure session middleware
 app.use(session({
@@ -38,11 +43,6 @@ function isAuthenticated(req, res, next)
 }
 
 
-
-// Body parser middleware
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
 //importing routers
 const signupRouter = require('./routes/signup')
 const loginRouter = require('./routes/login')
@@ -55,8 +55,9 @@ const profileUpdateRouter = require('./routes/profileUpdate');
 const passwordChangeRouter = require('./routes/passwordChange');
 
 
-const { Console } = require('console');
+const { Console, dirxml } = require('console');
 const { render } = require('ejs');
+const log = console.log;
 
 //configuring a connection pool for MSSQL using the mssql module and connecting to the database
 const sqlConfig = {
@@ -90,20 +91,62 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));   //true
+// Body parser middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));  //set up your Express server to serve static files from public directory..( thats why we have used absolute paths everywhere then )
 
 
 
+
 app.post('/sendEmail', (req, res )=>{
   //send email
-  console.log('Data: ', req.body);
-  res.json({ message: 'Message recieved!!'})
+  //res.json({ message: 'Message recieved!!'})
+  const nm = req.body.name;
+  const eml = req.body.email;
+  const sbj = req.body.subject;
+  const msg = req.body.message;
+
+  var transporter = nodemailer.createTransport({
+    
+    service:'gmail',
+    auth: {
+      user: 'yourEmail@gmail.com',  //enter the email address whom you want to get mails
+      pass: 'yourAppPassword'      //go to your google acc and seach app passwords then create 16 digti pass and use here
+      }
+  });
+
+  var mailOptions = {
+    from: eml,    
+    to: 'youEmail@gmail.com',    //enter your email address whom you want to get emails also note that emails'to and from will be same when revieced which is your own email
+    cc: 'railsyc',
+    subject: 'Message from railsync user ' + nm,
+    text: 'Email :' + eml + '\n\n' + 'Subject :' + sbj + '\n\n' + 'Message :' + msg
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if(error){
+      console.error(error);
+      res.status(500).send("Error submitting mail");
+    } else {
+      log("Email sent: " + info.response);
+      res.redirect('contact');
+    }
+  });
+
+
 });
+
 
 // Define a route to render an ejs/html page
 app.get('/home',(req,res)=>{
 res.render('home.ejs');
+});
+
+app.get("/",function(req, res){
+  console.log(__dirname);
+  res.sendFile(__dirname + "/views/home.ejs");
 });
 
 app.get('/decisionPg',(req,res)=>{
@@ -269,6 +312,7 @@ app.get('/ds', (req, res) => {
   res.render('./ADMIN/dashboard.ejs');
 });
 
+//work to be done below to show email sent message!
 app.get('/contact', (req, res) => {
   res.render('./USER/contact.ejs');
 });

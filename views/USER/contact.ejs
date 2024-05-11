@@ -64,7 +64,7 @@
 
         <div class="col-xl-6">
           <div class="card p-4 dark-custom-card-theme">
-            <form class="email-form">
+            <form action="/sendEmail" method="post" class="email-form">
               <div class="row gy-4">
 
                 <div class="col-md-6">
@@ -106,32 +106,6 @@
 
   <%- include('./partials/footer.ejs') %>
   <%- include('./partials/script.ejs') %>
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script>
-
-    $('form').on('submit', (e) => {
-      e.preventDefault();
-
-      const name = $('#name').val().trim();
-      const email = $('#email').val().trim();
-      const subject = $('#subject').val().trim();
-      const message = $('#message').val().trim();
-
-      const data = {
-        name,
-        email,
-        subject,
-        message
-      };
-
-      $.post('/sendEmail', data, function() {
-        console.log('server recieved our data!');
-      });
-      
-    });
-
-  </script>
 
 </body>
 
