@@ -282,7 +282,6 @@ h6 {
   font-size: 18px;
   font-weight: 500;
   color: #012970;
-  /* font-family: "Poppins", sans-serif; */
   font-family: 'Ubuntu', sans-serif;
 }
 
@@ -290,6 +289,38 @@ h6 {
   color: #0098f0;
   font-size: 14px;
   font-weight: 400;
+  padding-bottom: 40px;
+}
+
+.card a {
+  color: #fff;
+  font-size: 1.2em;
+  font-weight: 800;
+  transition: color 0.3s ease; /* Apply transition to the color property */
+}
+
+.card a:hover {
+  color: #de6b00;
+}
+
+.card-item{
+  margin: 1px;
+}
+
+.card-link {
+  display: flex;
+  align-items: center;
+}
+
+.card-link i.bi {
+  font-size: 1em; /* Adjust the size of the icon to match the text size */
+  margin-right: 15px; /* Add some space between the icon and the text */
+}
+
+.card-link span {
+  display: inline-block;
+  vertical-align: middle; /* Align the text vertically with the icon */
+  line-height: 1em; /* Ensure the text's line height matches its font size */
 }
 
 .card-body {
@@ -300,6 +331,7 @@ h6 {
 .card-img-overlay {
   background-color: rgba(255, 255, 255, 0.6);
 }
+
 
 /* Alerts */
 .alert-heading {
