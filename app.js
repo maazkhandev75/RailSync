@@ -179,23 +179,16 @@ app.get('/SearchTrainform', (req, res) => {
       });
 });
 
-app.get('/admin', (req, res) => {
-  pool.query('SELECT * FROM Train')
-      .then(result => {
-          const Trains = result.recordset;
-          res.render("admin.ejs", { Trains });
-      })
-      .catch(err => {
-          console.error(err);
-          res.status(500).send('Internal Server Error');
-      });
+
+app.get('/adminDash', (req, res) => {
+  res.render('./ADMIN/dashboard.ejs');
 });
 
-app.get('/trainData', (req, res) => {
+app.get('/trainsData', (req, res) => {
   pool.query('SELECT * FROM Train')
       .then(result => {
           const Trains = result.recordset;
-          res.render("./ADMIN/trainData.ejs", { Trains });
+          res.render("./ADMIN/trainsData.ejs", { Trains });
       })
       .catch(err => {
           console.error(err);
@@ -232,97 +225,7 @@ app.get('/usersData', (req, res) => {
 
 
 
-app.get('/faq', (req, res) => {  
-  try
-  {
-  res.render("./USER/faq.ejs");
-  }
-  catch(error)
-  {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  };
-});
-
-app.get('/logout',(req,res)=>{
-
-  req.session.destroy(err => {
-
-    if(err){
-      console.error('error destroying session: ',err);
-    }
-    else
-    {
-       res.redirect('/home');
-    }
-  });
-
-});
-
-
-
-
-app.get('/showTicketsOfUser', isAuthenticated, async (req, res) => {
-  const cnic = req.session.userDetails.cnic;
-    try {
-    // Call the stored procedure to fetch booked tickets
-    const result = await pool.request()
-      .input('CNIC', sql.NVarChar(255), cnic)
-      .execute('ShowBookedTickets');
-  
-    if (result.returnValue === 0) 
-    {
-      console.log('Tickets found!');
-      const Tickets = result.recordset; 
-      console.log(Tickets)
-      const ticketsUpcoming = [];
-      const ticketsPrevious = [];
-      const currentTime = new Date();
-      // console.log(currentTime);
-      Tickets.forEach((ticket) => {
-
-        const deptTime=new Date(ticket.deptTime);
-        if(deptTime >= currentTime)
-        {
-          ticketsUpcoming.push(ticket);
-        }
-        else
-        {
-          ticketsPrevious.push(ticket);
-        }
-      });
-
-      // Assuming this is how your ticket data is structured
-      res.render('./USER/ticketsOfUser.ejs',{ticketsPrevious,ticketsUpcoming}); 
-      // Send ticket data as JSON response
-    } 
-    else
-    {
-      throw new Error('Failed to retrieve tickets');
-    } 
-    } 
-    catch (error)
-    {
-    console.error('Error retrieving tickets:', error);
-    res.status(500).send('Failed to retrieve tickets');
-    }
-});
-
-app.get('/ds', (req, res) => {
-  res.render('./ADMIN/dashboard.ejs');
-});
-
-//work to be done below to show email sent message!
-app.get('/contact', (req, res) => {
-  res.render('./USER/contact.ejs');
-});
-
-app.get('/userDash', isAuthenticated, (req,res)=>{
-  const userData = req.session.userDetails;
-  res.render('./USER/dashboard.ejs',{userData});
-  })
-
-app.get('/stationData', (req, res) => {
+app.get('/stationsData', (req, res) => {
   const requestStation = new sql.Request(pool);
   const requestTrack = new sql.Request(pool);
 
@@ -334,7 +237,7 @@ app.get('/stationData', (req, res) => {
   .then(results => {
     const Station = results[0].recordset;
     const Track = results[1].recordset;
-    res.render('./ADMIN/stationData.ejs', { Station:Station, Track:Track });
+    res.render('./ADMIN/stationsData.ejs', { Station:Station, Track:Track });
   })
   .catch(err => {
     console.error(err);
@@ -342,7 +245,7 @@ app.get('/stationData', (req, res) => {
   });
 });
 
-app.get('/routeData', (req, res) => {
+app.get('/routesData', (req, res) => {
      
   pool.query('SELECT * FROM Route as R join Tracks as T on R.TrackId=T.TrackId')
   .then(result => {
@@ -379,19 +282,43 @@ app.get('/staffdata', (req, res) => {
 });
 
 
+
+app.get('/staffData', (req, res) => {
+  res.render('./ADMIN/staffData.ejs');
+});
+
+app.get('/addTrain', (req, res) => {
+  pool.query('SELECT * FROM Station')
+      .then(result => {
+          const Station = result.recordset;
+
+          res.render('./ADMIN/addTrain.ejs', {  Station: Station });
+
+      })
+      .catch(err => {
+          console.error(err);
+          res.status(500).send('Internal Server Error');
+      });
+  
+});
+
+
+
+
 app.get('/addCarriage', (req, res) => {
      
   pool.query('SELECT * FROM Train ')
   .then(result => {
       const Train =result.recordset;
 
-      res.render("./ADMIN/CarriageForm.ejs", { Train });
+      res.render("./ADMIN/addCarriage.ejs", { Train });
   })
   .catch(err => {
       console.error(err);
       res.status(500).send('Internal Server Error');
   });
 });
+
 
 
 
@@ -406,7 +333,7 @@ app.get('/addRoute', (req, res) => {
    
       const Train = TrainResult.recordset;
       const Track=TrackResult.recordset;
-      res.render("./ADMIN/RouteForm.ejs", { Train,Track });
+      res.render("./ADMIN/addRoute.ejs", { Train,Track });
   })
   .catch(err => {
       console.error(err);
@@ -414,38 +341,15 @@ app.get('/addRoute', (req, res) => {
   });
 });
 
-app.get('/form', (req, res) => {
-  res.render('./ADMIN/form.ejs');
-});
-
-app.get('/staffData', (req, res) => {
-  res.render('./ADMIN/staffData.ejs');
-});
-
-app.get('/addTrain', (req, res) => {
-  pool.query('SELECT * FROM Station')
-      .then(result => {
-          const Station = result.recordset;
-
-          res.render('./ADMIN/trainForm.ejs', {  Station: Station });
-
-      })
-      .catch(err => {
-          console.error(err);
-          res.status(500).send('Internal Server Error');
-      });
-  
-});
-
 app.get('/addStation', (req, res) => {
-  res.render('./ADMIN/stationForm.ejs');
+  res.render('./ADMIN/addStation.ejs');
 });
 
 app.get('/addTrack', (req, res) => {
   pool.query('SELECT * FROM Station')
   .then(result => {
       const Station = result.recordset;
-      res.render('./ADMIN/TrackForm.ejs', {Station: Station });
+      res.render('./ADMIN/addTrack.ejs', {Station: Station });
 
   })
   .catch(err => {
@@ -454,34 +358,24 @@ app.get('/addTrack', (req, res) => {
   });
 });
 
-app.get('/addSecurity', (req, res) => {
-  pool.query('SELECT * FROM Station')
-  .then(result => {
-      const Station = result.recordset;
-      res.render('./ADMIN/SecurityForm.ejs', {Station: Station });
+app.get('/addStaff', (req, res) => {
+  const stationQuery = pool.query('SELECT * FROM Station');
+  const trainQuery = pool.query('SELECT * FROM Train');
 
-  })
-  .catch(err => {
+  Promise.all([stationQuery, trainQuery])
+    .then(results => {
+      const stationResult = results[0].recordset;
+      const trainResult = results[1].recordset;
+
+      res.render('./ADMIN/addStaff.ejs', {
+        Station: stationResult,
+        Train: trainResult
+      });
+    })
+    .catch(err => {
       console.error(err);
       res.status(500).send('Internal Server Error');
-  });
-});
-
-app.get('/addPilot', (req, res) => {
-  pool.query('SELECT * FROM Train')
-  .then(result => {
-      const Train = result.recordset;
-      res.render('./ADMIN/PilotForm.ejs', {Train: Train });
-
-  })
-  .catch(err => {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
-  });
-});
-
-app.get('/addCarriage', (req, res) => {
-  res.render('./ADMIN/CarriageForm.ejs');
+    });
 });
 
 
@@ -603,6 +497,99 @@ app.get('/profile', isAuthenticated, async(req,res)=>{
       res.status(500).send('Internal Server Error');
     }
 })
+
+
+app.get('/userDash', isAuthenticated, (req,res)=>{
+  const userData = req.session.userDetails;
+  res.render('./USER/dashboard.ejs',{userData});
+  })
+
+
+
+  app.get('/faq', (req, res) => {  
+    try
+    {
+    res.render("./USER/faq.ejs");
+    }
+    catch(error)
+    {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    };
+  });
+  
+  app.get('/logout',(req,res)=>{
+  
+    req.session.destroy(err => {
+  
+      if(err){
+        console.error('error destroying session: ',err);
+      }
+      else
+      {
+         res.redirect('/home');
+      }
+    });
+  
+  });
+  
+  
+  
+  
+  app.get('/showTicketsOfUser', isAuthenticated, async (req, res) => {
+    const cnic = req.session.userDetails.cnic;
+      try {
+      // Call the stored procedure to fetch booked tickets
+      const result = await pool.request()
+        .input('CNIC', sql.NVarChar(255), cnic)
+        .execute('ShowBookedTickets');
+    
+      if (result.returnValue === 0) 
+      {
+        console.log('Tickets found!');
+        const Tickets = result.recordset; 
+        console.log(Tickets)
+        const ticketsUpcoming = [];
+        const ticketsPrevious = [];
+        const currentTime = new Date();
+        // console.log(currentTime);
+        Tickets.forEach((ticket) => {
+  
+          const deptTime=new Date(ticket.deptTime);
+          if(deptTime >= currentTime)
+          {
+            ticketsUpcoming.push(ticket);
+          }
+          else
+          {
+            ticketsPrevious.push(ticket);
+          }
+        });
+  
+        // Assuming this is how your ticket data is structured
+        res.render('./USER/ticketsOfUser.ejs',{ticketsPrevious,ticketsUpcoming}); 
+        // Send ticket data as JSON response
+      } 
+      else
+      {
+        throw new Error('Failed to retrieve tickets');
+      } 
+      } 
+      catch (error)
+      {
+      console.error('Error retrieving tickets:', error);
+      res.status(500).send('Failed to retrieve tickets');
+      }
+  });
+  
+//work to be done below to show email sent message!
+app.get('/contact', (req, res) => {
+  res.render('./USER/contact.ejs');
+});
+
+
+
+
 
 
 app.post('/bookTicketNonStop', (req, res) => {  

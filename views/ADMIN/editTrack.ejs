@@ -105,7 +105,7 @@
     .then(data => {
       const result = data.Message;
        if(result[0].ResultMessage=='FARE UPDATED SUCCESSFULLY')
-          {window.location.href = '/stationData';}
+          {window.location.href = '/stationsData';}
         else
         {
           console.log(result[0].ResultMessage);
