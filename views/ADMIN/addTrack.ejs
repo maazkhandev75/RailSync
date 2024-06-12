@@ -8,21 +8,11 @@
 <%- include('./partials/header.ejs') %>
 
 <%- include('./partials/sidebar.ejs') %>
-<style>
-  /* CSS */
-#inputName5 {
-    /* Style the input field to make it visually distinct */
-    color: #555; /* Example text color */
-    background-color: #f9f9f9; /* Example background color */
-    border: 1px solid #ddd; /* Example border */
-    /* Add any other styles as needed */
-}
 
-</style>
 <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1 style="color: rgb(219, 135, 56);">Add Track</h1>
+      <h1>Add Track</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="adminDash">Home</a></li>
@@ -37,41 +27,41 @@
 
         
 
-          <div class="card" style="color: rgb(219, 135, 56);">
+          <div class="card">
             <div class="card-body">
-              <h5 class="card-title" style="color: rgb(219, 135, 56);" >Track Details</h5>
+              <h5 class="card-title">Track Details :</h5>
 
               <!-- Multi Columns Form -->
               <form class="row g-3">
 
 
                 <div class="col-md-6">
-                  <label for="inputStartStation" class="form-label">Starting Station</label>
-                  <select id="inputStartStation" class="form-select">
+                  <label for="inputStartStation" class="form-label" style="color: #de6b00;">Starting Station</label>
+                  <select id="inputStartStation" class="form-select inputs">
                     <% Station.forEach((station) => { %>
                       <option value="<%= station.StationId %>"><%= station.StationName %></option>
                   <% }); %>
                   </select>
                 </div>
                 <div class="col-md-6">
-                  <label for="inputArrivalStation" class="form-label">Arrival Station</label>
-                  <select id="inputArrivalStation" class="form-select">
+                  <label for="inputArrivalStation" class="form-label" style="color: #de6b00;">Arrival Station</label>
+                  <select id="inputArrivalStation" class="form-select inputs">
                   <% Station.forEach((station) => { %>
                     <option value="<%= station.StationId %>"><%= station.StationName %></option>
                 <% }); %>
               </select>
                 </div>
                 <div class="col-md-4">
-                    <label for="Economy" class="form-label">Economy Price</label>
-                    <input type="text" class="form-control" id="Economy" >
+                    <label for="Economy" class="form-label" style="color: #de6b00;">Economy Price</label>
+                    <input type="text" class="form-control inputs" id="Economy" >
                   </div>
                   <div class="col-md-4">
-                    <label for="BusinessClass" class="form-label">BusinessClass Price</label>
-                    <input type="text" class="form-control" id="BusinessClass" >
+                    <label for="BusinessClass" class="form-label" style="color: #de6b00;">BusinessClass Price</label>
+                    <input type="text" class="form-control inputs" id="BusinessClass" >
                   </div>
                   <div class="col-md-4">
-                    <label for="FirstClass" class="form-label">FirstClass Price</label>
-                    <input type="text" class="form-control" id="FirstClass" >
+                    <label for="FirstClass" class="form-label" style="color: #de6b00;">FirstClass Price</label>
+                    <input type="text" class="form-control inputs" id="FirstClass" >
                   </div>
                 <div class="text-center">
                   <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>

@@ -1,28 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <%- include('./partials/head.ejs') %>
 
 <body>
-
 <%- include('./partials/header.ejs') %>
-
 <%- include('./partials/sidebar.ejs') %>
-<style>
-  /* CSS */
-#inputName5 {
-    /* Style the input field to make it visually distinct */
-    color: #555; /* Example text color */
-    background-color: #f9f9f9; /* Example background color */
-    border: 1px solid #ddd; /* Example border */
-    /* Add any other styles as needed */
-}
 
-</style>
 <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1 style="color: rgb(219, 135, 56);">Add Train</h1>
+      <h1>Add Train</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="adminDash">Home</a></li>
@@ -37,40 +24,43 @@
 
         
 
-          <div class="card" style="color: rgb(219, 135, 56);">
+          <div class="card" ">
             <div class="card-body">
-              <h5 class="card-title" style="color: rgb(219, 135, 56);" >Train Details</h5>
+              <h5 class="card-title" >Train Details :</h5>
 
               <!-- Multi Columns Form -->
               <form class="row g-3">
-                <div class="col-md-6">
-                  <label for="inputName5" class="form-label">TrainID</label>
-                  <input type="text" class="form-control" id="inputName5" >
+                <div class="col-md-5">
+                  <label for="inputName5" class="form-label" style="color: #de6b00;">TrainID</label>
+                  <input type="text" class="form-control inputs" id="inputName5" >
                 </div>
-                <div class="col-md-6">
-                  <label for="inputState" class="form-label">UpDownStatus</label>
-                  <select id="inputState" class="form-select">
+
+                <div class="col-md-5">
+                  <label for="inputState" class="form-label" style="color: #de6b00;">UpDownStatus</label>
+                  <select id="inputState" class="form-select inputs">
                     <option selected>UP</option>
                     <option>Down</option>
-
                   </select>
                 </div>
-                <div class="col-md-6">
-                  <label for="inputArrivalStation" class="form-label">Arrival Station</label>
-                  <select id="inputArrivalStation" class="form-select">
+
+                <div class="col-md-5">
+                  <label for="inputArrivalStation" class="form-label" style="color: #de6b00;">Arrival Station</label>
+                  <select id="inputArrivalStation" class="form-select inputs">
                     <% Station.forEach((station) => { %>
                       <option value="<%= station.StationId %>"><%= station.StationName %></option>
                   <% }); %>
                   </select>
                 </div>
-                <div class="col-md-6">
-                  <label for="inputDepartureStation" class="form-label">Depature Station</label>
-                  <select id="inputDepartureStation" class="form-select">
+
+                <div class="col-md-5">
+                  <label for="inputDepartureStation" class="form-label" style="color: #de6b00;">Depature Station</label>
+                  <select id="inputDepartureStation" class="form-select inputs">
                   <% Station.forEach((station) => { %>
                     <option value="<%= station.StationId %>"><%= station.StationName %></option>
                 <% }); %>
               </select>
                 </div>
+
                 <div class="text-center">
                   <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>
                   <button type="reset" class="btn btn-secondary">Reset</button>
