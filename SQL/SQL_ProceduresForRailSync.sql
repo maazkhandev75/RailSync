@@ -50,6 +50,36 @@ END
 
 --------------------------------------------------------------------------------------------------------
 
+--------PROCEDURE FOR LOGIN FUNCTIONALITY OF ADMIN-------
+
+ALTER PROCEDURE AuthenticateAdmin 
+	@PIN nvarchar(255)
+AS 
+BEGIN	
+	SET NOCOUNT ON;
+
+	-- Check if the CNIC and password combination exists
+	IF @PIN='11223'
+    BEGIN
+    --if pin is correct then return the details of the user maaz  which is admin also 
+    --so that we can use the functionality of session as well for the adminDash
+    SELECT UserName,CNIC 
+    FROM [User]
+    WHERE CNIC='3520297089087'
+
+	END
+	ELSE
+	BEGIN
+		-- Return error message
+		RAISERROR ('Invalid PIN enterred!', 16, 1);
+		RETURN -1;
+	END
+
+END
+
+--------------------------------------------------------------------------------------------------------
+
+
 
 --------PROCEDURE FOR SHOW PROFILE FUNCTIONALITY-------
 

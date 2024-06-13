@@ -10,7 +10,7 @@
 
 /* Hide the default scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 7px;
 }
 
 /* Track */
@@ -20,13 +20,13 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #6d6d6d;
+  background: #3f3f3f;
   border-radius: 40px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(221, 124, 6);
+  background: rgb(137, 137, 137);
 }
 
 body {
@@ -110,7 +110,7 @@ h6 {
   font-size: 24px;
   margin-bottom: 0;
   font-weight: 600;
-  color: rgb(241, 93, 0);
+  color: #e06c00;
 }
 
 /*--------------------------------------------------------------
@@ -123,10 +123,10 @@ h6 {
   right: 15px;
   bottom: 15px;
   z-index: 99999;
-  background: rgb(0, 155, 216);
-  width: 40px;
-  height: 40px;
-  border-radius: 4px;
+  background: #00a6ff;
+  width: 30px;
+  height: 30px;
+  border-radius: 40px;
   transition: all 0.4s;
 }
 
@@ -491,7 +491,7 @@ h6 {
   font-size: 32px;
   padding-left: 876px;    /* we have to adjust for smaller screens */
   cursor: pointer;
-  color: #ffffff;
+  color: #9d9d9d;
 }
 
 
@@ -520,7 +520,7 @@ h6 {
 .sidebar {
   position: fixed;
   top: 60px;
-  left: 0;
+  right: 0;
   bottom: 0;
   width: 300px;
   z-index: 996;
@@ -536,45 +536,46 @@ h6 {
 
 @media (max-width: 1199px) {
   .sidebar {
-    left: -300px;
+    right: -300px;
+  }
+  .toggle-sidebar .sidebar {
+    right: 0;
   }
 }
 
+@media (min-width: 1200px) {
+  .sidebar {
+    right: -300px;
+  }
+  .toggle-sidebar .sidebar {
+    right: 0;
+  }
+  
+}
+
 .sidebar::-webkit-scrollbar {
-  width: 5px;
-  height: 8px;
+  width: 2px;
+  height: 3px;
   background-color: #111111;
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background-color: #727272;
+  background-color: rgb(156, 156, 156);
 }
 
-@media (min-width: 1200px) {
+/* @media (min-width: 1200px) {
 
-  #main,
+   #main,
   #footer {
     margin-left: 300px;
-  }
-}
+  } 
+} */
 
-@media (max-width: 1199px) {
-  .toggle-sidebar .sidebar {
-    left: 0;
-  }
-}
+/* @media (max-width: 1199px) {
+  
+} */
 
-@media (min-width: 1200px) {
 
-  .toggle-sidebar #main,
-  .toggle-sidebar #footer {
-    margin-left: 0;
-  }
-
-  .toggle-sidebar .sidebar {
-    left: -300px;
-  }
-}
 
 .sidebar-nav {
   padding: 0;
@@ -981,13 +982,31 @@ h6 {
 }
 
 .custom-btn{
-  background-color: #0080cb;
-  font-weight: 700;
+  background-color: #0096ed;
+  font-weight: 900;
+  font-size: 1em;
   transition: color 0.75s, background-color 0.75s;
-	
+  color: #000;
+  border-radius: 20px;
+  margin-right: 0.6em;
 }
 .custom-btn:hover{
-  background-color: rgb(70, 193, 255);
+  background-color: rgb(60, 190, 255);
+  color: #000;
+}
+
+.custom-btn-secondary{
+  background-color: rgb(99, 99, 99);
+  color: #fff;
+  font-weight: 900;
+  transition: all 0.5s ease-in;
+  border-radius: 20px;
+  font-size: 1em;
+  margin-right: 0.6em;
+}
+.custom-btn-secondary:hover{
+  background-color: rgb(184, 184, 184);
+  color: #000;
 }
 
 /*--------------------------------------------------------------
@@ -1014,7 +1033,7 @@ h6 {
 .contact .info-box i {
   font-size: 38px;
   line-height: 0;
-  color: #0091ff;
+   color: #00a6ff;   /* change the color of the icons in the website */ 
 }
 
 .contact .info-box h3 {
@@ -1191,116 +1210,400 @@ h6 {
 
 /* _____________________responsiveness__________________ */
 
-@media (max-width: 1234px) {
+/* ------- NOTES REGARDING RESPONSIVENESS ------- */
+/* when we are writing with respect to max-width -> deal in descending order  */
+/* when we are writing with respect to min-width -> deal in ascending order */
+
+/* min will consider the ref value */
+/* max will not consider the max value */
+
+@media (min-width: 1450px) {
   .header .toggle-sidebar-btn {
-    padding-left: 840px;
+    padding-left: 1060px;
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1450px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 1060px;
+  }
+}
+
+@media (max-width: 1430px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 1040px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 1020px;
+  }
+}
+
+@media (max-width: 1380px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 1000px;
+  }
+}
+
+@media (max-width: 1360px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 980px;
+  }
+}
+
+@media (max-width: 1340px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 960px;
+  }
+}
+
+@media (max-width: 1360px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 980px;
+  }
+}
+
+@media (max-width: 1340px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 960px;
+  }
+}
+
+@media (max-width: 1320px) {
   .header .toggle-sidebar-btn {
     padding-left: 940px;
   }
 }
 
-@media (max-width: 1181px) {
+@media (max-width: 1300px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 920px;
+  }
+}
+
+@media (max-width: 1280px) {
   .header .toggle-sidebar-btn {
     padding-left: 900px;
   }
 }
 
-@media (max-width: 1141px) {
+@media (max-width: 1260px) {
   .header .toggle-sidebar-btn {
-    padding-left: 870px;
+    padding-left: 980px;
   }
 }
 
-@media (max-width: 1110px) {
+@media (max-width: 1240px) {
   .header .toggle-sidebar-btn {
-    padding-left: 830px;
+    padding-left: 960px;
   }
 }
 
-@media (max-width: 1074px) {
+@media (max-width: 1220px) {
   .header .toggle-sidebar-btn {
-    padding-left: 790px;
+    padding-left: 940px;
   }
 }
 
-@media (max-width: 1030px) {
+@media (max-width: 1200px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 920px;
+  }
+}
+
+@media (max-width: 1180px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 900px;
+  }
+}
+
+@media (max-width: 1160px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 880px;
+  }
+}
+
+@media (max-width: 1140px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 860px;
+  }
+}
+
+@media (max-width: 1120px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 840px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 820px;
+  }
+}
+
+@media (max-width: 1080px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 800px;
+  }
+}
+
+@media (max-width: 1060px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 780px;
+  }
+}
+
+@media (max-width: 1040px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 760px;
+  }
+}
+
+@media (max-width: 1020px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 740px;
+  }
+}
+
+@media (max-width: 1000px) {
   .header .toggle-sidebar-btn {
     padding-left: 720px;
   }
 }
 
-@media (max-width: 975px) {
+@media (max-width: 980px) {
   .header .toggle-sidebar-btn {
-    padding-left: 670px;
+    padding-left: 700px;
   }
 }
 
-@media (max-width: 916px) {
+@media (max-width: 960px) {
   .header .toggle-sidebar-btn {
-    padding-left: 630px;
+    padding-left: 680px;
   }
 }
 
-@media (max-width: 866px) {
+@media (max-width: 940px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 660px;
+  }
+}
+
+@media (max-width: 920px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 640px;
+  }
+}
+
+@media (max-width: 900px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 620px;
+  }
+}
+
+@media (max-width: 880px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 600px;
+  }
+}
+
+@media (max-width: 860px) {
   .header .toggle-sidebar-btn {
     padding-left: 580px;
   }
 }
 
-@media (max-width: 814px) {
+@media (max-width: 840px) {
   .header .toggle-sidebar-btn {
-    padding-left: 490px;
+    padding-left: 560px;
   }
 }
 
-@media (max-width: 726px) {
+@media (max-width: 820px) {
   .header .toggle-sidebar-btn {
-    padding-left: 450px;
+    padding-left: 540px;
   }
 }
 
-@media (max-width: 686px) {
+@media (max-width: 800px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 520px;
+  }
+}
+
+@media (max-width: 780px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 500px;
+  }
+}
+
+@media (max-width: 760px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 480px;
+  }
+}
+
+@media (max-width: 740px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 460px;
+  }
+}
+
+@media (max-width: 720px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 440px;
+  }
+}
+
+@media (max-width: 700px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 420px;
+  }
+}
+
+@media (max-width: 680px) {
   .header .toggle-sidebar-btn {
     padding-left: 400px;
   }
 }
 
-@media (max-width: 686px) {
+@media (max-width: 660px) {
   .header .toggle-sidebar-btn {
-    padding-left: 370px;
+    padding-left: 380px;
   }
 }
 
-@media (max-width: 615px) {
+@media (max-width: 640px) {
   .header .toggle-sidebar-btn {
-    padding-left: 330px;
+    padding-left: 360px;
   }
 }
 
-@media (max-width: 565px) {
+
+@media (max-width: 620px) {
   .header .toggle-sidebar-btn {
-    padding-left: 270px;
+    padding-left: 340px;
   }
 }
 
-@media (max-width: 505px) {
+
+/* due to smaller screens now gap from left will be more smaller
+   so we will make diff 10 which was previously 20 */
+
+@media (max-width: 600px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 320px;
+  }
+}
+
+
+@media (max-width: 580px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 300px;
+  }
+}
+
+
+@media (max-width: 560px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 280px;
+  }
+}
+
+
+@media (max-width: 540px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 260px;
+  }
+}
+
+
+@media (max-width: 520px) {
   .header .toggle-sidebar-btn {
     padding-left: 240px;
   }
 }
 
-@media (max-width: 479px) {
+
+@media (max-width: 500px) {
   .header .toggle-sidebar-btn {
-    padding-left: 170px;
+    padding-left: 225px;
   }
 }
 
-@media (max-width: 450px) {
+
+@media (max-width: 480px) {
   .header .toggle-sidebar-btn {
-    padding-left: 100px;
+    padding-left: 215px;
+  }
+}
+
+@media (max-width: 460px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 195px;
+  }
+}
+
+@media (max-width: 440px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 175px;
+  }
+}
+
+
+@media (max-width: 420px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 155px;
+  }
+}
+
+
+@media (max-width: 400px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 135px;
+  }
+}
+
+
+@media (max-width: 380px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 115px;
+  }
+}
+
+
+@media (max-width: 360px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 95px;
+  }
+}
+
+@media (max-width: 340px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 85px;
+  }
+}
+
+
+
+@media (max-width: 320px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 55px;
+  }
+}
+
+
+@media (max-width: 300px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 35px;
+  }
+}
+
+
+@media (max-width: 280px) {
+  .header .toggle-sidebar-btn {
+    padding-left: 20px;
   }
 }

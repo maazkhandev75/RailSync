@@ -14,14 +14,14 @@
     <title>LogIn Form</title>
 </head>
 <body>
-	<!-- if the user logged in successfully -->
+	<!-- if the admin pin is correct -->
     <% if (typeof successMessage !== 'undefined') { %>
     <div class="alert alert-success" role="alert">
         <%= successMessage %>
     </div>
     <% } %>
 
-	<!-- if the user not found  -->
+	<!-- if the admin pin is not correct -->
 	<% if (typeof errorMessage !== 'undefined') { %>
 	<div class="alert alert-danger" role="alert">
 		<%= errorMessage %>
@@ -30,45 +30,33 @@
 
 
     <div class="topHeading">
-        <h2 class="display-4 heading">Log In</h2>
+        <h2 class="display-4 heading">Admin LogIn</h2>
         </div>
 
-    <div class="container_topLvl ">
+    <div class="container_topLvl">
         <div class="main">
             <div class="container-fluid mt-1">
-                <form action="/login" method="POST">
+                <form action="/adminLogin" method="POST">
                     <div class="row">
 
                         <div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
-                            <label for="CNIC" class="form-label sub_heading">CNIC:</label>
-                            <input type="text" class="form-control inputs" id="CNIC" name="cnic" placeholder="13 digits" pattern="[0-9]{13}" required>
+                            <label for="CNIC" class="form-label sub_heading">Admin PIN:</label>
+                            <input type="text" class="form-control inputs" id="adminPin" name="adminPin" placeholder="5 digits" pattern="[0-9]{5}" required>
                         </div>
 
-                        <div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
-                            <label for="Password" class="form-label sub_heading">Password:</label>
-                            <input type="password" class="form-control inputs" id="Password" name="password" placeholder="type password" required>
-                        </div>
                     </div>
 
 
                     <div class="mb-3 mt-2 form-check">
                         <input type="checkbox" class="form-check-input ml-3 " id="check1" required>
-                        <label class="form-check-label pl-5" for="exampleCheck1">I assure that the above information is correct!!</label>
+                        <label class="form-check-label pl-5" for="exampleCheck1">I am not a Robot!</label>
                     </div>
 
                     <div class="pl-4">
                         <button type="submit" class="btn-submit ml-2">Enter</button>
                     </div>
-
-               </form>
+                </form>
             </div>
-        </div>
-
-        <div class="adminLoginContainer">
-                <!-- Admin login redirection button -->
-                <div class="pl-4 mt-2">
-                    <a href="/adminLoginForm" class="btn-admin ml-2">Login as Admin</a>
-                </div>
         </div>
     </div>
 
@@ -78,7 +66,7 @@
         <% if (typeof successMessage !== 'undefined') { %>  //if success msg appears only then redirect to dashbaord but after 2 sec delay so that msg can be read by client
             // Redirect to the dashboard after 2 seconds
             setTimeout(function() {
-                window.location.href = '/userDash';
+                window.location.href = '/adminDash';
             }, 2000); // 2sec delay
         <% } %>
     </script>

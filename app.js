@@ -46,6 +46,7 @@ function isAuthenticated(req, res, next)
 //importing routers
 const signupRouter = require('./routes/signup')
 const loginRouter = require('./routes/login')
+const adminLoginRouter = require('./routes/adminLogin')
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const SearchTrainRouter = require('./routes/SearchTrain');
@@ -161,6 +162,10 @@ app.get('/loginForm',(req,res)=>{
   res.render('login.ejs');
 });
 
+app.get('/adminLoginForm',(req,res)=>{
+  res.render('adminLogin.ejs');
+});
+
 app.get('/errorOfSession',(req,res)=>{
   res.render('errorSession.ejs');
 });
@@ -180,7 +185,7 @@ app.get('/SearchTrainform', (req, res) => {
 });
 
 
-app.get('/adminDash', (req, res) => {
+app.get('/adminDash',isAuthenticated, (req, res) => {
   res.render('./ADMIN/dashboard.ejs');
 });
 
@@ -650,6 +655,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/signup', signupRouter(pool));   // Pass pool object to signupRouter
 app.use('/login', loginRouter(pool));     // Pass pool object to loginRouter
+app.use('/adminLogin', adminLoginRouter(pool));     // Pass pool object to loginRouter
 app.use('/SearchTrain', SearchTrainRouter(pool));
 app.use('/TD',SearchCarriage(pool));
 app.use('/', sessionRouter);    //for testing session

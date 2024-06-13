@@ -45,6 +45,13 @@ flex-direction: column;
 	align-content: center;
 }
 
+.adminLoginContainer{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+}
+
 .container-fluid{
 	align-items: center;
 	align-content: center;
@@ -155,6 +162,27 @@ input[type='checkbox']:checked:after {
     box-shadow: 0 0.5em 0.7em -0.4em #de6b00;
 	
  }
+
+ .btn-admin {
+	display: inline-block;
+	margin-top: 10px;
+	padding: 10px 10px;
+	background-color: #7bcd00;
+	color: rgb(0, 0, 0);
+	text-align: center;
+	transition: all 0.9s ease-out;
+	border: none;
+	font-family: 'Inconsolata', monospace;
+	font-weight: 900;
+	border-radius: 30px;
+	cursor: pointer;
+	text-decoration: none;
+}
+.btn-admin:hover {
+	background-color: rgb(251, 255, 0);
+	color: #000;
+	text-decoration: none;
+}
 
  @media(max-width: 635px)
  {
