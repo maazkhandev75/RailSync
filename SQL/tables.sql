@@ -310,6 +310,7 @@ select * from [Seat]
 
 
 
+
 --UPDATES--
 
 --renaming column of some table syntax
