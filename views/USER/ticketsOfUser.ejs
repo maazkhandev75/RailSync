@@ -109,26 +109,26 @@ body {
         background-color: #9a42ff;
     }
 </style>
+
 <body>
 
-<%- include('./partials/header.ejs') %>
-<%- include('./partials/sidebar.ejs') %>
-
+    <%- include('./partials/header.ejs') %>
+    <%- include('./partials/sidebar.ejs') %>
+    
     <main id="main" class="main">
-
+    
         <div class="pagetitle">
-        <h1>All Tickets</h1>
-        <nav>
-            <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="userDash">User Dashboard</a></li>
-            <li class="breadcrumb-item active">My Bookings</li>
-            </ol>
-        </nav>
+            <h1>All Tickets</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="userDash">User Dashboard</a></li>
+                    <li class="breadcrumb-item active">My Bookings</li>
+                </ol>
+            </nav>
         </div><!-- End Page Title -->
-
+    
         <section class="section">
-
-
+    
             <div class="container">
                 <h2>Current Bookings</h2>
                 <table>
@@ -140,38 +140,31 @@ body {
                             <th>DeptTime</th>
                             <th>RefundStatus</th>
                             <th>Action</th>
-                            
                         </tr>
                     </thead>
                     <tbody>
-                        <% ticketsUpcoming.forEach((ticket)=>{ %>
+                        <% ticketsUpcoming.forEach((ticket) => { %>
                             <tr>
                                 <td><%= ticket.TicketId[0] %></td>  <!--[0] to get only one time ticketId because our join has given us more than one ticketId which are same as repetition-->
                                 <td><%= ticket.SeatNo %></td>
-								<td><%= ticket.TotalPrice %></td>
+                                <td><%= ticket.TotalPrice %></td>
                                 <td><%= ticket.DeptTime %></td>
-                                <td>
+                                <td id="refund-status-<%= ticket.TicketId[0] %>">
                                     <% if (ticket.RefundStatus === 'R') { %>
-                                      Refunded
+                                        Refunded
                                     <% } else { %>
-                                      Not Refunded
+                                        Not Refunded
                                     <% } %>
-                                  </td>
-                                  
-                                
+                                </td>
                                 <td>
-                                    <button class="edit-btn" onclick="editTicket('<%=ticket.TicketId[0]%>', '<%=ticket.TrainId%>','<%=ticket.CarriageId%>','<%= ticket.SeatNo %>')">UNBOOK</button>
+                                    <button class="edit-btn" onclick="editTicket('<%= ticket.TicketId[0] %>', '<%= ticket.CarriageId %>', '<%= ticket.TrainId %>', '<%= ticket.SeatNo %>')">unbook</button>
                                 </td>
                             </tr>
                         <% }); %>
-
-
-                        <!-- More rows here -->
                     </tbody>
                 </table>
             </div>
-
-
+    
             <div class="container">
                 <h2>Previous Bookings</h2>
                 <table>
@@ -186,67 +179,66 @@ body {
                         </tr>
                     </thead>
                     <tbody>
-                        <% ticketsPrevious.forEach((ticket)=>{ %>
+                        <% ticketsPrevious.forEach((ticket) => { %>
                             <tr>
                                 <td><%= ticket.TicketId[0] %></td>
                                 <td><%= ticket.SeatNo %></td>
-								<td><%= ticket.TotalPrice %></td>
+                                <td><%= ticket.TotalPrice %></td>
                                 <td><%= ticket.DeptTime %></td>
-                                <td>
+                                <td id="refund-status-<%= ticket.TicketId[0] %>">
                                     <% if (ticket.RefundStatus === 'R') { %>
-                                      Refunded
+                                        Refunded
                                     <% } else { %>
-                                      Not Refunded
+                                        Not Refunded
                                     <% } %>
                                 </td>
-                                  
                                 <td>
-                                    <button class="edit-btn" onclick="editTicket('<%=ticket.TicketId[0]%>', '<%=ticket.CarriageId%>','<%=ticket.TrainId%>','<%= ticket.SeatNo %>')">UNBOOK</button>
+                                    <button class="edit-btn" onclick="editTicket('<%= ticket.TicketId[0] %>', '<%= ticket.CarriageId %>', '<%= ticket.TrainId %>', '<%= ticket.SeatNo %>')">UNBOOK</button>
                                 </td>
                             </tr>
                         <% }); %>
-
-
-                        <!-- More rows here -->
                     </tbody>
                 </table>
             </div>
-
+    
         </section>
     </main>
-  <%- include('./partials/footer.ejs') %>
-  <%- include('./partials/script.ejs') %>
-
-</body>
-<script>
-  function editTicket(TicketId,CarriageID, TrainID, SeatNo) {
-    fetch('/UnbookTicket', {
-        method: 'POST',
-        body: JSON.stringify({TicketId, CarriageID, TrainID, SeatNo }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-
-        const result = data.Message[0];
-
-        rows.forEach(row => {
-
-        if (result.ResultMessage == 'UNBOOKED SUCCESSFULLY') {
-            const refundStatusTd = document.querySelector(`td[data-refund-status="${TicketId}"]`);
-            if (refundStatusTd) {
-                refundStatusTd.textContent = 'R';
+    <%- include('./partials/footer.ejs') %>
+    <%- include('./partials/script.ejs') %>
+    
+    <script>
+    function editTicket(TicketId, CarriageID, TrainID, SeatNo) {
+        fetch('/UnbookTicket', {
+            method: 'POST',
+            body: JSON.stringify({ TicketId, CarriageID, TrainID, SeatNo }),
+            headers: {
+                'Content-Type': 'application/json'
             }
-        }else{
-            alert('SOMETHING WENT WRONG');
-        }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const result = data.Message[0];
+    
+            if (result.ResultMessage === 'UNBOOKED SUCCESSFULLY') {
+
+                // const refundStatusTd = document.querySelector(`td[data-refund-status="${TicketId}"]`);
+
+                const refundStatusTd = document.getElementById(`refund-status-${TicketId}`);
+                if (refundStatusTd) {
+                    refundStatusTd.textContent = 'Refunded';   //basically is not not changing in the database its only frontend ui change for smooth updation
+                }
+    
+                window.location.reload(); // Reload the page after successful unbooking
+            } else {
+                alert('SOMETHING WENT WRONG');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error occurred while processing the request');
         });
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
-</script>
-</html>
+    }
+    </script>
+    
+    </body>
+    </html>

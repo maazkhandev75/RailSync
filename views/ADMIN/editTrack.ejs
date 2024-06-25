@@ -40,8 +40,8 @@
                     <input type="text" class="form-control inputs" id="Economy" placeholder="<%= Economy %>" >
                   </div>
                   <div class="col-md-6">
-                    <label for="BusinessClass" class="form-label" style="color: #de6b00;">BusinessClass Price</label>
-                    <input type="text" class="form-control inputs" id="BusinessClass" placeholder="<%= BusinessClass %>" >
+                    <label for="Business" class="form-label" style="color: #de6b00;">Business Price</label>
+                    <input type="text" class="form-control inputs" id="Business" placeholder="<%= Business %>" >
                   </div>
                   <div class="col-md-6">
                     <label for="FirstClass" class="form-label" style="color: #de6b00;">FirstClass Price</label>
@@ -75,14 +75,14 @@
       event.preventDefault();
       const TrackId = document.getElementById('TrackID').placeholder;
       const Economy = document.getElementById('Economy').value !== '' ? document.getElementById('Economy').value : document.getElementById('Economy').placeholder;
-        const BusinessClass = document.getElementById('BusinessClass').value !== '' ? document.getElementById('BusinessClass').value : document.getElementById('BusinessClass').placeholder;
+        const Business = document.getElementById('Business').value !== '' ? document.getElementById('Business').value : document.getElementById('Business').placeholder;
         const FirstClass = document.getElementById('FirstClass').value !== '' ? document.getElementById('FirstClass').value : document.getElementById('FirstClass').placeholder;
 
-    console.log(BusinessClass);
+    console.log(Business);
         
       fetch('/TD/editFare', {
       method: 'POST',
-      body: JSON.stringify({ TrackId,Economy,BusinessClass,FirstClass }),
+      body: JSON.stringify({ TrackId,Economy,Business,FirstClass }),
         headers: {
             'Content-Type': 'application/json'
         }

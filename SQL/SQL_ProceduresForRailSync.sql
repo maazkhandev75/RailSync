@@ -166,27 +166,30 @@ END
 drop proc ShowBookedTickets
 
 --------PROCEDURE FOR CANCEL TICKET OF USER-------
-CREATE PROCEDURE CancelTicket
-	@CNIC nvarchar(255)
+CREATE PROCEDURE [dbo].[CancelTicket]
+	@TicketId int,
+    @TrainId nvarchar(255),
+    @CarriageId NVARCHAR(255),
+    @SeatNo int 
+
 AS 
 BEGIN	
 	SET NOCOUNT ON;
 
-	IF EXISTS (SELECT 1 FROM [Ticket] WHERE  CNIC = @CNIC)
+	IF EXISTS (SELECT 1 FROM [Ticket] WHERE  TicketId = @TicketId)
 	BEGIN
 	
-		DELETE FROM [Ticket] WHERE  CNIC = @CNIC
+		update [Seat] set BookingStatus=null where SeatNo=@SeatNo and TrainId=@TrainId and CarriageId=@CarriageId;
+        update [Payment] set RefundStatus='R' where TicketId=@TicketId   --here only we are updating the refudnStatus to R rest is only frontend level changes not in the backend database
+        select 'UNBOOKED SUCCESSFULLY' as ResultMessage
 	END
 	ELSE
 	BEGIN
 		-- Return error message if no ticket of user found
-		RAISERROR ('no ticket of user found!', 16, 1);
-		RETURN -1;
+		        select 'UNBOOKED UNSUCCESSFULLY' as ResultMessage
 	END
 END
-
-drop proc CancelTicket
-
+GO
 ---------------Procedure to Search Train recursively-=----------------
 USE [afaqkhaliq_SampleDB]
 GO
@@ -248,7 +251,7 @@ WITH  TrainRoute AS (
         Tr.Station1Id <> (SELECT StationId FROM Station WHERE StationName = @Search_to_Station)
 )
 -- Select the final train route
-select T.TrainId,T.UpDownStatus as UPStatus ,CTEtable.TrackId as TrackId,(select StationName from Station where StationId=fromStation) as DeptStation,((select StationName from Station where StationId=toStation)) as ArrivalStation,DeptTime,ArrivalTime,Economy,BusinessClass,FirstClass
+select T.TrainId,T.UpDownStatus as UPStatus ,CTEtable.TrackId as TrackId,(select StationName from Station where StationId=fromStation) as DeptStation,((select StationName from Station where StationId=toStation)) as ArrivalStation,DeptTime,ArrivalTime,Economy,Business,FirstClass
 FROM TrainRoute as CTEtable
 join [Train] as T on T.TrainId=CTEtable.TrainId
 join [Route] as R
@@ -260,7 +263,7 @@ AND CONVERT(date, R.ArrivalTime) = CONVERT(date, @SearchDate)
 
 [SearchTrainWithStops]  'Karachi','Islamabad','2024-04-16'
 -- Select the final train route
-select T.TrainId,T.UpDownStatus as UPStatus ,fromStation as DeptStation,toStation as ArrivalStation,DeptTime,ArrivalTime,Economy,BusinessClass,FirstClass
+select T.TrainId,T.UpDownStatus as UPStatus ,fromStation as DeptStation,toStation as ArrivalStation,DeptTime,ArrivalTime,Economy,Business,FirstClass
 FROM TrainRoute as CTEtable
 join [Train] as T on T.TrainId=CTEtable.TrainId
 join [Route] as R
@@ -269,7 +272,7 @@ join Fare as F on F.TrackId=CTEtable.TrackId
 AND CONVERT(date, R.ArrivalTime) = CONVERT(date, @SearchDate)
 
 -----------------Procedure to searchtrainwith one stop--------------
-create procedure [dbo].[SearchTrainWithOneStop] @Search_from_Station nvarchar(30),@Search_to_Station nvarchar(30), @SearchDate datetime
+alter procedure [dbo].[SearchTrainWithOneStop] @Search_from_Station nvarchar(30),@Search_to_Station nvarchar(30), @SearchDate datetime
 as
 with my_cte as (
     SELECT
@@ -319,7 +322,7 @@ from union_cte as U1, union_cte as U2
 where U1.fromStation=U2.toStation)
 
 
-select T.TrainId,T.UpDownStatus as UPStatus ,CTEtable.TrackId as TrackId,(select StationName from Station where StationId=fromStation) as DeptStation,(select StationName from Station where StationId=toStation) as ArrivalStation,DeptTime,ArrivalTime,Economy,BusinessClass,FirstClass
+select T.TrainId,T.UpDownStatus as UPStatus ,CTEtable.TrackId as TrackId,(select StationName from Station where StationId=fromStation) as DeptStation,(select StationName from Station where StationId=toStation) as ArrivalStation,DeptTime,ArrivalTime,Economy,Business,FirstClass
 FROM FinalRoute as CTEtable
 join [Route] as R
 on R.TrainId=CTEtable.TrainId and R.TrackId=CTEtable.TrackId
@@ -331,7 +334,7 @@ exec SearchTrainWithOneStop 'Karachi Cannt','Islamabad','2024-08-05'
 ---------------------Procedure to Search non Stops----------------------
 ALTER PROCEDURE [dbo].[SearchForTrains] @fromStation nvarchar(30), @toStation nvarchar(30), @SearchDate datetime
 as
-select T.TrainId,Tr.TrackId as TrackId,T.UpDownStatus as UPStatus ,@fromStation as DeptStation,@toStation as ArrivalStation,DeptTime,ArrivalTime,Economy,BusinessClass,FirstClass
+select T.TrainId,Tr.TrackId as TrackId,T.UpDownStatus as UPStatus ,@fromStation as DeptStation,@toStation as ArrivalStation,DeptTime,ArrivalTime,Economy,Business,FirstClass
 from [Train] as T
 join [Route] as R
 on R.TrainId=T.TrainId
@@ -341,10 +344,11 @@ join Fare as F on F.TrackId=Tr.TrackId
 where Tr.Station1Id=(select StationId from Station where StationName=@fromStation )
 and Tr.Station2Id=(select StationId from Station where StationName=@toStation )
 AND CONVERT(date, R.ArrivalTime) = CONVERT(date, @SearchDate)
+
 -------------------Proceduure to getdetails about seats-----------------------------
 ALTER Procedure [dbo].[GetTicketInfo] @FoundCarriage nvarchar(30), @FoundSeat  int, @TrainId nvarchar(30), @TrackId nvarchar(30)
 as
-select @FoundCarriage as CarriageID,@FoundSeat as SeatNo,@TrainId as TrainId, t.Station1Id as DeptStaion, t.Station2Id as ArrivalStation, r.ArrivalTime, r.DeptTime,F.Economy,F.BusinessClass,F.FirstClass
+select @FoundCarriage as CarriageID, @TrackId as TrackId, @FoundSeat as SeatNo,@TrainId as TrainId, t.Station1Id as DeptStaion, t.Station2Id as ArrivalStation, r.ArrivalTime, r.DeptTime,F.Economy,F.Business,F.FirstClass
 from Tracks as t
 join [Route] as r on r.TrackId=@TrackId and r.TrainId=@TrainId
 join Fare as F on F.TrackId=@TrackId
@@ -365,9 +369,9 @@ join Seat as s on s.TrainID=T.TrainId
 where c.Type=@Class and s.BookingStatus is  Null
 -----------------------;---------
 
-create trigger Addpayment on Ticket
-as
+create trigger [dbo].[Addpayment] on [dbo].[Ticket]
 after insert
+as
 declare @CNIC nvarchar(255)
 declare @TicketId nvarchar(255)
 declare @TrackId nvarchar(255)
@@ -375,21 +379,27 @@ declare @CarriageId nvarchar(255)
 declare @price int
 declare @type char
 select @CNIC=CNIC,@TicketId=TicketId,@CarriageId=CarriageId,@TrackId=TrackId from inserted
-select @type=[Type] from Carriage where CarraigeId=@CarriageId
-if (type='B')
+select @type=[Type] from Carriage where CarriageId=@CarriageId
+if (@type='B')
 begin
-select @price=select BussinessClass from Fare where TrackId= @TrackId
+select @price= Business from Fare where TrackId= @TrackId
 end
-if (type='E')
+if (@type='E')
 begin
-select @price=select Economy from Fare where TrackId= @TrackId
+select @price= Economy from Fare where TrackId= @TrackId
 end
-if (type='F')
+if (@type='F')
 begin
-select @price=select FirstClass from Fare where TrackId= @TrackId
+select @price= FirstClass from Fare where TrackId= @TrackId
 end
 insert into Payment
 values(@TicketId,@CNIC,@Price,NULL)
+
+GO
+ALTER TABLE [dbo].[Ticket] ENABLE TRIGGER [Addpayment]
+GO
+
+
 
 
 
@@ -509,7 +519,7 @@ alter PROCEDURE InsertTrack
     @Station1Id NVARCHAR(255),
     @Station2Id NVARCHAR(255),
     @Economy FLOAT,
-    @BusinessClass float,
+    @Business float,
     @FirstClass FLOAT
 AS 
 BEGIN
@@ -523,8 +533,8 @@ BEGIN
    INSERT INTO Tracks (TrackId, Station1Id, Station2Id)
     VALUES (@COUNT_NVARCHAR, @Station1Id, @Station2Id);
 
-    INSERT INTO Fare (TrackId,Economy,BusinessClass,FirstClass)
-    VALUES (@COUNT_NVARCHAR,@Economy,@BusinessClass,@FirstClass)
+    INSERT INTO Fare (TrackId,Economy,Business,FirstClass)
+    VALUES (@COUNT_NVARCHAR,@Economy,@Business,@FirstClass)
 
     select 'TRACK ADDED SUCCESSFULLY' as ResultMessage
     
@@ -664,17 +674,17 @@ END;
 
 
 
-Create PROCEDURE EditFare
+ALTER PROCEDURE EditFare
     @TrackId NVARCHAR(255),
     @Economy FLOAT,
-    @BusinessClass float,
+    @Business float,
     @FirstClass FLOAT
 AS 
 BEGIN
     if( exists(select * from [Fare] where TrackId=@TrackId ))
     BEGIN
 
-    update [Fare] set Economy=@Economy,BusinessClass=@BusinessClass,FirstClass=@FirstClass 
+    update [Fare] set Economy=@Economy,Business=@Business,FirstClass=@FirstClass 
     where TrackId=@TrackId;
     SELECT 'FARE UPDATED SUCCESSFULLY' AS ResultMessage;
     END
@@ -885,3 +895,70 @@ create PROCEDURE DeleteRoute
     END;
    
  
+
+
+
+ 
+
+
+
+select* FROM Carriage where TrainId='101';
+
+insert into Carriage
+values('203','101','F');
+
+CREATE PROCEDURE SearchForCarriage
+    @ID nvarchar(255)
+AS
+BEGIN
+    SELECT * FROM Carriage WHERE TrainId = @ID;
+END;
+
+
+EXEC SearchForCarriage @ID='101';
+
+CREATE PROCEDURE SearchForSeats
+    @CARRIAGEID nvarchar(255)
+AS
+BEGIN
+    Select * from [Seat] where CarriageID=@CARRIAGEID
+END;
+
+EXEC SearchForSeats @CARRIAGEID='202'
+
+ 
+
+
+
+
+ SELECT name
+FROM sys.objects
+WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT'
+AND parent_object_id = OBJECT_ID('Payment');
+
+SELECT 
+    fk.name AS ForeignKeyName,
+    OBJECT_NAME(fk.parent_object_id) AS TableName,
+    COL_NAME(fkc.parent_object_id, fkc.parent_column_id) AS ColumnName,
+    OBJECT_NAME(fk.referenced_object_id) AS ReferencedTableName,
+    COL_NAME(fkc.referenced_object_id, fkc.referenced_column_id) AS ReferencedColumnName,
+    fk.delete_referential_action_desc AS OnDeleteAction,
+    fk.update_referential_action_desc AS OnUpdateAction
+FROM 
+    sys.foreign_keys AS fk
+INNER JOIN 
+    sys.foreign_key_columns AS fkc ON fk.object_id = fkc.constraint_object_id
+WHERE 
+    fk.name = 'FK__Ticket__CNIC__2B947552'
+
+ALTER TABLE [Ticket]
+DROP CONSTRAINT FK_Ticket_Seat;
+
+ALTER TABLE [Carriage] ADD CONSTRAINT FK_TRAINID FOREIGN KEY ([TrainId]) REFERENCES [Train] ([TrainId]) ON UPDATE CASCADE on delete CASCADE
+ALTER TABLE [Seat] ADD CONSTRAINT FK_CARRIAGEID FOREIGN KEY ([CarriageID]) REFERENCES [Carriage] ([CarriageId]) ON UPDATE CASCADE on delete CASCADE
+
+ALTER TABLE [Security] ADD CONSTRAINT FK_CREW_ID FOREIGN KEY ([CrewId]) REFERENCES [Crew] ([CrewId]) on delete CASCADE
+ALTER TABLE [Pilot] ADD CONSTRAINT FK_CREWID_PILOT FOREIGN KEY ([CrewId]) REFERENCES [Crew] ([CrewId]) on delete CASCADE
+ALTER TABLE [Pilot] ADD CONSTRAINT FK_STATIONID_PILOT FOREIGN KEY ([TrainId]) REFERENCES [Train] ([TrainId]) on delete SET NULL
+
+select * from [Ticket] as T join [Payment] as P on T.TicketId=P.TicketId; 

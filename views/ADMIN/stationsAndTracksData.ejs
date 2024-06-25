@@ -173,8 +173,8 @@
                             <th>TrackID</th>
                             <th>StationID</th>
                             <th>StationID</th>
-                            <th>EconomyClass</th>
-                            <th>BusinessClass</th>
+                            <th>Economy</th>
+                            <th>Business</th>
                             <th>FirstClass</th>
                             <th>Actions</th>
                         </tr>
@@ -186,11 +186,11 @@
                                 <td><%= i.Station1Id %></td>
                                 <td><%= i.Station2Id %></td>
                                 <td><%= i.Economy %></td>
-                                <td><%= i.BusinessClass %></td>
+                                <td><%= i.Business %></td>
                                 <td><%= i.FirstClass %></td>
                                 <td>
                                     
-                                    <button class="edit-btn" onclick="editTrack('<%= i.TrackId[0] %>','<%= i.Economy %>','<%= i.BusinessClass %>','<%= i.FirstClass %>')">Edit</button>
+                                    <button class="edit-btn" onclick="editTrack('<%= i.TrackId[0] %>','<%= i.Economy %>','<%= i.Business %>','<%= i.FirstClass %>')">Edit</button>
                                     <button class="delete-btn" onclick="deleteTrack('<%= i.TrackId[0] %>')">Delete</button>
                                   
                                 </td>
@@ -213,10 +213,10 @@
 
 </body>
 <script>
-function editTrack(TrackId,Economy,BusinessClass,FirstClass)
-{
-    window.location.href = `/editTrack?TrackID=${TrackId[0]}&Economy=${Economy}&BusinessClass=${BusinessClass}&FirstClass=${FirstClass}`;
+function editTrack(TrackId, Economy, Business, FirstClass) {
+    window.location.href = `/editTrack?TrackID=${TrackId}&Economy=${Economy}&Business=${Business}&FirstClass=${FirstClass}`;
 }
+
 
 function deleteStation(StationId) {
     if (confirm('Are you sure you want to delete this Station?')) {

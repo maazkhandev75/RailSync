@@ -55,8 +55,8 @@
                     <input type="text" class="form-control inputs" id="Economy" >
                   </div>
                   <div class="col-md-4">
-                    <label for="BusinessClass" class="form-label" style="color: #de6b00;">BusinessClass Price</label>
-                    <input type="text" class="form-control inputs" id="BusinessClass" >
+                    <label for="Business" class="form-label" style="color: #de6b00;">Business Price</label>
+                    <input type="text" class="form-control inputs" id="Business" >
                   </div>
                   <div class="col-md-4">
                     <label for="FirstClass" class="form-label" style="color: #de6b00;">FirstClass Price</label>
@@ -89,12 +89,12 @@
       const Station1Id = document.getElementById('inputStartStation').value;
       const Station2Id = document.getElementById('inputArrivalStation').value;
       const Economy = document.getElementById('Economy').value;
-      const BusinessClass = document.getElementById('BusinessClass').value;
+      const Business = document.getElementById('Business').value;
       const FirstClass = document.getElementById('FirstClass').value;
   
       fetch('/TD/addTrack', {
       method: 'POST',
-      body: JSON.stringify({ Station1Id,Station2Id,Economy,BusinessClass,FirstClass }),
+      body: JSON.stringify({ Station1Id,Station2Id,Economy,Business,FirstClass }),
         headers: {
             'Content-Type': 'application/json'
         }

@@ -79,10 +79,11 @@ const log = console.log;
 
 //configuring a connection pool for MSSQL using the mssql module and connecting to the database
 const sqlConfig = {
+  
   //UNDER CONSTRUCTION
-  user:'',
-  password:'',
-  database:'',
+  user:'maazkhan75_RailSyncDB',
+  password:'railsyncpass',
+  database:'maazkhan75_RailSyncDB',
   server: 'sql.bsite.net\\MSSQL2016',
   pool: {
     max: 10,
@@ -429,7 +430,6 @@ app.post('/UnbookTicket', (req, res) => {
           console.log(result.recordset);
           Message=result.recordset;
           res.json({ Message });
-          
       }
   });
 });
@@ -492,9 +492,9 @@ app.get('/editTrack', (req, res) => {
 
   const TrackID=req.query.TrackID;
   const Economy=req.query.Economy;
-  const BusinessClass=req.query.BusinessClass;
+  const Business=req.query.Business;
   const FirstClass=req.query.FirstClass;
-  res.render('./ADMIN/editTrack.ejs', {TrackID,Economy,BusinessClass,FirstClass });
+  res.render('./ADMIN/editTrack.ejs', {TrackID,Economy,Business,FirstClass });
 });
 
 app.get('/profile', isAuthenticated, async(req,res)=>{
@@ -619,59 +619,6 @@ app.get('/userDash', isAuthenticated, (req,res)=>{
 //work to be done below to show email sent message!
 app.get('/contact', (req, res) => {
   res.render('./USER/contact.ejs');
-});
-
-
-app.post('/bookTicketNonStop', (req, res) => {  
-  console.log(req.body);
-  const userName = req.session.userDetails.username;
-  console.log(userName);
-  const InputTrackId=req.body.TrackID;
-  var inputClassType=req.body.selectedClass;
-  if(req.body.selectedClass==="Economy") inputClassType="E";
-  else if(req.body.selectedClass==="Business") inputClassType="B";
-  else if(req.body.selectedClass==="First Class") inputClassType="F";
-
-  const request= new sql.Request(pool);
-  request.input('TrainId',sql.NVarChar(30),req.body.selectedTrainID);
-  request.input('TrackId',sql.NVarChar(30),req.body.TrackID);
-  request.input('Class',sql.NVarChar(30),inputClassType);
-  var TicketAvailInfo="";
-  request.execute('BookTicket',(err,result)=>{
-    if(err){
-      console.log(err);
-      res.status(500).send('Internal Server Error');
-    }
-    else{
-        TicketAvailInfo=result.recordset[0];
-        console.log(TicketAvailInfo);
-        if(TicketAvailInfo.length!= undefined){
-          const TicketInfoReq= new sql.Request(pool);
-        TicketInfoReq.input('FoundCarriage',sql.NVarChar(30),TicketAvailInfo.CarriageId);
-        TicketInfoReq.input('TrainId',sql.NVarChar(30),req.body.selectedTrainID);
-        TicketInfoReq.input('FoundSeat',sql.Int,TicketAvailInfo.SeatNo);
-        TicketInfoReq.input('TrackId',sql.NVarChar(30),InputTrackId);
-        console.log(InputTrackId);
-        TicketInfoReq.execute('GetTicketInfo',(err,result2)=>{
-
-        if(err){
-          console.error(err);
-          res.status(500).send('Internel Server Error');
-        }
-        else{
-          console.log("seat details are: ");
-          console.log(result2);
-        }
-
-        var TicketInfo=result2.recordset;
-        res.render('Ticket',{TicketInfo,inputClassType,userName});
-      });
-    } 
-    else{
-        res.send("No Avaiailable Seat Found");
-    }
-  }
-  })
 });
 
 

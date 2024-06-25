@@ -62,13 +62,13 @@ module.exports = function(pool) {
 });
 
 router.post('/addTrack', (req, res) => {
-    const { Station1Id, Station2Id, Economy,BusinessClass,FirstClass } = req.body;
+    const { Station1Id, Station2Id, Economy,Business,FirstClass } = req.body;
 
     const request = new sql.Request(pool);
     request.input('Station1Id', sql.NVarChar, Station1Id);
     request.input('Station2Id', sql.NVarChar, Station2Id);
     request.input('Economy', sql.Float, Economy);
-    request.input('BusinessClass', sql.Float, BusinessClass);
+    request.input('Business', sql.Float, Business);
     request.input('FirstClass', sql.Float, FirstClass);
 
     request.execute('InsertTrack', (err, result) => {
@@ -259,12 +259,12 @@ router.post('/editRoute', (req, res) => {
 
 
 router.post('/editFare', (req, res) => {
-    const { TrackId,Economy,BusinessClass,FirstClass } = req.body;
+    const { TrackId,Economy,Business,FirstClass } = req.body;
 
     const request = new sql.Request(pool);
     request.input('TrackId', sql.NVarChar, TrackId);
     request.input('Economy', sql.Float, Economy);
-    request.input('BusinessClass', sql.Float, BusinessClass);
+    request.input('Business', sql.Float, Business);
     request.input('FirstClass', sql.Float, FirstClass);
 
 

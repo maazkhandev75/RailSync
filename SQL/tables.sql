@@ -82,7 +82,7 @@ GO
 CREATE TABLE [Fare] (
   [TrackId] nvarchar(255),
   [Economy] float,
-  [BusinessClass] float,
+  [BusinessClass] float,   --now updated to Business
   [FirstClass] float
 )
 GO
@@ -298,6 +298,7 @@ select * from [Admin]
 select * from [Ticket]
 select * from [Route]
 select * from [Tracks]
+select * from [Station]
 select * from [Crew]
 select * from [Pilot]
 select * from [Security]
@@ -305,14 +306,50 @@ select * from [Train]
 select * from [Carriage]
 select * from [Fare]
 select * from [Payment]
-select * from [Station]
 select * from [Seat]
 
 
 
+--UPDATES--
+
+--renaming column of some table syntax
+EXEC sp_rename '[Fare].BusinessClass', 'Business', 'COLUMN';
+
+
+ALTER TABLE [ticket]
+DROP COLUMN DeptTime;
+
+
+ALTER TABLE [ticket]
+DROP COLUMN ArrivalStation;
+
+
+ALTER TABLE [ticket]
+DROP COLUMN DeptStation;
+
+
+ALTER TABLE [ticket]
+DROP COLUMN BookingDate;
+
+
+delete from [ticket]
+where cnic='3520297089087'
+
+delete from Track
+where TrackId=''
+
+delete from [Admin] where cnic='3338392917432'
+
+update [Admin]
+set pin='6776'
+where cnic='3520297089087'
+
+delete from [ticket] where seatNo='3'
+update [station] set StationName='Lahore' where StationId='LHR'
+
+DELETE FROM Tracks WHERE TrackId = '6A8611D0-D'
 
 DELETE FROM Tracks WHERE TrackId = '6';
-
 
 delete from [ticket]
 where CNIC='5555555555555'
@@ -326,7 +363,8 @@ delete from [payment]
 where cnic='5555555555555'
 
 
-
+delete from [ticket]
+where ticketId='2022'
 
 SELECT name
 FROM sys.objects
