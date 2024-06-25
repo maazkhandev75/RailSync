@@ -79,9 +79,10 @@ const log = console.log;
 
 //configuring a connection pool for MSSQL using the mssql module and connecting to the database
 const sqlConfig = {
-  user:'maazkhan75_RailSyncDB',
-  password:'railsyncpass',
-  database:'maazkhan75_RailSyncDB',
+  //UNDER CONSTRUCTION
+  user:'',
+  password:'',
+  database:'',
   server: 'sql.bsite.net\\MSSQL2016',
   pool: {
     max: 10,
