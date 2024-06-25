@@ -14,9 +14,8 @@
       <h1>Add Carraige</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="adminDash">Home</a></li>
-          <li class="breadcrumb-item">add Data</li>
-          <li class="breadcrumb-item active">carriage</li>
+          <li class="breadcrumb-item"><a href="adminDash">Admin Dashboard</a></li>
+          <li class="breadcrumb-item active">Add Carriage</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -32,7 +31,7 @@
               <form class="row g-3">
                 <div class="col-md-6">
                   <label for="TrainId" class="form-label" style="color: #de6b00;">TrainID</label>
-                  <select id="TrainId" class="form-select inputs">
+                  <select id="TrainId" class="form-select inputs selector">
                     <% Train.forEach((train) => { %>
                       <option value="<%= train.TrainId %>"><%= train.TrainId %></option>
                     <% }); %>
@@ -43,8 +42,8 @@
                   <input type="input" class="form-control inputs" id="CarriageId">
                 </div>
                 <div class="col-md-6">
-                  <label for="Type" class="form-label">No of Seats</label>
-                  <select id="Type" class="form-select inputs">
+                  <label for="Type" class="form-label">Type</label>
+                  <select id="Type" class="form-select inputs selector">
                     <option value="E">Economy</option>
                     <option value="B">BusinessClass</option>
                     <option value="F">FirstClass</option>
@@ -52,12 +51,13 @@
                 </div>
                 <div class="col-md-6">
                   <label for="NoOfSeats" class="form-label" style="color: #de6b00;">No of Seats</label>
-                  <select id="NoOfSeats" class="form-select inputs">
+                  <select id="NoOfSeats" class="form-select inputs selector">
                     <option value="20">20</option>
                     <option value="30">30</option>
                     <option value="40">40</option>
                   </select>
                 </div>
+                
                 <div class="col-12 text-left">
                   <button type="submit" id="submitButton" class="btn custom-btn">Submit</button>
                   <button type="reset" class="btn custom-btn-secondary">Reset</button>

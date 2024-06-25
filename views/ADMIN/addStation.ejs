@@ -16,9 +16,8 @@
       <h1>Add Station</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="adminDash">Home</a></li>
-          <li class="breadcrumb-item">add Data</li>
-          <li class="breadcrumb-item active">Station</li>
+          <li class="breadcrumb-item"><a href="adminDash">Admin Dashboard</a></li>
+          <li class="breadcrumb-item active">Add Station</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -86,7 +85,7 @@
     .then(data => {
       const result = data.Message;
        if(result[0].ResultMessage=='STATION ADDED SUCCESSFULLY')
-          {window.location.href = '/stationsData';}
+          {window.location.href = '/stationsAndTracksData';}
         else
         {
           console.log(result[0].ResultMessage);

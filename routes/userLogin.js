@@ -27,12 +27,12 @@ module.exports = (pool) => {
          req.session.userDetails = userDetails;
 
          //pass success message obj to login.ejs to display success mesg on top
-         res.render('login', { successMessage: 'User logged in successfully!' }); 
+         res.render('userLogin', { successMessage: 'User logged in successfully!' }); 
         } 
     } catch (error) {
 		//console.error('Error authenticating user:', error);  //for displaying on terminal ( the actual error )
 		// Send the error message to the client side for display
-		res.render('login', { errorMessage: error });
+		res.render('userLogin', { errorMessage: error });
     }
   });
 

@@ -6,6 +6,18 @@ CREATE TABLE [User] (
 )
 GO
 
+
+CREATE TABLE [Admin] (
+  [CNIC] nvarchar(255) PRIMARY KEY,
+  [AdminName] nvarchar(255),
+  [Pin] nvarchar(255),
+  [PhoneNo] nvarchar(255)
+)
+GO
+
+
+
+
 CREATE TABLE [Ticket] (
   [TicketId] nvarchar(255) PRIMARY KEY,
   [CNIC] nvarchar(255),
@@ -281,23 +293,40 @@ go
 
 sp_help ticket
 
-
-
 select * from [User]
+select * from [Admin]
 select * from [Ticket]
+select * from [Route]
+select * from [Tracks]
 select * from [Crew]
 select * from [Pilot]
+select * from [Security]
 select * from [Train]
 select * from [Carriage]
 select * from [Fare]
 select * from [Payment]
 select * from [Station]
-select * from [Security]
-select * from [Tracks]
 select * from [Seat]
-select * from [Route]
+
+
+
 
 DELETE FROM Tracks WHERE TrackId = '6';
+
+
+delete from [ticket]
+where CNIC='5555555555555'
+
+
+delete from [user]
+where cnic='5555555555555'
+
+
+delete from [payment]
+where cnic='5555555555555'
+
+
+
 
 SELECT name
 FROM sys.objects

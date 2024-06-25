@@ -9,9 +9,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playwrite+NG+Modern:wght@100..400&display=swap" rel="stylesheet">
+
+    
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/assets/css/signup&login_styles.css">
-    <title>LogIn Form</title>
+    <title>User LogIn Form</title>
 </head>
 <body>
 	<!-- if the user logged in successfully -->
@@ -36,7 +40,7 @@
     <div class="container_topLvl ">
         <div class="main">
             <div class="container-fluid mt-1">
-                <form action="/login" method="POST">
+                <form action="/userLogin" method="POST">
                     <div class="row">
 
                         <div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
@@ -53,7 +57,7 @@
 
                     <div class="mb-3 mt-2 form-check">
                         <input type="checkbox" class="form-check-input ml-3 " id="check1" required>
-                        <label class="form-check-label pl-5" for="exampleCheck1">I assure that the above information is correct!!</label>
+                        <label class="form-check-label pl-5" for="exampleCheck1">I assure that the above information is correct!</label>
                     </div>
 
                     <div class="pl-4">
@@ -67,7 +71,7 @@
         <div class="adminLoginContainer">
                 <!-- Admin login redirection button -->
                 <div class="pl-4 mt-2">
-                    <a href="/adminLoginForm" class="btn-admin ml-2">Login as Admin</a>
+                    <a href="/adminLoginForm" class="btn-admin ml-2">Click here to Login as Admin </a>
                 </div>
         </div>
     </div>

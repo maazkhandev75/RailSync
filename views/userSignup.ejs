@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/assets/css/signup&login_styles.css">
-    <title>SignUp Form</title>
+    <title>User SignUp Form</title>
 </head>
 <body>
 	<!-- if the user signup successfully -->
@@ -35,7 +35,7 @@
     <div class="container_topLvl">
         <div class="main">
             <div class="container-fluid mt-1">
-                <form action="/signup" method="POST" onsubmit="return validatePassword()">
+                <form action="/userSignup" method="POST" onsubmit="return validatePassword()">
 
                     <div class="row">
                         <div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
@@ -103,6 +103,17 @@
         
           return true;
         }
+
+        // Check if the success message is present
+        <% if (typeof successMessage !== 'undefined') { %>  //if success msg appears only then redirect to dashbaord but after 2 sec delay so that msg can be read by client
+            // Redirect to the userLoginForm after 2 seconds
+            setTimeout(function() {
+                window.location.href = '/userLoginForm';
+            }, 2000); // 2sec delay
+        <% } %>
+    
+
+
     </script>
         
 

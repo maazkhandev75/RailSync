@@ -24,6 +24,31 @@ BEGIN
 END
 
 
+--------PROCEDURE FOR SIGNUP FUNCTIONALITY OF ADMIN-------
+create PROCEDURE CreateAdmin
+	@AdminName nvarchar(255),
+	@CNIC nvarchar(255),
+	@PIN nvarchar(255),
+	@PhoneNo nvarchar(255)
+AS 
+BEGIN	
+	SET NOCOUNT ON;
+
+	-- Check if the user already exists
+	IF EXISTS (SELECT 1 FROM [Admin] WHERE CNIC=@CNIC)
+	BEGIN
+		-- Admin already exists, return an error message
+		RAISERROR ('Admin already exists!', 16, 1);
+		RETURN -1;
+	END
+
+	-- Insert the new admin into the admin table
+	INSERT INTO [Admin] ([AdminName], [Pin],[CNIC],[PhoneNo])
+	VALUES(@AdminName, @PIN, @CNIC, @PhoneNo);
+
+END
+
+
 --------PROCEDURE FOR LOGIN FUNCTIONALITY-------
 
 CREATE PROCEDURE AuthenticateUser 
@@ -52,31 +77,27 @@ END
 
 --------PROCEDURE FOR LOGIN FUNCTIONALITY OF ADMIN-------
 
-ALTER PROCEDURE AuthenticateAdmin 
+CREATE PROCEDURE AuthenticateAdmin 
+    @CNIC nvarchar(255),
 	@PIN nvarchar(255)
 AS 
 BEGIN	
 	SET NOCOUNT ON;
 
 	-- Check if the CNIC and password combination exists
-	IF @PIN='11223'
-    BEGIN
-    --if pin is correct then return the details of the user maaz  which is admin also 
-    --so that we can use the functionality of session as well for the adminDash
-    SELECT UserName,CNIC 
-    FROM [User]
-    WHERE CNIC='3520297089087'
-
+	IF EXISTS (SELECT 1 FROM [Admin] WHERE  CNIC = @CNIC AND  Pin = @PIN)
+	BEGIN
+		-- User account found, return a success message
+		 SELECT AdminName FROM [Admin] WHERE CNIC = @CNIC;
 	END
 	ELSE
 	BEGIN
 		-- Return error message
-		RAISERROR ('Invalid PIN enterred!', 16, 1);
+		RAISERROR ('Admin account not found!', 16, 1);
 		RETURN -1;
 	END
 
 END
-
 --------------------------------------------------------------------------------------------------------
 
 
@@ -131,7 +152,8 @@ BEGIN
 
 	IF EXISTS (SELECT 1 FROM [Ticket] WHERE  CNIC = @CNIC)
 	BEGIN
-		SELECT * FROM [Ticket] as T JOIN [Payment] as P on P.TicketId = T.TicketId where T.CNIC=@CNIC;
+		SELECT * FROM [Ticket] as T JOIN [Payment] as P on P.TicketId = T.TicketId 
+        JOIN [route] R on R.TrainId=T.TrainId AND R.TrackId=T.trackId where T.CNIC=@CNIC;
     END
 	ELSE
 	BEGIN
@@ -515,6 +537,8 @@ END;
 
 exec InsertTrack 'PESH','ISL',500,1000,2000
 select * from [Tracks]
+
+
 alter PROCEDURE AddSecurity
     @CrewId NVARCHAR(255),
     @CrewName NVARCHAR(255),
@@ -553,11 +577,11 @@ BEGIN
     VALUES (@CrewId, @CrewName, @Address,@DateOfBirth);
 
     Insert into [Pilot] (CrewId,TrainId) values(@CrewId,@TrainId);
-    SELECT 'GUARD ADDED SUCCESSFULLY' AS ResultMessage;
+    SELECT 'PILOT ADDED SUCCESSFULLY' AS ResultMessage;
     end
     else 
     BEGIN
-        SELECT 'GUARD NOT ADDED SUCCESSFULLY' AS ResultMessage;
+        SELECT 'PILOT NOT ADDED SUCCESSFULLY' AS ResultMessage;
     END
     end;
 

@@ -22,12 +22,12 @@
 <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1 style="color: rgb(219, 135, 56);">Form Layouts</h1>
+      <h1>Edit Route</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="DS">Home</a></li>
-          <li class="breadcrumb-item">Forms</li>
-          <li class="breadcrumb-item active">Layouts</li>
+          <li class="breadcrumb-item"><a href="adminDash">Admin Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="routesData">Routes Data</a></li>
+          <li class="breadcrumb-item active">Edit Route</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -37,36 +37,58 @@
 
         
 
-          <div class="card" style="color: rgb(219, 135, 56);">
+          <div class="card">
             <div class="card-body">
-              <h5 class="card-title" style="color: rgb(219, 135, 56);" >Edit Route</h5>
+              <h5>Edit Route</h5>
 
               <!-- Multi Columns Form -->
 
               <form class="row g-3">
 
                 <div class="col-md-6">
-                    <label for="TrainID" class="form-label">TrainID</label>
-                    <input type="text" class="form-control" id="TrainID" readonly placeholder="<%= TrainID %>">
+                    <label for="TrainID" class="form-label" style="color: #de6b00;">TrainID</label>
+                    <input type="text" class="form-control inputs" id="TrainID" readonly placeholder="<%= TrainID %>">
                   </div>
                   <div class="col-md-6">
-                    <label for="TrackID" class="form-label">TrackID</label>
-                    <input type="text" class="form-control" id="TrackID" readonly placeholder="<%= TrackID %>">
+                    <label for="TrackID" class="form-label" style="color: #de6b00;">TrackID</label>
+                    <input type="text" class="form-control inputs" id="TrackID" readonly placeholder="<%= TrackID %>">
                   </div>
                 
+                  <!--    if we want to do data-time picker with flatpickr js library             -->
                   <div class="col-md-6">
-                    <label for="DepartureTime" class="form-label">DepartureTime</label>
-                    <input type="datetime-local" class="form-control" id="DepartureTime">
-                  </div>
-                  <div class="col-md-6">
-                    <label for="ArrivalTime" class="form-label">ArrivalTime</label>
-                    <input type="datetime-local" class="form-control" id="ArrivalTime">
-                  </div>
+                   <label for="DepartureTime" class="form-label" style="color: #de6b00;">DepartureTime</label>
+                   <input type="text" class="form-control inputs" id="DepartureTime" name="DepartureTime" placeholder="Open Calendar">
+                 </div>
+                 
+                 <script>
+                   flatpickr("#DepartureTime", {
+                     enableTime: true,
+                     dateFormat: "Y-m-d H:i",
+                     theme: "dark"
+                   });
+                 </script>
 
-                <div class="text-center">
-                    <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>
-                    <button type="reset" class="btn btn-secondary">Reset</button>
-                </div>
+
+                  
+                  <!--    if we want to do data-time picker with flatpickr js library             -->
+                  <div class="col-md-6">
+                    <label for="ArrivalTime" class="form-label" style="color: #de6b00;">ArrivalTime</label>
+                    <input type="text" class="form-control inputs" id="ArrivalTime" name="ArrivalTime" placeholder="Open Calendar">
+                  </div>
+                  
+                  <script>
+                    flatpickr("#ArrivalTime", {
+                      enableTime: true,
+                      dateFormat: "Y-m-d H:i",
+                      theme: "dark"
+                    });
+                  </script>
+ 
+
+                  <div class="col-12 text-left">
+                    <button type="submit" id="submitButton" class="btn custom-btn">Submit</button>
+                    <button type="reset" class="btn custom-btn-secondary">Reset</button>
+                  </div>
 
               </form><!-- End Multi Columns Form -->
 

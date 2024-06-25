@@ -43,15 +43,32 @@ function isAuthenticated(req, res, next)
 }
 
 
+function isAuthenticatedAdmin(req, res, next)
+{
+  if(req.session.AdminDetails && req.session.AdminDetails.cnic){
+    //user is authenticated proceed with the request
+    next();
+  }
+  else 
+  {
+     //redirect an error page
+    console.log('Forbidden: access denied because of authentication bypass!');
+    res.redirect('/errorOfSession');
+  }
+}
+
+
 //importing routers
-const signupRouter = require('./routes/signup')
-const loginRouter = require('./routes/login')
+const signupRouter = require('./routes/userSignup')
+const loginRouter = require('./routes/userLogin')
 const adminLoginRouter = require('./routes/adminLogin')
+const adminSignupRouter = require('./routes/adminSignup')
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const SearchTrainRouter = require('./routes/SearchTrain');
 const SearchCarriage = require('./routes/TD');
-const sessionRouter = require('./routes/testSession');
+const userSessionRouter = require('./routes/testSessionUser');
+const adminSessionRouter = require('./routes/testSessionAdmin');
 const profileUpdateRouter = require('./routes/profileUpdate');
 const passwordChangeRouter = require('./routes/passwordChange');
 
@@ -113,14 +130,14 @@ app.post('/sendEmail', (req, res )=>{
     
     service:'gmail',
     auth: {
-      user: 'yourEmail@gmail.com',  //enter the email address whom you want to get mails
-      pass: 'yourAppPassword'      //go to your google acc and seach app passwords then create 16 digti pass and use here
+      user: 'youremail',  //enter the email address whom you want to get mails
+      pass: 'yourAppPass'      //go to your google acc and seach app passwords then create 16 digti pass and use here
       }
   });
 
   var mailOptions = {
     from: eml,    
-    to: 'youEmail@gmail.com',    //enter your email address whom you want to get emails also note that emails'to and from will be same when revieced which is your own email
+    to: 'youremail',    //enter your email address whom you want to get emails also note that emails'to and from will be same when revieced which is your own email
     cc: 'railsyc',
     subject: 'Message from railsync user ' + nm,
     text: 'Email :' + eml + '\n\n' + 'Subject :' + sbj + '\n\n' + 'Message :' + msg
@@ -154,17 +171,22 @@ app.get('/decisionPg',(req,res)=>{
 res.render('decision.ejs');
 });
 
-app.get('/signupForm',(req,res)=>{
-res.render('signup.ejs');
+app.get('/userSignupForm',(req,res)=>{
+res.render('userSignup.ejs');
 });
 
-app.get('/loginForm',(req,res)=>{
-  res.render('login.ejs');
+app.get('/userLoginForm',(req,res)=>{
+  res.render('userLogin.ejs');
 });
 
 app.get('/adminLoginForm',(req,res)=>{
   res.render('adminLogin.ejs');
 });
+
+app.get('/adminSignupForm',(req,res)=>{
+  res.render('adminSignup.ejs');
+});
+
 
 app.get('/errorOfSession',(req,res)=>{
   res.render('errorSession.ejs');
@@ -176,7 +198,7 @@ app.get('/SearchTrainform', (req, res) => {
       .then(result => {
           const StationNames = result.recordset;
           var isSubmitted=false;
-          res.render("form.ejs", { StationNames ,isSubmitted});
+          res.render("tripForm.ejs", { StationNames ,isSubmitted});
       })
       .catch(err => {
           console.error(err);
@@ -185,7 +207,7 @@ app.get('/SearchTrainform', (req, res) => {
 });
 
 
-app.get('/adminDash',isAuthenticated, (req, res) => {
+app.get('/adminDash', (req, res) => {
   res.render('./ADMIN/dashboard.ejs');
 });
 
@@ -215,22 +237,29 @@ app.get('/ticketsData', (req, res) => {
 });
 
 
-app.get('/usersData', (req, res) => {
-  pool.query('SELECT * FROM [User]')
-      .then(result => {
-          const Users = result.recordset;
-          console.log(Users);
-          res.render("./ADMIN/usersData.ejs", { Users });
-      })
-      .catch(err => {
-          console.error(err);
-          res.status(500).send('Internal Server Error');
-      });
+app.get('/usersAndAdminsData', (req, res) => {
+  
+  Promise.all([
+     
+    pool.query('SELECT * FROM [User]'),
+    pool.query('SELECT * FROM [Admin]')
+  ])
+.then(([UserResult,AdminResult]) => {
+ 
+    const Users  = UserResult.recordset;
+    const Admins = AdminResult.recordset;
+    res.render("./ADMIN/usersAndAdminsData.ejs", { Users, Admins });
+})
+.catch(err => {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+});
+
 });
 
 
 
-app.get('/stationsData', (req, res) => {
+app.get('/stationsAndTracksData', (req, res) => {
   const requestStation = new sql.Request(pool);
   const requestTrack = new sql.Request(pool);
 
@@ -242,7 +271,7 @@ app.get('/stationsData', (req, res) => {
   .then(results => {
     const Station = results[0].recordset;
     const Track = results[1].recordset;
-    res.render('./ADMIN/stationsData.ejs', { Station:Station, Track:Track });
+    res.render('./ADMIN/stationsAndTracksData.ejs', { Station:Station, Track:Track });
   })
   .catch(err => {
     console.error(err);
@@ -267,7 +296,7 @@ app.get('/routesData', (req, res) => {
 
 
 
-app.get('/staffdata', (req, res) => {
+app.get('/crewData', (req, res) => {
   
   Promise.all([
      
@@ -278,7 +307,7 @@ app.get('/staffdata', (req, res) => {
    
       const Pilot = PilotResult.recordset;
       const Security=SecurityResult.recordset;
-      res.render("./ADMIN/staffData.ejs", { Pilot,Security });
+      res.render("./ADMIN/crewData.ejs", { Pilot,Security });
   })
   .catch(err => {
       console.error(err);
@@ -286,11 +315,6 @@ app.get('/staffdata', (req, res) => {
   });
 });
 
-
-
-app.get('/staffData', (req, res) => {
-  res.render('./ADMIN/staffData.ejs');
-});
 
 app.get('/addTrain', (req, res) => {
   pool.query('SELECT * FROM Station')
@@ -363,7 +387,7 @@ app.get('/addTrack', (req, res) => {
   });
 });
 
-app.get('/addStaff', (req, res) => {
+app.get('/addCrew', (req, res) => {
   const stationQuery = pool.query('SELECT * FROM Station');
   const trainQuery = pool.query('SELECT * FROM Train');
 
@@ -372,7 +396,7 @@ app.get('/addStaff', (req, res) => {
       const stationResult = results[0].recordset;
       const trainResult = results[1].recordset;
 
-      res.render('./ADMIN/addStaff.ejs', {
+      res.render('./ADMIN/addCrew.ejs', {
         Station: stationResult,
         Train: trainResult
       });
@@ -504,6 +528,10 @@ app.get('/profile', isAuthenticated, async(req,res)=>{
 })
 
 
+
+
+
+
 app.get('/userDash', isAuthenticated, (req,res)=>{
   const userData = req.session.userDetails;
   res.render('./USER/dashboard.ejs',{userData});
@@ -546,8 +574,8 @@ app.get('/userDash', isAuthenticated, (req,res)=>{
       try {
       // Call the stored procedure to fetch booked tickets
       const result = await pool.request()
-        .input('CNIC', sql.NVarChar(255), cnic)
-        .execute('ShowBookedTickets');
+      .input('CNIC', sql.NVarChar(255), cnic)
+      .execute('ShowBookedTickets');
     
       if (result.returnValue === 0) 
       {
@@ -560,7 +588,7 @@ app.get('/userDash', isAuthenticated, (req,res)=>{
         // console.log(currentTime);
         Tickets.forEach((ticket) => {
   
-          const deptTime=new Date(ticket.deptTime);
+          const deptTime=new Date(ticket.DeptTime);
           if(deptTime >= currentTime)
           {
             ticketsUpcoming.push(ticket);
@@ -593,10 +621,6 @@ app.get('/contact', (req, res) => {
 });
 
 
-
-
-
-
 app.post('/bookTicketNonStop', (req, res) => {  
   console.log(req.body);
   const userName = req.session.userDetails.username;
@@ -604,7 +628,7 @@ app.post('/bookTicketNonStop', (req, res) => {
   const InputTrackId=req.body.TrackID;
   var inputClassType=req.body.selectedClass;
   if(req.body.selectedClass==="Economy") inputClassType="E";
-  else if(req.body.selectedClass==="Bussiness") inputClassType="B";
+  else if(req.body.selectedClass==="Business") inputClassType="B";
   else if(req.body.selectedClass==="First Class") inputClassType="F";
 
   const request= new sql.Request(pool);
@@ -653,12 +677,14 @@ app.post('/bookTicketNonStop', (req, res) => {
 // Use the routes
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/signup', signupRouter(pool));   // Pass pool object to signupRouter
-app.use('/login', loginRouter(pool));     // Pass pool object to loginRouter
+app.use('/userSignup', signupRouter(pool));   // Pass pool object to signupRouter
+app.use('/userLogin', loginRouter(pool));     // Pass pool object to loginRouter
 app.use('/adminLogin', adminLoginRouter(pool));     // Pass pool object to loginRouter
+app.use('/adminSignup', adminSignupRouter(pool));     // Pass pool object to loginRouter
 app.use('/SearchTrain', SearchTrainRouter(pool));
 app.use('/TD',SearchCarriage(pool));
-app.use('/', sessionRouter);    //for testing session
+app.use('/', userSessionRouter);    //for testing session of user
+app.use('/', adminSessionRouter);    //for testing session of admin
 app.use('/profileUpdate',profileUpdateRouter(pool))
 app.use('/passwordChange',passwordChangeRouter(pool))
 

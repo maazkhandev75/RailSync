@@ -4,72 +4,57 @@
 <%- include('./partials/head.ejs') %>
 
 <body>
-
 <%- include('./partials/header.ejs') %>
-
 <%- include('./partials/sidebar.ejs') %>
-<style>
-  /* CSS */
-#inputName5 {
-    /* Style the input field to make it visually distinct */
-    color: #555; /* Example text color */
-    background-color: #f9f9f9; /* Example background color */
-    border: 1px solid #ddd; /* Example border */
-    /* Add any other styles as needed */
-}
 
-</style>
 <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1 style="color: rgb(219, 135, 56);">Edit Pilot</h1>
+      <h1>Edit Pilot</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="DS">Home</a></li>
-          <li class="breadcrumb-item">Edit</li>
-          <li class="breadcrumb-item active">Pilot</li>
+          <li class="breadcrumb-item"><a href="adminDash">Admin Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="crewData">Crew Data</a></li>
+          <li class="breadcrumb-item active">Edit Pilot</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
     <section class="section">
       <div class="row">
 
-
-        
-
-          <div class="card" style="color: rgb(219, 135, 56);">
+          <div class="card" >
             <div class="card-body">
-              <h5 class="card-title" style="color: rgb(219, 135, 56);" >Pilot Details</h5>
+              <h5 class="card-title">Pilot Details :</h5>
 
               <!-- Multi Columns Form -->
 
               <form class="row g-3">
 
                   <div class="col-md-6">
-                    <label for="CrewId" class="form-label">CrewId</label>
-                    <input type="text" class="form-control" id="CrewId" readonly placeholder="<%= CrewId %>">
+                    <label for="CrewId" class="form-label" style="color: #de6b00;">CrewId</label>
+                    <input type="text" class="form-control inputs" id="CrewId" readonly placeholder="<%= CrewId %>">
                   </div>
                   <div class="col-md-6">
-                    <label for="CrewName" class="form-label">CrewName</label>
-                    <input type="text" class="form-control" id="CrewName" placeholder="<%= CrewName %>" >
+                    <label for="CrewName" class="form-label" style="color: #de6b00;">CrewName</label>
+                    <input type="text" class="form-control inputs" id="CrewName" placeholder="<%= CrewName %>" >
                   </div>
                   <div class="col-md-6">
-                    <label for="Address" class="form-label">Address</label>
-                    <input type="text" class="form-control" id="Address" placeholder="<%= Address %>" >
+                    <label for="Address" class="form-label" style="color: #de6b00;">Address</label>
+                    <input type="text" class="form-control inputs" id="Address" placeholder="<%= Address %>" >
                   </div>
                   <div class="col-md-6">
-                    <label for="inputDepartureStation" class="form-label">Station</label>
-                    <select id="inputDepartureStation" class="form-select">
+                    <label for="TrainId" class="form-label" style="color: #de6b00;">TrainId</label>
+                    <select id="TrainId" class="form-select inputs selector">
                       <% Train.forEach((i) => { %>
                         <option value="<%= i.TrainId %>"><%= i.TrainId %></option>
                     <% }); %>
                     </select>
                   </div>
 
-                <div class="text-center">
-                    <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>
-                    <button type="reset" class="btn btn-secondary">Reset</button>
-                </div>
+                  <div class="col-12 text-left">
+                    <button type="submit" id="submitButton" class="btn custom-btn">Submit</button>
+                    <button type="reset" class="btn custom-btn-secondary">Reset</button>
+                  </div>
 
               </form><!-- End Multi Columns Form -->
 
@@ -94,7 +79,7 @@
       const CrewId = document.getElementById('CrewId').placeholder;
       const CrewName = document.getElementById('CrewName').value !== '' ? document.getElementById('CrewName').value : document.getElementById('CrewName').placeholder;
         const Address = document.getElementById('Address').value !== '' ? document.getElementById('Address').value : document.getElementById('Address').placeholder;
-        const TrainId = document.getElementById('inputDepartureStation').value;
+        const TrainId = document.getElementById('TrainId').value;
 
     console.log(TrainId);
         
@@ -109,7 +94,7 @@
     .then(data => {
       const result = data.Message;
        if(result[0].ResultMessage=='CREW UPDATED SUCCESSFULLY')
-          {window.location.href = '/staffdata';}
+          {window.location.href = '/crewData';}
         else
         {
           console.log(result[0].ResultMessage);

@@ -11,6 +11,7 @@
 /* Hide the default scrollbar */
 ::-webkit-scrollbar {
   width: 7px;
+  height:7px
 }
 
 /* Track */
@@ -38,6 +39,9 @@ body {
 .inputs{
 	background-color: #000;
 	outline: none;
+  border: 2px solid #6d6d6d;
+  font-weight: 400;
+  font-family: 'Comfortaa',sans-serif;
 	border-radius: 8px;
 }
 .inputs:focus {
@@ -50,7 +54,7 @@ body {
 .inputs:enabled{
 	background-color: #000;
 	color:white;
-	font-weight: 600;
+	font-weight: 400;
 	letter-spacing: 1px;
 	outline: none;
 }
@@ -61,6 +65,226 @@ body {
    filter: invert(1);
  }
 
+.form-control.inputs[readonly] {
+  background-color: #000000; 
+  font-family: 'Comfortaa',sans-serif;
+  color: #9b9b9b; 
+}
+
+.form-control.inputs[readonly]::placeholder {
+  font-family: 'Comfortaa',sans-serif;
+  color:#626262;
+  font-style: italic;
+}
+
+.form-control.inputs::placeholder{
+  font-family: 'Comfortaa',sans-serif;
+  color:#9f9f9f;
+}
+
+/* Custom styles for the select element */
+  .selector {
+  position: relative;
+  appearance: none;
+  font-family: 'Comfortaa',sans-serif;
+  padding-right: 20px;
+  /* padding-left: 5px; */
+  background-color: #000;
+  /* background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"><path fill="%23757575" d="M5 7.5L0 2.5h10z"/></svg>'); */
+  background-image: url('/assets/img_and_gif/dropdown.svg');    /* compare it with trainResult.ejs url */
+  background-repeat: no-repeat;
+  background-position: calc(100% - 10px) center;
+  background-size: 20px 20px;
+  color: #f6f6f6; /* Set text color to match background color */
+  text-shadow: 0 0 0 #000;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  justify-content: center;
+  }
+
+/* we are using custom data time picker so that it integrates well with the website */
+/* Customizing the Flatpickr calendar */
+.flatpickr-calendar {
+  background-color: #000000; /* Dark background */
+  color: #fff; /* White text */
+  border: 1px solid #363636;
+}
+
+/* Prevent text selection within the Flatpickr calendar */
+.flatpickr-calendar {
+  user-select: none; /* Disable text selection */
+  -webkit-user-select: none; /* Disable text selection in WebKit browsers (Chrome, Safari) */
+  -moz-user-select: none; /* Disable text selection in Firefox */
+  -ms-user-select: none; /* Disable text selection in Internet Explorer/Edge */
+}
+
+
+.flatpickr-calendar .flatpickr-months {
+  background-color: #000000; 
+  color: #ffffff; 
+}
+
+.flatpickr-calendar .flatpickr-weekdays {
+  background-color: #000000; 
+}
+
+.flatpickr-calendar .flatpickr-weekdays .flatpickr-weekday {
+  background-color: #000000;
+  color: #fff;
+}
+
+.flatpickr-calendar .flatpickr-months .flatpickr-month {
+  background-color: #000000;
+  color: #fff;
+}
+
+
+.flatpickr-calendar .flatpickr-day {
+  background-color: #1d1d1d;
+  color: #fff;
+  border: 2px solid #000000;
+}
+
+.flatpickr-calendar .flatpickr-day:hover {
+  background-color: #3a3a3a;
+  border: 1px solid #e06c00;
+}
+
+.flatpickr-calendar .flatpickr-day.today {
+  background-color: #00a5f8;
+  border: 2px solid #000000;
+  color: #000000; 
+}
+
+.flatpickr-calendar .flatpickr-day.selected {
+  background-color: #de6b00; 
+  color: #000000; 
+  border: 2px solid #000000; 
+  border-color: #000;
+  font-weight: 900;
+}
+
+.flatpickr-time {
+  background-color: #333; 
+  color: #fff;
+}
+
+.flatpickr-time input {
+  background-color: #000000;
+  color: #fff;
+}
+
+.flatpickr-time .flatpickr-hour,
+.flatpickr-time .flatpickr-minute,
+.flatpickr-time .flatpickr-second,
+.flatpickr-time .flatpickr-am-pm {
+  background-color: #000;
+  border: none;
+  color: #fff;
+}
+
+.flatpickr-time .flatpickr-hour:hover,
+.flatpickr-time .flatpickr-minute:hover,
+.flatpickr-time .flatpickr-second:hover,
+.flatpickr-time .flatpickr-am-pm:hover {
+  background-color: #212121;
+}
+
+/* Focus and active states for time elements */
+.flatpickr-time .flatpickr-hour:focus,
+.flatpickr-time .flatpickr-minute:focus,
+.flatpickr-time .flatpickr-second:focus,
+.flatpickr-time .flatpickr-am-pm:focus,
+.flatpickr-time .flatpickr-hour:active,
+.flatpickr-time .flatpickr-minute:active,
+.flatpickr-time .flatpickr-second:active,
+.flatpickr-time .flatpickr-am-pm:active {
+  background-color: #000; 
+  color: #fff; 
+}
+
+.flatpickr-time .flatpickr-time-separator {
+  background-color: #000000; /* Dark background */
+  color: #fff; 
+  padding: 0 5px;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+  background: #000;
+  color: #fff;
+}
+
+.flatpickr-monthDropdown-months:hover {
+  background: #292929;
+  
+}
+
+.flatpickr-monthDropdown-months option {
+  background-color: #000000;
+  color: #fff;
+}
+
+.flatpickr-monthDropdown-months option:hover {
+  background-color: #444; 
+  color: #fff;
+}
+
+.flatpickr-monthDropdown-months select {
+  background-color: #000000;
+  color: #fff;
+  border: 1px solid #666;
+}
+
+.flatpickr-monthDropdown-months select option {
+  background-color: #000000;
+  color: #fff;
+}
+
+.flatpickr-monthDropdown-months select option:hover {
+  background-color: #444;
+  color: #fff;
+}
+
+.flatpickr-flat-pickr-current-month{
+  background-color: #000000;
+  color: #fff;
+}
+
+
+.customBtn2{
+  background-color: rgb(0, 166, 232);
+  color: black;
+  transition: all 0.3s ease-in;
+  font-weight: 600;
+  font-family: 'Trebuchet MS', sans-serif;
+  border: 2px solid rgb(0, 0, 0);
+	border-radius: 10px;
+	padding: 0.2em 0.5em;
+	letter-spacing: 3px;
+}
+.customBtn2:hover, .customBtn2:focus{
+    background-color: #de6b00;
+    border: 2px solid black;
+    color:rgb(0, 0, 0);
+    text-decoration: none;
+    outline: none;
+    transform: translateY(-0.2em);
+    cursor:pointer;
+    box-shadow: 0 0.5em 0.7em -0.4em #de6b00;
+}
+
+
+.customBtn2:active{
+  transition:all 100ms;
+  background-color: rgb(81, 81, 81);
+  color:#000;
+  transform:scale(1.1,1.1);
+  box-shadow: 0 0.5em 0.7em -0.4em #6e6e6e;
+  
+ }
 
   
 a {
@@ -81,6 +305,14 @@ h5,
 h6 {
   /* font-family: "Nunito", sans-serif; */
   font-family: 'Ubuntu', sans-serif;
+}
+
+h2{
+  color:#00a6ff;
+}
+
+h5{
+  color:#00a6ff;
 }
 
 /*--------------------------------------------------------------
@@ -111,6 +343,16 @@ h6 {
   margin-bottom: 0;
   font-weight: 600;
   color: #e06c00;
+}
+
+.dash-title{
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 3em;
+}
+
+.breadcrumb{
+  margin-top: 0.5em;
 }
 
 /*--------------------------------------------------------------
@@ -364,7 +606,7 @@ h6 {
 
 /* Accordion */
 .accordion-item {
-  border: 1px solid rgb(57, 57, 57);
+  border: 1px solid #282828;
 }
 
 .accordion-button:focus {
@@ -397,11 +639,12 @@ h6 {
 
 
 .dark-custom-card-theme{
-  background-color: #151515;
+  background-color: #161616;
   color: #fff;
 }
 .faq-body{
-  background-color: #171717;
+  background-color: #161616;
+  border-radius: 10px;
 }
 
 
@@ -493,7 +736,6 @@ h6 {
   cursor: pointer;
   color: #9d9d9d;
 }
-
 
 /*--------------------------------------------------------------
 # Header Nav
@@ -614,10 +856,11 @@ h6 {
 }
 
 .sidebar-nav .nav-link i {
-  font-size: 16px;
+  font-size: 17px;
   margin-right: 10px;
   color: #ffffff;
 }
+
 
 .sidebar-nav .nav-link.collapsed {
   color: #ffffff;
@@ -625,7 +868,7 @@ h6 {
 }
 
 .sidebar-nav .nav-link.collapsed i {
-  color: #d6d6d6;
+  color: #ffffff;
 }
 
 .sidebar-nav .nav-link:hover {
@@ -664,8 +907,8 @@ h6 {
   transition: 0.3s;
 }
 
-.sidebar-nav .nav-content a i {
-  font-size: 6px;
+.sidebar-nav .nav-content a i {    /*the inside links*/
+  font-size: 16px;
   margin-right: 8px;
   line-height: 0;
   border-radius: 50%;
@@ -673,7 +916,7 @@ h6 {
 
 .sidebar-nav .nav-content a:hover,
 .sidebar-nav .nav-content a.active {
-  color: #ff7b00;
+  color: #00aeff;
 }
 
 .sidebar-nav .nav-content a.active i {
@@ -1038,7 +1281,7 @@ h6 {
 
 .contact .info-box h3 {
   font-size: 20px;
-  color: #0091ff;
+  color: #00aeff;
   font-weight: 700;
   margin: 20px 0 10px 0;
 }
@@ -1115,7 +1358,7 @@ h6 {
 
 .contact .email-form input::placeholder,
 .contact .email-form textarea::placeholder {
-  color: rgb(255, 149, 0); /* Desired color for the placeholder text */
+  color: #de6b00; /* Desired color for the placeholder text */
 }
 
 .contact .email-form input {
@@ -1129,16 +1372,17 @@ h6 {
 }
 
 .contact .email-form button[type=submit] {
-  background: #4154f1;
+  background: #0093e1;
   border: 0;
+  font-weight: 900;
   padding: 10px 30px;
-  color: #fff;
+  color: #000000;
   transition: 0.4s;
-  border-radius: 4px;
+  border-radius: 10px;
 }
 
 .contact .email-form button[type=submit]:hover {
-  background: #5969f3;
+  background: rgb(42, 180, 255);
 }
 
 @keyframes animate-loading {
@@ -1197,9 +1441,10 @@ h6 {
   background-color: #111; 
   font-size: 14px;
   font-family: 'Roboto Mono', monospace;
-  font-weight: 600;
+  font-weight: 400;
   padding: 20px 0;
   margin-right: 0;
+  letter-spacing: 1px;
   border-top: 2px solid #505050;
 }
 

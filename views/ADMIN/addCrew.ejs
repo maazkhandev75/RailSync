@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/head.ejs') %>
+
+<body>
+
+<%- include('./partials/header.ejs') %>
+<%- include('./partials/sidebar.ejs') %>
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Add Crew</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="adminDash">Admin Dashboard</a></li>
+          <li class="breadcrumb-item active">Add Crew</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+    <section class="section">
+      <div class="row">
+
+        <!-- NAMING IS KEPT DIFFERENT OR EXPLICIT BECAUSE IT CAUSING AMBUITITY TO THE SERVER IN THE BACKEND AND CAUSING ERRORS IN DATA ENTRY IN FACT ALSO IT WAS GIVING SOME ERRORS -->
+          
+
+        <div class="card" ">
+          <div class="card-body">
+            <h5 class="card-title" >Pilot  Details :</h5>
+
+            <!-- Multi Columns Form -->
+            <form class="row g-3">
+              <div class="col-md-4">
+                  <label for="CrewIdForPilot" class="form-label" style="color: #de6b00;">CNIC</label>
+                  <input type="text" class="form-control inputs" id="CrewIdForPilot" >
+                </div>
+                <div class="col-md-4">
+                  <label for="NameForPilot" class="form-label" style="color: #de6b00;">Name</label>
+                  <input type="text" class="form-control inputs" id="NameForPilot" >
+                </div>
+                <div class="col-md-4">
+                  <label for="AddressForPilot" class="form-label" style="color: #de6b00;">Address</label>
+                  <input type="text" class="form-control inputs" id="AddressForPilot" >
+                </div>
+
+                <!-- <div class="col-md-4">
+                  <label for="DateOfBirth" class="form-label" style="color: #de6b00;">DateOfBirth</label>
+                  <input type="date" class="form-control inputs" id="DateOfBirth">
+                </div>
+                 -->
+                <div class="col-md-4">
+                  <label for="DateOfBirthForPilot" class="form-label" style="color: #de6b00;">DateOfBirth</label>
+                  <input type="text" class="form-control inputs" id="DateOfBirthForPilot" placeholder="Open Calendar">
+                </div>
+                
+                <script>
+                  flatpickr("#DateOfBirthForPilot", {
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                    theme: "dark"
+                  });
+                </script>
+
+
+
+              <div class="col-md-4">
+                <label for="TrainId" class="form-label" style="color: #de6b00;">TrainID</label>
+                <select id="TrainId" class="form-select inputs selector">
+                  <% Train.forEach((Train) => { %>
+                    <option value="<%= Train.TrainId %>"><%= Train.TrainId %></option>
+                <% }); %>
+                </select>
+              </div>
+              
+              <div class="col-12 text-left">
+                <button type="submit" id="submitButtonForPilot" class="btn custom-btn">Submit</button>
+                <button type="reset" class="btn custom-btn-secondary">Reset</button>
+              </div>
+
+            </form><!-- End Multi Columns Form -->
+
+          </div>
+        </div>
+
+
+
+
+
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Security Guard Details :</h5>
+
+              <!-- Multi Columns Form -->
+              <form class="row g-3">
+                <div class="col-md-4">
+                    <label for="CrewIdForSecurity" class="form-label" style="color: #de6b00;">CNIC</label>
+                    <input type="text" class="form-control inputs" id="CrewIdForSecurity" >
+                  </div>
+                  <div class="col-md-4">
+                    <label for="NameForSecurity" class="form-label" style="color: #de6b00;">Name</label>
+                    <input type="text" class="form-control inputs" id="NameForSecurity" >
+                  </div>
+                  <div class="col-md-4">
+                    <label for="AddressForSecurity" class="form-label" style="color: #de6b00;">Address</label>
+                    <input type="text" class="form-control inputs" id="AddressForSecurity" >
+                  </div>
+
+                  
+                  <div class="col-md-4">
+                    <label for="DateOfBirthForSecurity" class="form-label" style="color: #de6b00;">DateOfBirth</label>
+                    <input type="text" class="form-control inputs" id="DateOfBirthForSecurity" placeholder="Open Calendar">
+                  </div>
+                  
+                  <script>
+                    flatpickr("#DateOfBirthForSecurity", {
+                      enableTime: true,
+                      dateFormat: "Y-m-d H:i",
+                      theme: "dark"
+                    });
+                  </script>
+  
+
+
+                <div class="col-md-4">
+                  <label for="inputStartStation" class="form-label" style="color: #de6b00;">Station Name</label>
+                  <select id="inputStartStation" class="form-select inputs selector">
+                    <% Station.forEach((station) => { %>
+                      <option value="<%= station.StationId %>"><%= station.StationName %></option>
+                  <% }); %>
+                  </select>
+                </div>
+                <div class="col-12 text-left">
+                  <button type="submit" id="submitButtonForSecurity" class="btn custom-btn">Submit</button>
+                  <button type="reset" class="btn custom-btn-secondary">Reset</button>
+                </div>
+
+
+
+              </form><!-- End Multi Columns Form -->
+          </div>
+        </div>
+
+
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+
+  <%- include('./partials/footer.ejs') %>
+  <%- include('./partials/script.ejs') %>
+
+</body>
+<script>
+  document.getElementById('submitButtonForSecurity').addEventListener('click', function() {
+      event.preventDefault();
+      const CrewIdForSecurity = document.getElementById('CrewIdForSecurity').value;
+      const CrewNameForSecurity = document.getElementById('NameForSecurity').value;
+      const AddressForSecurity = document.getElementById('AddressForSecurity').value;
+      const DateOfBirthForSecurity = document.getElementById('DateOfBirthForSecurity').value;
+      const StationId = document.getElementById('inputStartStation').value;
+
+      //for tessting
+      console.log(CrewIdForSecurity);
+      console.log(CrewNameForSecurity);
+      console.log(AddressForSecurity);
+      console.log(DateOfBirthForSecurity);
+      console.log(StationId);
+
+        
+      fetch('/TD/addSecurity', {
+      method: 'POST',
+      body: JSON.stringify({ CrewIdForSecurity,CrewNameForSecurity,AddressForSecurity,DateOfBirthForSecurity,StationId }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+      const result = data.Message;
+       if(result[0].ResultMessage=='GUARD ADDED SUCCESSFULLY')
+          {window.location.href = '/crewData';}
+        else
+        {
+          console.log(result[0].ResultMessage);
+          alert(result[0].ResultMessage);
+        }
+
+    })
+    .catch(error => {
+       
+      console.error('Error:', error);
+    });
+      // You can perform further actions here, such as sending the data to the server via fetch() or XMLHttpRequest
+  });
+
+
+
+  document.getElementById('submitButtonForPilot').addEventListener('click', function() {
+      event.preventDefault();
+      const CrewIdForPilot = document.getElementById('CrewIdForPilot').value;
+      const CrewNameForPilot = document.getElementById('NameForPilot').value;
+      const AddressForPilot = document.getElementById('AddressForPilot').value;
+      const DateOfBirthForPilot = document.getElementById('DateOfBirthForPilot').value;
+      const TrainId = document.getElementById('TrainId').value;
+        
+      fetch('/TD/addPilot', {
+      method: 'POST',
+      body: JSON.stringify({ CrewIdForPilot,CrewNameForPilot,AddressForPilot,DateOfBirthForPilot,TrainId }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+      const result = data.Message;
+       if(result[0].ResultMessage=='PILOT ADDED SUCCESSFULLY')
+          {window.location.href = '/crewData';}
+        else
+        {
+          console.log(result[0].ResultMessage);
+          alert(result[0].ResultMessage);
+        }
+
+    })
+    .catch(error => {
+       
+      console.error('Error:', error);
+    });
+      // You can perform further actions here, such as sending the data to the server via fetch() or XMLHttpRequest
+  });
+
+
+
+</script>
+
+</html>

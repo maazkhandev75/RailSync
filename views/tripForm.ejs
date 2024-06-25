@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- if we want to use flatpickr as a calender for date-time picking -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">    
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+
+    
+    <!-- order does matter alot here  deciding for the precedence between bootstrap and custom css files remember always -->
+
+
+    <title>Search Train Form</title>
+</head>
+
+
+<body>    <!--later we will customize this page further --> <!--style="overflow: hidden;-->
+     <div class="container mt-5" class="bg-success">
+        <h2 class="mb-4" style="font-family: Raleway;">Plan Your Trip</h2>
+        <form id="StationInput" action="SearchTrain" method="post" >
+          <div class="row mb-3">
+            <label for="From-City" class="col-sm-2 col-form-label" style="font-family: comfortaa; font-weight: 900; color:#de6b00">From : </label>
+            <div class="col-sm-5">
+              <select class="form-select inputs selector" id="From-City-Dropdown" name="fromCity" aria-label="From-City-Dropdown">
+                <% StationNames.forEach((name)=>{ %>
+                    <option> <%= name.StationName %> </option>
+                <% }); %>
+
+              </select>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="To-city-Dropdown" class="col-sm-2 col-form-label" style="font-family: comfortaa; font-weight: 900; color:#de6b00">To : </label>
+            <div class="col-sm-5">
+              <select class="form-select inputs selector" id="To-city-Dropdown" name="toCity" aria-label="To-City-DropDown">
+                
+                <% StationNames.forEach((name)=>{ %>
+                    <option> <%= name.StationName %> </option>
+                <% }); %>
+
+              </select>
+            </div>
+          </div>
+
+
+           <!--    if we want to do data-time picker with flatpickr js library             -->
+           <div class="row mb-3">
+            <label for="tripDate" class="col-sm-2 col-form-label" style="font-family: comfortaa; font-weight: 900; color:#de6b00"> Date :</label>
+            <div class="col-sm-5">
+            <input type="text" class="form-control inputs" id="tripDate" name="journeyDate" placeholder="Open Calendar">
+            </div>
+          </div>
+          
+          <script>
+            flatpickr("#tripDate", {
+              enableTime: true,
+              dateFormat: "Y-m-d H:i",
+              theme: "dark"
+            });
+          </script>
+
+          <div class="row mb-3">
+            <div class="col-sm-12 offset-sm-2">
+              <button type="submit" class="customBtn2">Search Trains</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <div id="TrainName" ></div>
+      <% if(isSubmitted){ %>
+          <h1>hello</h1>
+      <% }%>
+
+</body>
+<script>
+    function submitForm() {
+          alert("lol");
+            const formData = new FormData(document.getElementById('StationInput'));
+            fetch('/SearchTrain', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                
+                document.getElementById('TrainName').innerHTML = data[0].TrainId;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+  </script>
+</html>

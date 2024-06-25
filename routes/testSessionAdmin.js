@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 // Test route to check session
-router.get('/sessionCheck', (req, res) => {
+router.get('/sessionCheckAdmin', (req, res) => {
   // Check if user details are stored in the session
-  if (req.session.userDetails) {
-    // If user details are stored, display them
+  if (req.session.AdminDetails) {
+    // If admin details are stored, display them
     res.send(`
 
     <html>
@@ -23,8 +23,8 @@ router.get('/sessionCheck', (req, res) => {
       </style>
     </head>
     <body>
-      <h1>User details stored in session:</h1>
-      <p>${JSON.stringify(req.session.userDetails)}</p>
+      <h1>Admin details stored in session:</h1>
+      <p>${JSON.stringify(req.session.AdminDetails)}</p>
     </body>
     </html>
 
@@ -49,7 +49,7 @@ router.get('/sessionCheck', (req, res) => {
       </style>
     </head>
     <body>
-      <p>No user details found in session</p>
+      <p>No Admin details found in session</p>
     </body>
     </html>
 

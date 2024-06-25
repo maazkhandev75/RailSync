@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<!-- the below line will apply bootstrap dark mode to even calender -->
+<!-- <html lang="en" data-bs-theme="dark">    -->
+<html lang="en">   
 
 <%- include('./partials/head.ejs') %>
 
@@ -15,9 +18,8 @@
       <h1>Add Route</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="adminDash">Home</a></li>
-          <li class="breadcrumb-item">add Data</li>
-          <li class="breadcrumb-item active">Route</li>
+          <li class="breadcrumb-item"><a href="adminDash">Admin Dashboard</a></li>
+          <li class="breadcrumb-item active">Add Route</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -37,7 +39,7 @@
 
                 <div class="col-md-6">
                     <label for="TrainId" class="form-label" style="color: #de6b00;">TrainID</label>
-                    <select id="TrainId" class="form-select inputs">
+                    <select id="TrainId" class="form-select inputs selector">
                       <% Train.forEach((train) => { %>
                         <option value="<%= train.TrainId %>"><%= train.TrainId %></option>
                     <% }); %>
@@ -45,22 +47,22 @@
                 </div>
                 <div class="col-md-6">
                     <label for="TrackId" class="form-label" style="color: #de6b00;">Track</label>
-                    <select id="TrackId" class="form-select inputs">
+                    <select id="TrackId" class="form-select inputs selector">
                         <% Track.forEach((track) => { %>
                             <option value="<%= track.TrackId %>"><%= track.Station1Id %> - <%= track.Station2Id %></option>
                         <% }); %>
                     </select>
                 </div>
 
-
+<!-- 
                 <div class="col-md-6">
                   <label for="DepartureTime" class="form-label" style="color: #de6b00;">DepartureTime</label>
                   <input type="datetime-local" class="form-control inputs" id="DepartureTime">
-                </div>
+                </div> -->
                 
 
                 <!--    if we want to do data-time picker with flatpickr js library             -->
-                <!-- <div class="col-md-6">
+                <div class="col-md-6">
                   <label for="DepartureTime" class="form-label">DepartureTime</label>
                   <input type="text" class="form-control inputs" id="DepartureTime">
                 </div>
@@ -71,12 +73,26 @@
                     dateFormat: "Y-m-d H:i",
                     theme: "dark"
                   });
-                </script> -->
-                
+                </script>
+<!--                 
                   <div class="col-md-6">
                     <label for="ArrivalTime" class="form-label" style="color: #de6b00;">ArrivalTime</label>
                     <input type="datetime-local" class="form-control inputs" id="ArrivalTime">
-                  </div>
+                  </div> -->
+
+                   <!--    if we want to do data-time picker with flatpickr js library             -->
+                <div class="col-md-6">
+                  <label for="ArrivalTime" class="form-label">ArrivalTime</label>
+                  <input type="text" class="form-control inputs" id="ArrivalTime">
+                </div>
+                
+                <script>
+                  flatpickr("#ArrivalTime", {
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                    theme: "dark"
+                  });
+                </script>
 
                   <div class="col-12 text-left">
                   <button type="submit" id="submitButton" class="btn custom-btn">Submit</button>

@@ -12,9 +12,8 @@
       <h1>Add Train</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="adminDash">Home</a></li>
-          <li class="breadcrumb-item">add Data</li>
-          <li class="breadcrumb-item active">Train</li>
+          <li class="breadcrumb-item"><a href="adminDash">Admin Dashboard</a></li>
+          <li class="breadcrumb-item active">Add Train</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -37,31 +36,32 @@
 
                 <div class="col-md-5">
                   <label for="inputState" class="form-label" style="color: #de6b00;">UpDownStatus</label>
-                  <select id="inputState" class="form-select inputs">
+                  <select id="inputState" class="form-select inputs selector">
                     <option selected>UP</option>
                     <option>Down</option>
                   </select>
                 </div>
 
                 <div class="col-md-5">
-                  <label for="inputArrivalStation" class="form-label" style="color: #de6b00;">Arrival Station</label>
-                  <select id="inputArrivalStation" class="form-select inputs">
-                    <% Station.forEach((station) => { %>
-                      <option value="<%= station.StationId %>"><%= station.StationName %></option>
-                  <% }); %>
-                  </select>
-                </div>
-
-                <div class="col-md-5">
                   <label for="inputDepartureStation" class="form-label" style="color: #de6b00;">Depature Station</label>
-                  <select id="inputDepartureStation" class="form-select inputs">
+                  <select id="inputDepartureStation" class="form-select inputs selector">
                   <% Station.forEach((station) => { %>
                     <option value="<%= station.StationId %>"><%= station.StationName %></option>
                 <% }); %>
               </select>
                 </div>
 
-                <div class="text-center">
+                <div class="col-md-5">
+                  <label for="inputArrivalStation" class="form-label" style="color: #de6b00;">Arrival Station</label>
+                  <select id="inputArrivalStation" class="form-select inputs selector">
+                    <% Station.forEach((station) => { %>
+                      <option value="<%= station.StationId %>"><%= station.StationName %></option>
+                  <% }); %>
+                  </select>
+                </div>
+
+
+                <div class="col-12 text-left">
                   <button type="submit" id="submitButton" class="btn custom-btn">Submit</button>
                   <button type="reset" class="btn custom-btn-secondary">Reset</button>
                 </div>
@@ -93,6 +93,7 @@
         upDownStatus='1';
       else
         upDownStatus='0';
+      
       console.log('Train ID:', trainId);
       console.log('arrival Station:', ArrivalStation);
       console.log('Departure Station:', departureStation);
@@ -108,7 +109,7 @@
     .then(data => {
       const result = data.Message;
        if(result[0].ResultMessage=='TRAIN ADDED SUCCESSFULLY')
-          {window.location.href = '/traindata';}
+          {window.location.href = '/trainsData';}
         else
         {
           console.log(result[0].ResultMessage);

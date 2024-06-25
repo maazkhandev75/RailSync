@@ -4,8 +4,8 @@
 <%- include('./partials/head.ejs') %>
 
 <style>
- body {
-        font-family: Arial, sans-serif;
+body {
+        font-family: Comfortaa, sans-serif;
         margin: 0;
         padding: 0;
         background-color: #000000;
@@ -30,17 +30,21 @@
      th {
         background-color: #000000;
         font-weight: bold;
+        font-family: ubuntu, sans-serif;
         color: rgb(255, 106, 0);
     }
     tr:hover {
-        background-color: #262626;
+        background-color: #1a1a1a;
     } 
     .edit-btn, .delete-btn {
         padding: 5px 10px;
         color: rgb(0, 0, 0);
+        font-weight: bold;
+        font-size: 0.9em;
+        margin: 0 0 10px 5px;
         border: none;
         cursor: pointer;
-        border-radius: 10px;
+        border-radius: 30px;
         transition: background-color 0.2s ease-in;
     }
     .delete-btn {
@@ -66,105 +70,44 @@
         flex: 1;
         margin-right: 10px;
         padding: 5px;
-        border-radius: 3px;
-        border: 1px solid #888888;
+        border-radius: 10px;
+        outline: none;
+        border: 2px solid #888888;
         color: #ffffff;
         background-color: #000;
     }
 
-    .search-btn {
-        padding: 5px 10px;
-        background-color: rgb(204, 211, 0);
-        color: #000000;
-        border: none;
-        cursor: pointer;
-        border-radius: 10px;
+    .search-input:focus {
+	border-color: #de6b00;
+	-webkit-box-shadow: none;
+	box-shadow: none;
     }
 
-    .search-btn:hover {
-        background-color: #f5ff31;
-    } body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #000000;
-    }
-    .container {
-        max-width: 1200px;
-        margin: 20px auto;
-        padding: 20px;
-        background-color: #000000;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-     table {
-        width: 100%;
-        border-collapse: collapse;
-        border-radius: 60px; /* Adjust the value as needed */
-    }
-    th, td {
-        border: 2px solid rgb(66, 66, 66);
-        padding: 10px;
-        text-align: left;
-    }
-     th {
-        background-color: #000000;
-        font-weight: bold;
-        color: rgb(255, 106, 0);
-    }
-    tr:hover {
-        background-color: #262626;
-    } 
-    .edit-btn, .delete-btn {
-        padding: 5px 10px;
-        color: rgb(0, 0, 0);
-        border: none;
-        cursor: pointer;
-        border-radius: 10px;
-        transition: background-color 0.2s ease-in;
-    }
-    .delete-btn {
-        background-color: #b40c00;
-    }
-    .edit-btn{
-        background-color: #32c700;
-    }
-    .delete-btn:hover{
-        background-color: #ec1000;
-    }
-    .edit-btn:hover{
-        background-color: #40ff00;
+    .search-input:enabled{
+	background-color: #000;
+	color:white;
+	font-weight: 600;
+	letter-spacing: 1px;
+	outline: none;
     }
 
-    .table-header {
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-    }
-
-    .search-input {
-        flex: 1;
-        margin-right: 10px;
-        padding: 5px;
-        border-radius: 3px;
-        border: 1px solid #888888;
-        color: #ffffff;
-        background-color: #000;
-    }
 
     .search-btn {
         padding: 5px 10px;
-        background-color: rgb(0, 187, 211);
+        background-color: #7700ff;
         color: #000000;
+        font-weight:bold;
         border: none;
+        font-size: 0.9em;
+        margin-left: 0.3em;
+        transition: all 0.2s ease-in;
         cursor: pointer;
-        border-radius: 10px;
+        border-radius: 30px;
     }
 
     .search-btn:hover {
-        background-color: #52d7ff;
+        background-color: #9a42ff;
     }
-
 </style>
 <body>
 
@@ -177,8 +120,7 @@
         <h1>All Tickets</h1>
         <nav>
             <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="userDash">Home</a></li>
-            <li class="breadcrumb-item">Pages</li>
+            <li class="breadcrumb-item"><a href="userDash">User Dashboard</a></li>
             <li class="breadcrumb-item active">My Bookings</li>
             </ol>
         </nav>
@@ -204,15 +146,22 @@
                     <tbody>
                         <% ticketsUpcoming.forEach((ticket)=>{ %>
                             <tr>
-                                <td><%= ticket.TicketId %></td>
+                                <td><%= ticket.TicketId[0] %></td>  <!--[0] to get only one time ticketId because our join has given us more than one ticketId which are same as repetition-->
                                 <td><%= ticket.SeatNo %></td>
 								<td><%= ticket.TotalPrice %></td>
                                 <td><%= ticket.DeptTime %></td>
-                                <td><%= ticket.RefundStatus %></td>
+                                <td>
+                                    <% if (ticket.RefundStatus === 'R') { %>
+                                      Refunded
+                                    <% } else { %>
+                                      Not Refunded
+                                    <% } %>
+                                  </td>
+                                  
                                 
                                 <td>
-                                    <button class="edit-btn" onclick="editSeat('<%=ticket.TicketId[0]%>', '<%=ticket.TrainId%>','<%=ticket.CarriageId%>','<%= ticket.SeatNo %>')">UNBOOK</button>
-                                </td>.SeatNo}
+                                    <button class="edit-btn" onclick="editTicket('<%=ticket.TicketId[0]%>', '<%=ticket.TrainId%>','<%=ticket.CarriageId%>','<%= ticket.SeatNo %>')">UNBOOK</button>
+                                </td>
                             </tr>
                         <% }); %>
 
@@ -243,7 +192,14 @@
                                 <td><%= ticket.SeatNo %></td>
 								<td><%= ticket.TotalPrice %></td>
                                 <td><%= ticket.DeptTime %></td>
-                                <td><%= ticket.RefundStatus %></td>
+                                <td>
+                                    <% if (ticket.RefundStatus === 'R') { %>
+                                      Refunded
+                                    <% } else { %>
+                                      Not Refunded
+                                    <% } %>
+                                </td>
+                                  
                                 <td>
                                     <button class="edit-btn" onclick="editTicket('<%=ticket.TicketId[0]%>', '<%=ticket.CarriageId%>','<%=ticket.TrainId%>','<%= ticket.SeatNo %>')">UNBOOK</button>
                                 </td>

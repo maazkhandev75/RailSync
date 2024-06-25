@@ -11,62 +11,99 @@
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/assets/css/signup&login_styles.css">
-    <title>Admin LogIn Form</title>
+    <title>Admin SignUp Form</title>
 </head>
 <body>
-	<!-- if the admin pin is correct -->
+	<!-- if the admin signup successfully -->
     <% if (typeof successMessage !== 'undefined') { %>
     <div class="alert alert-success" role="alert">
         <%= successMessage %>
     </div>
     <% } %>
 
-	<!-- if the admin pin is not correct -->
+	<!-- if the admin already exits -->
 	<% if (typeof errorMessage !== 'undefined') { %>
 	<div class="alert alert-danger" role="alert">
 		<%= errorMessage %>
 	</div>
 	<% } %>
 
-
     <div class="topHeading">
-        <h2 class="display-4 heading">Admin LogIn</h2>
-        </div>
+    <h2 class="display-4 heading">Admin SignUp</h2>
+    </div>
 
     <div class="container_topLvl">
         <div class="main">
             <div class="container-fluid mt-1">
-                <form action="/adminLogin" method="POST">
-                    <div class="row">
+                <form action="/adminSignup" method="POST" onsubmit="return validatePassword()">
 
+                    <div class="row">
                         <div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
                             <label for="CNIC" class="form-label sub_heading">CNIC:</label>
                             <input type="text" class="form-control inputs" id="CNIC" name="cnic" placeholder="13 digits" pattern="[0-9]{13}" required>
                         </div>
 
                         <div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
-                            <label for="adminPin" class="form-label sub_heading">PIN:</label>
-                            <input type="text" class="form-control inputs" id="adminPin" name="adminPin" placeholder="4 digits" pattern="[0-9]{4}" required>
+                            <label for="adminname" class="form-label sub_heading">Admin Name:</label>
+                            <input type="text" class="form-control inputs" id="adminname" name="adminname" required>
                         </div>
-
                     </div>
 
 
+                    <div class="row">
+                        <div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
+                            <label for="adminPin" class="form-label sub_heading">PIN:</label>
+                            <input type="password" class="form-control inputs" id="adminPin" name="adminPin" placeholder="4 digits" required>
+                        </div>
+
+						<div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
+                            <label for="confirmAdminPin" class="form-label sub_heading">Confirm PIN:</label>
+                            <input type="password" class="form-control inputs" id="confirmAdminPin" name="confirmAdminPin" placeholder="4 digits" required>
+                        </div>
+
+                        <div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
+                            <label for="PhoneNo" class="form-label sub_heading">Phone No:</label>
+                            <input type="tel" class="form-control inputs" id="PhoneNo" name="phoneNo" placeholder="11 digits" pattern="[0-9]{11}">
+                        </div>
+                    </div>
+
                     <div class="mb-3 mt-2 form-check">
-                        <input type="checkbox" class="form-check-input ml-3 " id="check1" required>
-                        <label class="form-check-label pl-5" for="exampleCheck1">I assure that the above information is correct!!</label>
+                        <input type="checkbox" class="form-check-input ml-4 " id="check1" required>
+                        <label class="form-check-label pl-5" for="exampleCheck1">I am not a Robot!</label>
                     </div>
 
                     <div class="pl-4">
                         <button type="submit" class="btn-submit ml-2">Enter</button>
                     </div>
+
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Script to redirect to the dashboard only if the success message is present -->
     <script>
+        function validatePassword() {
+          var pin = document.getElementById("adminPin").value;
+		  var c_pin = document.getElementById("confirmAdminPin").value;
+		  
+          
+          // Check if pins match
+          if (pin !== c_pin) {
+            alert("Pins donot match! \nEnter same Pins");
+            return false;
+          }
+
+          // Check if Pin is eaactly 4 digits
+		  const isValid = /^\d{4}$/.test(password);
+          if (!isValid) {
+          alert("Pin must be exacly 4 digits only!");
+          return false;
+        }
+        
+          return true;
+        }
+
+         //Script to redirect to the dashboard only if the success message is present
         // Check if the success message is present
         <% if (typeof successMessage !== 'undefined') { %>  //if success msg appears only then redirect to dashbaord but after 2 sec delay so that msg can be read by client
             // Redirect to the dashboard after 2 seconds
@@ -74,7 +111,9 @@
                 window.location.href = '/adminDash';
             }, 2000); // 2sec delay
         <% } %>
+
     </script>
+        
 
 </body>
 </html>
