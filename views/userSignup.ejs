@@ -9,9 +9,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/assets/css/signup&login_styles.css">
-    <title>User SignUp Form</title>
+    
+    <title>RailSync</title>
+    <link href="/assets/img_and_gif/icon.png" rel="icon">
 </head>
 <body>
 	<!-- if the user signup successfully -->
@@ -28,22 +34,22 @@
 	</div>
 	<% } %>
 
-    <div class="topHeading">
+    <div class="topHeading mt-md-1 mt-2">
     <h2 class="display-4 heading">Sign Up</h2>
     </div>
 
     <div class="container_topLvl">
         <div class="main">
-            <div class="container-fluid mt-1">
+            <div class="container-fluid mt-1 pb-4">
                 <form action="/userSignup" method="POST" onsubmit="return validatePassword()">
 
                     <div class="row">
-                        <div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
+                        <div class="col-12 col-md-5 mb-3 ml-md-4 pl-md-4">
                             <label for="CNIC" class="form-label sub_heading">CNIC:</label>
                             <input type="text" class="form-control inputs" id="CNIC" name="cnic" placeholder="13 digits" pattern="[0-9]{13}" required>
                         </div>
 
-                        <div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
+                        <div class="col-12 col-md-5 mb-3 ml-md-4 pl-md-4">
                             <label for="username" class="form-label sub_heading">User Name:</label>
                             <input type="text" class="form-control inputs" id="username" name="username" required>
                         </div>
@@ -51,45 +57,74 @@
 
 
                     <div class="row">
-                        <div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
+                        <div class="col-12 col-md-5 mb-3 ml-md-4 pl-md-4">
                             <label for="Password" class="form-label sub_heading">Password:</label>
-                            <input type="password" class="form-control inputs" id="Password" name="password" placeholder="characters + digit" required>
+                            <input type="password" class="form-control inputs" id="Password" name="password" placeholder="characters + digits" required>
                         </div>
 
                         
-                        <div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
+                        <div class="col-12 col-md-5 mb-3 ml-md-4 pl-md-4">
                             <label for="confirmPassword" class="form-label sub_heading">Confirm Password:</label>
-                            <input type="password" class="form-control inputs" id="confirmPassword" name="confirmpassword" placeholder="characters + digit" required>
+                            <input type="password" class="form-control inputs" id="confirmPassword" name="confirmpassword" placeholder="characters + digits" required>
                         </div> 
 
-                        <div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
+                        <div class="col-12 col-md-5 mb-3 ml-md-4 pl-md-4">
                             <label for="PhoneNo" class="form-label sub_heading">Phone No:</label>
                             <input type="tel" class="form-control inputs" id="PhoneNo" name="phoneNo" placeholder="11 digits" pattern="[0-9]{11}">
                         </div>
                     </div>
 
-                    <div class="mb-3 mt-2 form-check">
-                        <input type="checkbox" class="form-check-input ml-4 " id="check1" required>
-                        <label class="form-check-label pl-5" for="exampleCheck1">I am not a Robot!</label>
+                    <div class="mb-3 mt-2 pl-md-4 pl-2 form-check">
+                        <input type="checkbox" class="form-check-input ml-md-4 ml-0" id="check1" required>
+                        <label class="form-check-label ml-md-5 ml-4" for="exampleCheck1">I am not a Robot!</label>
                     </div>
 
-                    <div class="pl-4">
-                        <button type="submit" class="btn-submit ml-2">Enter</button>
+                    <div class="pl-md-4">
+                        <button type="submit" class="btn-submit signup-submit-btn ml-md-2 ml-0">Enter</button>
                     </div>
 
                 </form>
             </div>
         </div>
+
+        
+    <!-- Custom Alert Box Structure -->
+    <div id="alertModal" class="alert-modal">
+        <div class="alert-content">
+            <span class="alert-close" onclick="closeAlert()">&times;</span>
+            <p id="alertMessage"></p>
+            <button class="alert-btn" onclick="closeAlert()">OK</button>
+        </div>
+    </div>
+
+
+
     </div>
 
     <script>
+
+    // Function to open the custom alert box
+    function showAlert(message) {
+        document.getElementById('alertMessage').innerText = message;
+        document.getElementById('alertModal').style.display = 'flex';
+    }
+
+    // Function to close the custom alert box
+    function closeAlert() {
+        document.getElementById('alertModal').style.display = 'none';
+    }
+
+//******************************************
+
+
         function validatePassword() {
           var pass = document.getElementById("Password").value;
           var c_pass = document.getElementById("confirmPassword").value;
 
           // Check if passwords match
           if (pass !== c_pass) {
-            alert("Passwords donot match! \nEnter same passwords");
+            //alert("Passwords donot match! \nEnter same passwords");
+            showAlert("Passwords donot match! \nEnter same passwords");
             return false;
           }
 
@@ -97,7 +132,8 @@
           var digitRegex = /\d/;
           var charRegex = /[a-zA-Z]/;
           if (!digitRegex.test(pass) || !charRegex.test(pass)) {
-          alert("Password must contain at least one digit and one character.");
+          //alert("Password must contain at least one digit and one character.");
+          showAlert("Password must contain at least one digit and one character.");
           return false;
         }
         

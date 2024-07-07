@@ -38,4 +38,14 @@ body {
 	background-color: #de6b00;
 	color:#000;
   }
+
+  .left-half:active {
+	background-color: #de6b00; 
+	color:#000;
+  }
+  
+  .right-half:active {
+	background-color: #de6b00;
+	color:#000;
+  }
   

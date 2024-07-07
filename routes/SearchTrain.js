@@ -18,7 +18,7 @@ module.exports = function(pool) {
     var TrainsWithStops=[];
 
     router.post('/',(req,res)=>{
-    console.log(req.body);
+    //console.log(req.body);
     var St1=req.body.fromCity;
     var St2=req.body.toCity;
     var tripDate=req.body.journeyDate;
@@ -35,8 +35,8 @@ module.exports = function(pool) {
       }
       else{
          Trains=result.recordset;
-         console.log("NON STOP TRAIN FOUND :");
-        console.log(Trains);
+         //console.log("NON STOP TRAIN FOUND :");
+        //console.log(Trains);
       }
     
     const CTErequest= new sql.Request(pool);
@@ -50,24 +50,10 @@ module.exports = function(pool) {
       }
       else{
          TrainsWithStops=result.recordset;
-         console.log(" STOP TRAIN FOUND :");
-        console.log(result);
+         //console.log("STOP TRAIN FOUND :");
+        //console.log(result);
       
-    //    if(Trains.length!==0 && TrainsWithStops.length!==0)
-    //    TrainsWithStops = TrainsWithStops.filter(train => !Trains.some(t => t.TrainId === train.TrainId));
-      
-    //   if (TrainsWithStops.length <=0){
-    //     TrainsWithStops = [];
-    //     res.render("TrainResult", { Trains, TrainsWithStops });
-    // }
-    //   else{
-    //   if(TrainsWithStops[0].DeptStation ==St1 && TrainsWithStops[TrainsWithStops.length - 1].ArrivalStation==St2) 
-    //     res.render("TrainResult", { Trains, TrainsWithStops });
-    //   else {
-    //     TrainsWithStops = [];
-    //     res.render("TrainResult", { Trains, TrainsWithStops });
-    //   }
-         res.render("TrainResult", { Trains, TrainsWithStops });
+         res.render("USER/TrainResult", { Trains, TrainsWithStops });
       }
       });
     });
@@ -75,9 +61,9 @@ module.exports = function(pool) {
 
 
 router.post('/PrintTicketNonStop', (req, res) => {
-  console.log(req.body);
+  //console.log(req.body);
   const userName = req.session.userDetails.username;
-  console.log(userName);
+  //console.log(userName);
   const InputTrackId=req.body.TrackID;
   var inputClassType=req.body.selectedClass;
   if(req.body.selectedClass==="Economy") inputClassType="E";
@@ -96,8 +82,8 @@ router.post('/PrintTicketNonStop', (req, res) => {
     }
     else{
         TicketAvailInfo=result.recordset[0];
-        console.log(TicketAvailInfo);
-        console.log("testing123");
+        //console.log(TicketAvailInfo);
+        // console.log("testing123");
         if(TicketAvailInfo != undefined)    //ticket avail info comes to ourselft undefine so it goes to else part and prints no seats available
         {
           const TicketInfoReq= new sql.Request(pool);
@@ -105,7 +91,7 @@ router.post('/PrintTicketNonStop', (req, res) => {
         TicketInfoReq.input('TrainId',sql.NVarChar(30),req.body.selectedTrainID);
         TicketInfoReq.input('FoundSeat',sql.Int,TicketAvailInfo.SeatNo);
         TicketInfoReq.input('TrackId',sql.NVarChar(30),InputTrackId);
-        console.log(InputTrackId);
+        //console.log(InputTrackId);
         TicketInfoReq.execute('GetTicketInfo',(err,result2)=>{
 
         if(err){
@@ -113,17 +99,18 @@ router.post('/PrintTicketNonStop', (req, res) => {
           res.status(500).send('Internel Server Error');
         }
         else{
-          console.log("seat details are: ");
-          console.log(result2);
+          //console.log("seat details are: ");
+          //console.log(result2);
         }
 
         var TicketInfo=result2.recordset;
-        res.render('Ticket',{TicketInfo,inputClassType,userName});
+        res.render('USER/Ticket',{TicketInfo,inputClassType,userName});
       });
     }
     else
     {
-         res.send("No Seat Available");
+        //  res.send("No Seat Available");
+        res.render('USER/noSeatsAvailable');
     }
   }
 })
@@ -132,7 +119,7 @@ router.post('/PrintTicketNonStop', (req, res) => {
 
 router.post('/ConfirmNonStopTicket',(req,res)=>{
   
-  console.log(req.body);
+  //console.log(req.body);
   let AddTicket= new sql.Request(pool);
   AddTicket.input('Seat',sql.Int,req.body.SeatNo);
   AddTicket.input('Carriageid',sql.NVarChar,req.body.CarriageId);
@@ -144,7 +131,7 @@ router.post('/ConfirmNonStopTicket',(req,res)=>{
       res.json({status:false});
       }
     else{
-     console.log("Ticket Booked ");  
+     //console.log("Ticket Booked ");  
     res.json({status:true});
     }
   });

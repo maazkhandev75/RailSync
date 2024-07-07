@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/head.ejs') %>
+
+<body>
+
+<%- include('./partials/header.ejs') %>
+<%- include('./partials/sidebar.ejs') %>
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Edit Station</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="adminDash">Admin Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="stationsAndTracksData.ejs">Station & Tracks Data</a></li>
+          <li class="breadcrumb-item active">Edit Station</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+    <section class="section">
+      <div class="row">
+
+          <div class="card">
+            <div class="card-body">
+              <h5>Station Details</h5>
+
+              <!-- Multi Columns Form -->
+
+			  <form class="row g-3">
+                <div class="col-md-6">
+                  <label for="StationId" class="form-label" style="color: #de6b00;">Station ID</label>
+                  <input type="text" class="form-control inputs" id="StationId" readonly placeholder="<%= StationId %>">
+                </div>
+                <div class="col-md-6">
+                    <label for="StationName" class="form-label" style="color: #de6b00;">Station Name</label>
+                    <input type="text" class="form-control inputs" id="StationName" placeholder="<%= StationName %>" >
+                  </div>
+                  <div class="col-md-12">
+                    <label for="Address" class="form-label" style="color: #de6b00;">Station Address</label>
+                    <input type="text" class="form-control inputs" id="Address" placeholder="<%= Address %>" >
+                  </div>
+                
+                  <div class="col-12 text-left">
+                  <button type="submit" id="submitButton" class="btn custom-btn">Submit</button>
+                  <button type="reset" class="btn custom-btn-secondary">Reset</button>
+                </div>
+              </form><!-- End Multi Columns Form -->
+
+            </div>
+          </div>
+
+
+        </div>
+
+    </section>
+
+  </main><!-- End #main -->
+
+
+  <%- include('./partials/footer.ejs') %>
+  <%- include('./partials/script.ejs') %>
+
+
+<script>
+  document.getElementById('submitButton').addEventListener('click', function(event) {
+      event.preventDefault();
+      const StationId = document.getElementById('StationId').placeholder;
+      const StationName = document.getElementById('StationName').value !== '' ? document.getElementById('StationName').value : document.getElementById('StationName').placeholder;
+      const Address = document.getElementById('Address').value !== '' ? document.getElementById('Address').value : document.getElementById('Address').placeholder;
+
+        
+      fetch('/TD/editStation', {
+      method: 'POST',
+      body: JSON.stringify({ StationId,StationName,Address }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+      const result = data.Message;
+       if(result[0].ResultMessage=='STATION UPDATED SUCCESSFULLY')
+          {window.location.href = '/stationsAndTracksData';}
+        else
+        {
+          //console.log(result[0].ResultMessage);
+          alert(result[0].ResultMessage);
+        }
+
+    })
+    .catch(error => {
+       
+      console.error('Error:', error);
+    });
+      // You can perform further actions here, such as sending the data to the server via fetch() or XMLHttpRequest
+  });
+</script>
+</body>
+</html>

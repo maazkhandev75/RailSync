@@ -9,13 +9,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playwrite+NG+Modern:wght@100..400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
 
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/assets/css/signup&login_styles.css">
-    <title>User LogIn Form</title>
+    
+    <title>RailSync</title>
+    <link href="/assets/img_and_gif/icon.png" rel="icon">
 </head>
 <body>
 	<!-- if the user logged in successfully -->
@@ -33,9 +36,9 @@
 	<% } %>
 
 
-    <div class="topHeading">
+    <div class="topHeading mt-md-1 mt-2">
         <h2 class="display-4 heading">Log In</h2>
-        </div>
+    </div>
 
     <div class="container_topLvl ">
         <div class="main">
@@ -43,26 +46,40 @@
                 <form action="/userLogin" method="POST">
                     <div class="row">
 
-                        <div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
+                        <div class="col-12 col-md-5 mb-3 ml-md-4 pl-md-4">
                             <label for="CNIC" class="form-label sub_heading">CNIC:</label>
                             <input type="text" class="form-control inputs" id="CNIC" name="cnic" placeholder="13 digits" pattern="[0-9]{13}" required>
                         </div>
 
-                        <div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
+                        <div class="col-12 col-md-5 mb-3 ml-md-4 pl-md-4">
                             <label for="Password" class="form-label sub_heading">Password:</label>
                             <input type="password" class="form-control inputs" id="Password" name="password" placeholder="type password" required>
                         </div>
                     </div>
 
 
-                    <div class="mb-3 mt-2 form-check">
-                        <input type="checkbox" class="form-check-input ml-3 " id="check1" required>
-                        <label class="form-check-label pl-5" for="exampleCheck1">I assure that the above information is correct!</label>
+                    <div class="mb-3 mt-2 pl-md-4 pl-2 form-check">
+                        <input type="checkbox" class="form-check-input ml-md-4 ml-0" id="check1" required>
+                        <label class="form-check-label ml-md-5 ml-4" for="exampleCheck1">I assure that the above information is correct!</label>
                     </div>
 
-                    <div class="pl-4">
-                        <button type="submit" class="btn-submit ml-2">Enter</button>
+                    <div class="last-inner-container ml-md-2 ml-1">
+                        <a href="/forgetPass" class="forgetPass-btn-for-sm">forget password</a>
+                        <button type="submit" class="btn-submit ml-md-4">Enter</button>
+                        <a href="/forgetPass" class="forgetPass-btn-for-lg">forget password</a>
                     </div>
+                    
+                    
+<!-- 
+                    <div class="mb-3 mt-2 pl-md-4 pl-2 form-check">
+                        <input type="checkbox" class="form-check-input ml-md-4 ml-0" id="check1" required>
+                        <label class="form-check-label ml-md-5 ml-4" for="exampleCheck1">I am not a Robot!</label>
+                    </div>
+
+                    <div class="pl-md-4">
+                        <button type="submit" class="btn-submit signup-submit-btn ml-md-2 ml-0">Enter</button>
+                    </div> -->
+                    
 
                </form>
             </div>
@@ -70,8 +87,8 @@
 
         <div class="adminLoginContainer">
                 <!-- Admin login redirection button -->
-                <div class="pl-4 mt-2">
-                    <a href="/adminLoginForm" class="btn-admin ml-2">Click here to Login as Admin </a>
+                <div class="mt-2">
+                    <a href="/adminLoginForm" class="btn-admin">Click here to Login as Admin </a>
                 </div>
         </div>
     </div>

@@ -1,5 +1,4 @@
 
---------PROCEDURE FOR SIGNUP FUNCTIONALITY-------
 CREATE PROCEDURE CreateUser 
 	@UserName nvarchar(255),
 	@CNIC nvarchar(255),
@@ -24,7 +23,42 @@ BEGIN
 END
 
 
---------PROCEDURE FOR SIGNUP FUNCTIONALITY OF ADMIN-------
+ALTER PROCEDURE ResetUserPassword
+	@UserName nvarchar(255),
+	@CNIC nvarchar(255),
+    @PhoneNo nvarchar(255),
+	@Password nvarchar(255)
+AS 
+BEGIN	
+	SET NOCOUNT ON;
+
+    IF(@CNIC!='3520297089087')
+    BEGIN
+	-- Check if the user already exists
+	IF EXISTS (SELECT 1 FROM [User] WHERE CNIC=@CNIC AND UserName=@UserName AND PhoneNo=@PhoneNo)
+	BEGIN
+		UPDATE [User]
+        set password=@password
+        where CNIC=@CNIC AND UserName=@UserName AND PhoneNo=@PhoneNo
+	END
+    ELSE
+    BEGIN
+		-- User already exists, return an error message
+		RAISERROR ('Provided credentials are not valid for any User, Try again!', 16, 1);
+		RETURN -1;
+	END
+    END
+    ELSE
+    BEGIN
+		RAISERROR ('Password of Default User cannot be reset!', 16, 1);
+		RETURN -1;
+    END
+
+END
+
+
+
+
 create PROCEDURE CreateAdmin
 	@AdminName nvarchar(255),
 	@CNIC nvarchar(255),
@@ -49,7 +83,6 @@ BEGIN
 END
 
 
---------PROCEDURE FOR LOGIN FUNCTIONALITY-------
 
 CREATE PROCEDURE AuthenticateUser 
 	@CNIC nvarchar(255),
@@ -75,7 +108,6 @@ END
 
 --------------------------------------------------------------------------------------------------------
 
---------PROCEDURE FOR LOGIN FUNCTIONALITY OF ADMIN-------
 
 CREATE PROCEDURE AuthenticateAdmin 
     @CNIC nvarchar(255),
@@ -102,7 +134,6 @@ END
 
 
 
---------PROCEDURE FOR SHOW PROFILE FUNCTIONALITY-------
 
 CREATE PROCEDURE GetUserCredentials
 	@CNIC nvarchar(255)
@@ -115,7 +146,7 @@ END
 
 
 --------PROCEDURE FOR UPDATE PROFILE FUNCTIONALITY-------
-CREATE PROCEDURE UpdateProfile 
+ALTER PROCEDURE UpdateProfile 
 	@CNIC nvarchar(255),
 	@UserName nvarchar(255),
 	@PhoneNo nvarchar(255)
@@ -123,27 +154,40 @@ AS
 BEGIN	
 	SET NOCOUNT ON;
 
+ IF(@CNIC!='3520297089087')
+    BEGIN
 		 UPDATE [User]
 		 SET UserName=@UserName,PhoneNo=@PhoneNo
 		 WHERE CNIC=@CNIC
+    END
+    ELSE
+    BEGIN
+		RAISERROR ('profile of default user cannot be updated!', 16, 1);
+		RETURN -1;
+    END
 END
 
---------PROCEDURE FOR PASSWORD CHANGE FUNCTIONALITY-------
-CREATE PROCEDURE ChangePassword 
+ALTER PROCEDURE ChangePassword 
 	@CNIC nvarchar(255),
 	@newPassword nvarchar(255)
-
 AS 
 BEGIN	
 	SET NOCOUNT ON;
 
+    IF(@CNIC!='3520297089087')
+    BEGIN
 		 UPDATE [User]
 		 SET Password=@newPassword
 		 WHERE CNIC=@CNIC
+    END
+    ELSE
+    BEGIN
+		RAISERROR ('password for default user cannot be changed!', 16, 1);
+		RETURN -1;
+    END
 END
 
 
---------PROCEDURE FOR SHOWING BOOKED TICKETS OF USER-------
 alter PROCEDURE ShowBookedTickets
 	@CNIC nvarchar(255)
 AS 
@@ -163,9 +207,22 @@ BEGIN
 	END
 END
 
+
 drop proc ShowBookedTickets
 
---------PROCEDURE FOR CANCEL TICKET OF USER-------
+CREATE PROCEDURE ShowTickets
+AS 
+BEGIN	
+    SET NOCOUNT ON;
+
+    SELECT * 
+    FROM [Ticket] AS T
+    JOIN [Payment] AS P ON P.TicketId = T.TicketId 
+    JOIN [route] AS R ON R.TrainId = T.TrainId AND R.TrackId = T.trackId;
+END
+
+
+
 CREATE PROCEDURE [dbo].[CancelTicket]
 	@TicketId int,
     @TrainId nvarchar(255),
@@ -190,7 +247,6 @@ BEGIN
 	END
 END
 GO
----------------Procedure to Search Train recursively-=----------------
 USE [afaqkhaliq_SampleDB]
 GO
 /****** Object:  StoredProcedure [dbo].[SearchTrainWithStops]    Script Date: 22-04-2024 05:32:23 AM ******/
@@ -208,6 +264,136 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+
+
+
+--**********************************************
+
+
+exec SearchTrainWithOneStop 'Lahore','Islamabad','2024-06-14'
+
+exec SearchTrainWithOneStop 'Lahore','Islamabad','2020-01-1'
+---- IF WE WANT TO IMPLEMENT THE LOGIC WITH SEARCHDATE MEANS THE DATE ON WHICH YOU ARRIVE ON YOUR DESTINATION 
+
+ -- we will apply check of arrivalTime in  (seachTrain's both without stop and with one stop PROCEDURE )  because we have to reach the the destination on that searchDate it doesn't
+ -- matter that we leave one or two day before to start our journey thats why we have written arrivaltime instead of departuretime
+ -- the system may show you available trains which may start travelling one day before or even on the same day morning depending upon the route distance and time of travel
+
+
+-----IF WE WANT TO IMPLEMENT THE LOGIC WITH SEARCHDATE MEANS THE DATE ON WHICH YOU ARE SEARCHING TO TRAVEL FROM FROM YOUR DEPARTURE STATION
+
+ -- we will apply check of departureTime in (seachTrain's both without stop and with one stop PROCEDURE) because now we are finding the trains which are going to our destination on the same day of search and in this case the arrival time is
+ -- on the same day is also not guaranted 
+--  the system will only show you the trains which are starting their journey on that search date from your dept Station to your arrival Station
+
+
+ALTER PROCEDURE [dbo].[SearchTrainWithOneStop] 
+    @Search_from_Station NVARCHAR(30),
+    @Search_to_Station NVARCHAR(30), 
+    @SearchDate DATETIME
+AS
+WITH 
+first_cte AS (   -- cte is basically common table expression
+    SELECT
+        T.TrainId,
+        Tr.TrackId,
+        Tr.Station1Id AS fromStation,
+        Tr.Station2Id AS toStation
+    FROM
+        [Train] AS T
+    JOIN
+        [Route] AS R ON R.TrainId = T.TrainId
+    JOIN
+        [Tracks] AS Tr ON Tr.TrackId = R.TrackId
+    JOIN
+        Fare AS F ON F.TrackId = Tr.TrackId
+    WHERE
+        Tr.Station1Id = (SELECT StationId FROM Station WHERE Station.StationName = @Search_from_Station)
+        AND Tr.Station2Id <> (SELECT StationId FROM Station WHERE Station.StationName = @Search_to_Station)
+        AND CONVERT(date, R.DeptTime) = CONVERT(date, @SearchDate) 
+        
+),
+second_cte AS (
+    SELECT
+        T.TrainId,
+        Tr.TrackId,
+        Tr.Station1Id AS fromStation,
+        Tr.Station2Id AS toStation
+    FROM
+        [Train] AS T
+    JOIN
+        [Route] AS R ON R.TrainId = T.TrainId
+    JOIN
+        [Tracks] AS Tr ON Tr.TrackId = R.TrackId
+    JOIN
+        Fare AS F ON F.TrackId = Tr.TrackId
+    JOIN
+        first_cte AS PrevRoute ON PrevRoute.toStation = Tr.Station1Id
+    WHERE
+        Tr.Station2Id = (SELECT StationId FROM Station WHERE Station.StationName = @Search_to_Station)
+        AND CONVERT(date, R.DeptTime) = CONVERT(date, @SearchDate) 
+),
+union_cte AS (
+    SELECT * FROM first_cte 
+    UNION 
+    SELECT * FROM second_cte
+),
+FinalRoute AS (
+    SELECT U1.TrainId, U1.TrackId, U1.fromStation, U1.toStation
+    FROM union_cte AS U1, union_cte AS U2
+    WHERE U1.toStation = U2.fromStation
+    UNION
+    SELECT U1.TrainId, U1.TrackId, U1.fromStation, U1.toStation
+    FROM union_cte AS U1, union_cte AS U2
+    WHERE U1.fromStation = U2.toStation
+)
+---- This procedure finds trains with a single stop between the given departure and destination stations. 
+---- It shows both tickets, meaning the user will need to book each leg of the journey separately.
+---- Each leg has a different trackId, dept and arrival time and we are here showing both tickets 
+---- instead of showing a single ticket having depttime from the first leg and arrival time from the second leg.
+SELECT 
+    T.TrainId,
+    T.UpDownStatus AS UPStatus, 
+    CTEtable.TrackId AS TrackId,
+    (SELECT StationName FROM Station WHERE StationId = fromStation) AS DeptStation,
+    (SELECT StationName FROM Station WHERE StationId = toStation) AS ArrivalStation,
+    DeptTime,
+    ArrivalTime,
+    Economy,
+    Business,
+    FirstClass
+FROM 
+    FinalRoute AS CTEtable
+JOIN 
+    [Route] AS R ON R.TrainId = CTEtable.TrainId AND R.TrackId = CTEtable.TrackId
+JOIN 
+    [Train] AS T ON T.TrainId = R.TrainId 
+JOIN 
+    Fare AS F ON F.TrackId = R.TrackId
+WHERE
+    CONVERT(date, R.DeptTime) = CONVERT(date, @SearchDate)
+
+
+
+
+
+
+ALTER PROCEDURE [dbo].[SearchForTrains] @fromStation nvarchar(30), @toStation nvarchar(30), @SearchDate datetime
+as
+select T.TrainId,Tr.TrackId as TrackId,T.UpDownStatus as UPStatus ,@fromStation as DeptStation,@toStation as ArrivalStation,DeptTime,ArrivalTime,Economy,Business,FirstClass
+from [Train] as T
+join [Route] as R
+on R.TrainId=T.TrainId
+join [Tracks] as Tr
+on Tr.TrackId=R.TrackId
+join Fare as F on F.TrackId=Tr.TrackId
+where Tr.Station1Id=(select StationId from Station where StationName=@fromStation )
+and Tr.Station2Id=(select StationId from Station where StationName=@toStation )
+AND CONVERT(date, R.DeptTime) = CONVERT(date, @SearchDate) 
+
+
+
+----the following procedure functionality has been removed....
 ALTER procedure [dbo].[SearchTrainWithStops] @Search_from_Station nvarchar(30),@Search_to_Station nvarchar(30), @SearchDate datetime
 
 as
@@ -261,90 +447,6 @@ AND CONVERT(date, R.ArrivalTime) = CONVERT(date, @SearchDate)
 
 
 
-[SearchTrainWithStops]  'Karachi','Islamabad','2024-04-16'
--- Select the final train route
-select T.TrainId,T.UpDownStatus as UPStatus ,fromStation as DeptStation,toStation as ArrivalStation,DeptTime,ArrivalTime,Economy,Business,FirstClass
-FROM TrainRoute as CTEtable
-join [Train] as T on T.TrainId=CTEtable.TrainId
-join [Route] as R
-on R.TrainId=CTEtable.TrainId
-join Fare as F on F.TrackId=CTEtable.TrackId
-AND CONVERT(date, R.ArrivalTime) = CONVERT(date, @SearchDate)
-
------------------Procedure to searchtrainwith one stop--------------
-alter procedure [dbo].[SearchTrainWithOneStop] @Search_from_Station nvarchar(30),@Search_to_Station nvarchar(30), @SearchDate datetime
-as
-with my_cte as (
-    SELECT
-        T.TrainId,
-        Tr.TrackId,
-        Tr.Station1Id AS fromStation,
-        Tr.Station2Id AS toStation
-    FROM
-        [Train] AS T
-    JOIN
-        [Route] AS R ON R.TrainId = T.TrainId
-    JOIN
-        [Tracks] AS Tr ON Tr.TrackId = R.TrackId
-    JOIN
-        Fare AS F ON F.TrackId = Tr.TrackId
-    WHERE
-        Tr.Station1Id=(select StationId from Station where Station.StationName=@Search_from_Station) and Tr.Station2Id<> (select StationId from Station where Station.StationName=@Search_to_Station)
-),
-second_cte as(
-SELECT
-        T.TrainId,
-        Tr.TrackId,
-        Tr.Station1Id AS fromStation,
-        Tr.Station2Id AS toStation
-    FROM
-        [Train] AS T
-    JOIN
-        [Route] AS R ON R.TrainId = T.TrainId
-    JOIN
-        [Tracks] AS Tr ON Tr.TrackId = R.TrackId
-    JOIN
-        Fare AS F ON F.TrackId = Tr.TrackId
-	JOIN my_cte as PrevRoute on PrevRoute.toStation=Tr.Station1Id
-    WHERE
-        Tr.Station2Id= (select StationId from Station where Station.StationName=@Search_to_Station)
-		)
-, union_cte as
-(select * from my_cte union select * from second_cte
-)
-,FinalRoute as(
-select U1.TrainId,U1.TrackId,U1.fromStation,U1.toStation
-from union_cte as U1, union_cte as U2
-where U1.toStation=U2.fromStation
-union
-select U1.TrainId,U1.TrackId,U1.fromStation,U1.toStation
-from union_cte as U1, union_cte as U2
-where U1.fromStation=U2.toStation)
-
-
-select T.TrainId,T.UpDownStatus as UPStatus ,CTEtable.TrackId as TrackId,(select StationName from Station where StationId=fromStation) as DeptStation,(select StationName from Station where StationId=toStation) as ArrivalStation,DeptTime,ArrivalTime,Economy,Business,FirstClass
-FROM FinalRoute as CTEtable
-join [Route] as R
-on R.TrainId=CTEtable.TrainId and R.TrackId=CTEtable.TrackId
-join [Train] as T on T.TrainId=R.TrainId 
-join Fare as F on F.TrackId=R.TrackId
-
-
-exec SearchTrainWithOneStop 'Karachi Cannt','Islamabad','2024-08-05'
----------------------Procedure to Search non Stops----------------------
-ALTER PROCEDURE [dbo].[SearchForTrains] @fromStation nvarchar(30), @toStation nvarchar(30), @SearchDate datetime
-as
-select T.TrainId,Tr.TrackId as TrackId,T.UpDownStatus as UPStatus ,@fromStation as DeptStation,@toStation as ArrivalStation,DeptTime,ArrivalTime,Economy,Business,FirstClass
-from [Train] as T
-join [Route] as R
-on R.TrainId=T.TrainId
-join [Tracks] as Tr
-on Tr.TrackId=R.TrackId
-join Fare as F on F.TrackId=Tr.TrackId
-where Tr.Station1Id=(select StationId from Station where StationName=@fromStation )
-and Tr.Station2Id=(select StationId from Station where StationName=@toStation )
-AND CONVERT(date, R.ArrivalTime) = CONVERT(date, @SearchDate)
-
 -------------------Proceduure to getdetails about seats-----------------------------
 ALTER Procedure [dbo].[GetTicketInfo] @FoundCarriage nvarchar(30), @FoundSeat  int, @TrainId nvarchar(30), @TrackId nvarchar(30)
 as
@@ -354,7 +456,6 @@ join [Route] as r on r.TrackId=@TrackId and r.TrainId=@TrainId
 join Fare as F on F.TrackId=@TrackId
 where t.TrackId=@TrackId
 
----------------procdure to search fot available trains----------------------------------
 alter PROCEDURE [dbo].[BookTicket] @TrainId nvarchar(30), @TrackId nvarchar(30), @Class nvarchar(30)
 as
 select top 1 s.SeatNo,c.CarriageId,T.TrainId
@@ -400,60 +501,6 @@ ALTER TABLE [dbo].[Ticket] ENABLE TRIGGER [Addpayment]
 GO
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
---************************** (TESTING AREA) **************************
-
-CreateUser 'maazkhan75','3520297089087','password1965','03204553255'
-
-drop proc CreateUser
-
-INSERT INTO [User] ([Id], [UserName], [Password],[CNIC],[PhoneNo])
-VALUES(NEWID(), awais, awais123,1352049128298,03239292982);
-
-delete from [User]
-where UserName='user17'
-SELECT * FROM [User]
-GO
-
-truncate table [User]  --we have to remove one by one 
-
-drop proc AuthenticateUser
-
-exec ShowUser '3520297089087'
-
-UpdateUser '3520297089087','m maaz khan','mypass123','03204553255'
-
-INSERT INTO [Ticket] ([TicketId],[CNIC],[SeatNo],[StartingStation],[EndingStation],[date])
-VALUES(NEWID(),'0CD8799B-6898-4682-8C22-75A6C7224DA0',1,'KHI','LHR','2025-3-13')
-
-SELECT * FROM [Ticket]
-
-ShowBookedTickets '3520297089087'
-
-update  [Ticket]
-set date_and_time='2024-2-1 10:13:02'
-where TicketId='F8553E69-5A65-4EA3-AFFE-A7C8CEB704AA'
-
-update  [Ticket]
-set Date_and_Time='2025-2-1 20:03:12'
-where TicketId='8FDD6A4D-938B-4871-88AA-DC1F7B0D8A1D'
-
-
-alter table [Ticket] drop  column date
-alter table [ticket] add  Date_and_Time DATETIME
 
 
 --------EditTrain
@@ -618,6 +665,7 @@ END;
 
 
 ALTER PROCEDURE AddCarriage
+
     @TrainId NVARCHAR(255),
     @CarriageId NVARCHAR(255),
     @Type CHAR,
@@ -694,6 +742,47 @@ BEGIN
     END
 END;
 
+
+ALTER PROCEDURE EditStation
+    @StationId NVARCHAR(255),
+    @StationName NVARCHAR(255),
+    @Address NVARCHAR(255)
+AS 
+BEGIN
+    if( exists(select * from [Station] where StationId=@StationId ))
+    BEGIN
+
+    update [Station] set StationName=@StationName,Address=@Address 
+    where StationId=@StationId;
+    SELECT 'STATION UPDATED SUCCESSFULLY' AS ResultMessage;
+    END
+    ELSE
+    BEGIN
+        SELECT 'STATION NOT EXISTS' AS ResultMessage;
+    END
+END;
+
+
+CREATE PROCEDURE EditCarriage
+    @orignalCarriageId NVARCHAR(255),
+    @newCarriageId NVARCHAR(255),
+    @Type CHAR
+AS 
+BEGIN
+    if( exists(select * from [Carriage] where CarriageId=@orignalCarriageId ))
+    BEGIN
+
+    update [Carriage] set CarriageId=@newCarriageId,Type=@Type 
+    where CarriageId=@orignalCarriageId
+    SELECT 'CARRIAGE UPDATED SUCCESSFULLY' AS ResultMessage;
+    END
+    ELSE
+    BEGIN
+        SELECT 'CARRIAGE NOT EXISTS' AS ResultMessage;
+    END
+END;
+
+
 alter PROCEDURE EditSecurity
     @CrewId NVARCHAR(255),
     @CrewName NVARCHAR(255),
@@ -736,6 +825,69 @@ BEGIN
         SELECT 'CREW NOT EXISTS' AS ResultMessage;
     END
 END;
+
+ALTER PROCEDURE EditUser
+    @CNIC NVARCHAR(255),
+    @UserName NVARCHAR(255),
+    @Password NVARCHAR(255),
+    @PhoneNo NVARCHAR(255)
+AS 
+BEGIN
+
+    IF(@CNIC!='3520297089087')
+    BEGIN
+    IF(exists(select * from [User] where CNIC=@CNIC ))
+    BEGIN
+    update [User] set UserName=@UserName, Password=@Password, PhoneNo=@PhoneNo
+    where CNIC=@CNIC;
+    SELECT 'USER UPDATED SUCCESSFULLY' AS ResultMessage;
+    END
+    ELSE 
+    BEGIN
+        SELECT 'USER NOT EXISTS' AS ResultMessage;
+    END
+    END
+
+    ELSE
+    BEGIN
+       SELECT 'You cannot edit Default User :)' AS ResultMessage;
+    END
+
+END
+
+
+ALTER PROCEDURE EditAdmin
+    @CNIC NVARCHAR(255),
+    @AdminName NVARCHAR(255),
+    @Pin NVARCHAR(255),
+    @PhoneNo NVARCHAR(255)
+AS 
+BEGIN
+
+    IF(@CNIC!='3520297089087')
+    BEGIN
+    IF(exists(select * from [Admin] where CNIC=@CNIC ))
+    BEGIN
+    update [Admin] set AdminName=@AdminName,Pin=@Pin,PhoneNo=@PhoneNo
+    where CNIC=@CNIC;
+    SELECT 'ADMIN UPDATED SUCCESSFULLY' AS ResultMessage;
+    END
+    ELSE 
+    BEGIN
+        SELECT 'ADMIN NOT EXISTS' AS ResultMessage;
+    END
+    END
+
+    ELSE
+    BEGIN
+       SELECT 'You cannot edit Default Admin :)' AS ResultMessage;
+    END
+
+END
+
+
+
+
 
 CREATE PROCEDURE EditSeat
     @SeatNo INT,
@@ -846,14 +998,14 @@ create PROCEDURE DeleteRoute
     END;
 
 
-    create PROCEDURE DeleteCrew
+    alter PROCEDURE DeleteCrew
     @CrewId NVARCHAR(255)
 
     AS 
     BEGIN
     if(exists(select * from [Crew] where CrewId=@CrewId ))
     BEGIN
-    delete [Crew] where CrewId=@CrewId;
+    delete from [Crew] where CrewId=@CrewId;
     SELECT 'Success' AS ResultMessage;
     END
     else 
@@ -861,6 +1013,58 @@ create PROCEDURE DeleteRoute
         SELECT 'Fail' AS ResultMessage;
     end
     END;
+
+
+ALTER PROCEDURE DeleteUser
+    @CNIC NVARCHAR(255)
+    AS 
+    BEGIN
+
+    IF(@CNIC!='3520297089087')
+    BEGIN
+    IF(exists(select * from [User] where CNIC=@CNIC ))
+    BEGIN
+    DELETE FROM [User] WHERE CNIC=@CNIC;
+    SELECT 'Success' AS ResultMessage;
+    END
+    ELSE 
+    BEGIN
+        SELECT 'Fail' AS ResultMessage;
+    END
+    END
+
+    ELSE
+    BEGIN
+       SELECT 'You cannot delete Default User :)' AS ResultMessage;
+    END
+
+    END;
+
+ALTER PROCEDURE DeleteAdmin
+    @CNIC NVARCHAR(255)
+    AS 
+    BEGIN
+
+    IF(@CNIC!='3520297089087')
+    BEGIN
+    IF(exists(select * from [Admin] where CNIC=@CNIC ))
+    BEGIN
+    DELETE FROM [Admin] WHERE CNIC=@CNIC;
+    SELECT 'Success' AS ResultMessage;
+    END
+    ELSE 
+    BEGIN
+        SELECT 'Fail' AS ResultMessage;
+    END
+    END
+
+    ELSE
+    BEGIN
+       SELECT 'You cannot delete Default Admin :)' AS ResultMessage;
+    END
+
+    END;
+
 
 
     create PROCEDURE DeleteTrain
@@ -894,10 +1098,6 @@ create PROCEDURE DeleteRoute
     end
     END;
    
- 
-
-
-
  
 
 
@@ -962,3 +1162,47 @@ ALTER TABLE [Pilot] ADD CONSTRAINT FK_CREWID_PILOT FOREIGN KEY ([CrewId]) REFERE
 ALTER TABLE [Pilot] ADD CONSTRAINT FK_STATIONID_PILOT FOREIGN KEY ([TrainId]) REFERENCES [Train] ([TrainId]) on delete SET NULL
 
 select * from [Ticket] as T join [Payment] as P on T.TicketId=P.TicketId; 
+
+
+
+
+--************************** (TESTING AREA) **************************
+
+CreateUser 'maazkhan75','3520297089087','password1965','03204553255'
+
+drop proc CreateUser
+
+INSERT INTO [User] ([Id], [UserName], [Password],[CNIC],[PhoneNo])
+VALUES(NEWID(), awais, awais123,1352049128298,03239292982);
+
+delete from [User]
+where UserName='user17'
+SELECT * FROM [User]
+GO
+
+truncate table [User]  --we have to remove one by one 
+
+drop proc AuthenticateUser
+
+exec ShowUser '3520297089087'
+
+UpdateUser '3520297089087','m maaz khan','mypass123','03204553255'
+
+INSERT INTO [Ticket] ([TicketId],[CNIC],[SeatNo],[StartingStation],[EndingStation],[date])
+VALUES(NEWID(),'0CD8799B-6898-4682-8C22-75A6C7224DA0',1,'KHI','LHR','2025-3-13')
+
+SELECT * FROM [Ticket]
+
+ShowBookedTickets '3520297089087'
+
+update  [Ticket]
+set date_and_time='2024-2-1 10:13:02'
+where TicketId='F8553E69-5A65-4EA3-AFFE-A7C8CEB704AA'
+
+update  [Ticket]
+set Date_and_Time='2025-2-1 20:03:12'
+where TicketId='8FDD6A4D-938B-4871-88AA-DC1F7B0D8A1D'
+
+
+alter table [Ticket] drop  column date
+alter table [ticket] add  Date_and_Time DATETIME

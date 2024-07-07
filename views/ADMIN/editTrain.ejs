@@ -15,19 +15,25 @@
           <li class="breadcrumb-item"><a href="trainsData.ejs">Trains Data</a></li>
           <li class="breadcrumb-item active">Edit Train</li>
         </ol>
+        
+      </nav>
+    </div><!-- End Page Title -->
 
 
+    <section class="section">
+      <div class="row">
 
-          <div>
+          <div class="card">
             <div class="card-body">
-              <h5>Train Update Form</h5>
+              <h5>Train Details</h5>
 
               <!-- Multi Columns Form -->
               <form class="row g-3">
                 <div class="col-md-6">
-                  <label for="inputName5" class="form-label" style="color: #de6b00;">TrainID</label>
-                  <input type="text" class="form-control inputs" id="inputName5" readonly placeholder="<%= TrainId %>">
+                  <label for="inputTrainId" class="form-label" style="color: #de6b00;">TrainID</label>
+                  <input type="text" class="form-control inputs" id="inputTrainId" readonly placeholder="<%= TrainId %>">
                 </div>
+
                 <div class="col-md-6">
                   <label for="inputState" class="form-label">UpDownStatus</label>
                   <select id="inputState" class="form-select inputs selector">
@@ -36,15 +42,7 @@
 
                   </select>
                 </div>
-                <div class="col-md-6">
-                  <label for="inputArrivalStation" class="form-label" style="color: #de6b00;">Arrival Station</label>
-                  <select id="inputArrivalStation" class="form-select inputs selector">
-                    <% Station.forEach((station) => { %>
-                      <option value="<%= station.StationId %>" <%= station.StationId === TrainId ? 'selected' : '' %>><%= station.StationName %></option>
-                  <% }); %>
-                  <label for="inputState" class="form-label">Depature Station</label>
-                  </select>
-                </div>
+
                 <div class="col-md-6">
                   <label for="inputDepartureStation" class="form-label" style="color: #de6b00;">Depature Station</label>
                   <select id="inputDepartureStation" class="form-select inputs selector">
@@ -54,40 +52,95 @@
                   </select>
                 </div>
 
+                <div class="col-md-6">
+                  <label for="inputArrivalStation" class="form-label" style="color: #de6b00;">Arrival Station</label>
+                  <select id="inputArrivalStation" class="form-select inputs selector">
+                    <% Station.forEach((station) => { %>
+                      <option value="<%= station.StationId %>" <%= station.StationId === TrainId ? 'selected' : '' %>><%= station.StationName %></option>
+                  <% }); %>
+                  <label for="inputState" class="form-label">Depature Station</label>
+                  </select>
+                </div>
+
                 <div class="col-12 text-left">
                   <button type="submit" id="submitButton" class="btn custom-btn">Submit</button>
                   <button type="reset" class="btn custom-btn-secondary">Reset</button>
                 </div>
               </form><!-- End Multi Columns Form -->
-  <%- include('./partials/script.ejs') %>
 
-</body>
+            </div>
+          </div>
+
+
+        </div>
+
+    </section>
+
+  </main><!-- End #main -->
+        
+      <!-- Custom Alert Box Structure -->
+<div id="alertModal" class="alert-modal">
+  <div class="alert-content">
+      <span class="alert-close" onclick="closeAlert()">&times;</span>
+      <p id="alertMessage"></p>
+      <button class="alert-btn" onclick="closeAlert()">OK</button>
+  </div>
+</div>
+
+
+<%- include('./partials/footer.ejs') %>
+<%- include('./partials/script.ejs') %>
+
 <script>
-  document.getElementById('submitButton').addEventListener('click', function() {
+
+  
+    // Function to open the custom alert box
+    function showAlert(message) {
+        document.getElementById('alertMessage').innerText = message;
+        document.getElementById('alertModal').style.display = 'flex';
+    }
+
+    // Function to close the custom alert box
+    function closeAlert() {
+        document.getElementById('alertModal').style.display = 'none';
+    }
+
+//******************************************
+
+
+  document.getElementById('submitButton').addEventListener('click', function(event) {
       event.preventDefault();
-      const trainId = document.getElementById('inputName5').placeholder;
+      const trainId = document.getElementById('inputTrainId').placeholder;
       const departureStation = document.getElementById('inputDepartureStation').value;
-      const ArrivalStation = document.getElementById('inputArrivalStation').value;
+      const arrivalStation = document.getElementById('inputArrivalStation').value;
       let upDownStatus = document.getElementById('inputState').value;
       if(upDownStatus=='UP')
         upDownStatus='1';
       else
         upDownStatus='0';
-      console.log('Train ID:', trainId);
-      console.log('arrival Station:', ArrivalStation);
-      console.log('Departure Station:', departureStation);
-      console.log('UpDown Status:', upDownStatus);
+      //console.log('Train ID:', trainId);
+      //console.log('arrival Station:', arrivalStation);
+      //console.log('Departure Station:', departureStation);
+      //console.log('UpDown Status:', upDownStatus);
+
+
+      if(departureStation==arrivalStation){
+        showAlert('Departure and Arrival stations cannot be same :)');
+        return;
+      }
+
+
       fetch('/TD/editTrain', {
       method: 'POST',
-      body: JSON.stringify({ trainId,departureStation,ArrivalStation,upDownStatus }),
+      body: JSON.stringify({ trainId,departureStation,arrivalStation,upDownStatus }),
         headers: {
             'Content-Type': 'application/json'
         }
     })
     .then(response => response.json())
     .then(data => {
-       console.log(data);
-       window.location.href = '/traindata';
+       //console.log(data);
+       window.location.href = '/trainsData';
     })
     .catch(error => {
        
@@ -97,4 +150,5 @@
   });
 </script>
 
+</body>
 </html>

@@ -19,7 +19,7 @@ module.exports = (pool) => {
 
       if (result.returnValue === 0) 
       {
-         console.log('profile update successful!');
+         //console.log('profile update successful!');
 
           //res.render('USER/profile', { userCredentials });  //this one is for direct ejs loading but we have to again make a userCredentials obj and fetch updated credentials from database  //it also works
           res.redirect('profile');   //this one is for controller redirection //it is more efficient
@@ -34,8 +34,9 @@ module.exports = (pool) => {
     catch (error) 
     {
     // Log and handle the error
-    console.error('Error updating profile:', error);
-    res.status(500).send('Profile update failed');
+    //console.error('Error updating profile:', error);
+    res.render('USER/profileUpdateDenied');
+    // res.status(500).send('Profile update failed');
     }
   });
 

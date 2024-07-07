@@ -39,7 +39,7 @@
 
                 <div class="col-md-6">
                     <label for="TrainId" class="form-label" style="color: #de6b00;">TrainID</label>
-                    <select id="TrainId" class="form-select inputs selector">
+                    <select id="TrainId" class="form-select inputs selector" required>
                       <% Train.forEach((train) => { %>
                         <option value="<%= train.TrainId %>"><%= train.TrainId %></option>
                     <% }); %>
@@ -47,7 +47,7 @@
                 </div>
                 <div class="col-md-6">
                     <label for="TrackId" class="form-label" style="color: #de6b00;">Track</label>
-                    <select id="TrackId" class="form-select inputs selector">
+                    <select id="TrackId" class="form-select inputs selector" required>
                         <% Track.forEach((track) => { %>
                             <option value="<%= track.TrackId %>"><%= track.Station1Id %> - <%= track.Station2Id %></option>
                         <% }); %>
@@ -64,7 +64,7 @@
                 <!--    if we want to do data-time picker with flatpickr js library             -->
                 <div class="col-md-6">
                   <label for="DepartureTime" class="form-label">DepartureTime</label>
-                  <input type="text" class="form-control inputs" id="DepartureTime">
+                  <input type="text" class="form-control inputs" id="DepartureTime" required>
                 </div>
                 
                 <script>
@@ -83,7 +83,7 @@
                    <!--    if we want to do data-time picker with flatpickr js library             -->
                 <div class="col-md-6">
                   <label for="ArrivalTime" class="form-label">ArrivalTime</label>
-                  <input type="text" class="form-control inputs" id="ArrivalTime">
+                  <input type="text" class="form-control inputs" id="ArrivalTime" required>
                 </div>
                 
                 <script>
@@ -111,18 +111,49 @@
 
   </main><!-- End #main -->
 
+  <!-- Custom Alert Box Structure -->
+<div id="alertModal" class="alert-modal">
+  <div class="alert-content">
+      <span class="alert-close" onclick="closeAlert()">&times;</span>
+      <p id="alertMessage"></p>
+      <button class="alert-btn" onclick="closeAlert()">OK</button>
+  </div>
+</div>
+
 
   <%- include('./partials/footer.ejs') %>
   <%- include('./partials/script.ejs') %>
 
-</body>
+
 <script>
-  document.getElementById('submitButton').addEventListener('click', function() {
+
+    // Function to open the custom alert box
+    function showAlert(message) {
+        document.getElementById('alertMessage').innerText = message;
+        document.getElementById('alertModal').style.display = 'flex';
+    }
+
+    // Function to close the custom alert box
+    function closeAlert() {
+        document.getElementById('alertModal').style.display = 'none';
+    }
+
+//******************************************
+
+
+  document.getElementById('submitButton').addEventListener('click', function(event) {
       event.preventDefault();
       const TrainId = document.getElementById('TrainId').value;
       const TrackId = document.getElementById('TrackId').value;
       const DepartureTime = document.getElementById('DepartureTime').value;
       const ArrivalTime = document.getElementById('ArrivalTime').value;
+
+      if (!TrainId || !TrackId || !DepartureTime || !ArrivalTime) {
+        //alert('Please fill out all required fields.');
+        showAlert('Please fill out all required fields.');
+        return;
+      }
+
         
       fetch('/TD/addRoute', {
       method: 'POST',
@@ -138,8 +169,9 @@
           {window.location.href = '/routesData';}
         else
         {
-          console.log(result[0].ResultMessage);
-          alert(result[0].ResultMessage);
+          //console.log(result[0].ResultMessage);
+          //alert(result[0].ResultMessage);
+          showAlert(result[0].ResultMessage);
         }
 
     })
@@ -150,5 +182,5 @@
       // You can perform further actions here, such as sending the data to the server via fetch() or XMLHttpRequest
   });
 </script>
-
+</body>
 </html>

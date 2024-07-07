@@ -72,16 +72,16 @@
   <%- include('./partials/footer.ejs') %>
   <%- include('./partials/script.ejs') %>
 
-</body>
+
 <script>
-  document.getElementById('submitButton').addEventListener('click', function() {
+  document.getElementById('submitButton').addEventListener('click', function(event) {
       event.preventDefault();
       const CrewId = document.getElementById('CrewId').placeholder;
       const CrewName = document.getElementById('CrewName').value !== '' ? document.getElementById('CrewName').value : document.getElementById('CrewName').placeholder;
-        const Address = document.getElementById('Address').value !== '' ? document.getElementById('Address').value : document.getElementById('Address').placeholder;
-        const TrainId = document.getElementById('TrainId').value;
+      const Address = document.getElementById('Address').value !== '' ? document.getElementById('Address').value : document.getElementById('Address').placeholder;
+      const TrainId = document.getElementById('TrainId').value;
 
-    console.log(TrainId);
+      //console.log(TrainId);
         
       fetch('/TD/editPilot', {
       method: 'POST',
@@ -97,7 +97,7 @@
           {window.location.href = '/crewData';}
         else
         {
-          console.log(result[0].ResultMessage);
+          //console.log(result[0].ResultMessage);
           alert(result[0].ResultMessage);
         }
 
@@ -109,5 +109,5 @@
       // You can perform further actions here, such as sending the data to the server via fetch() or XMLHttpRequest
   });
 </script>
-
+</body>
 </html>

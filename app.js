@@ -28,7 +28,7 @@ app.use(session({
 
 
 
-function isAuthenticated(req, res, next)
+function isAuthenticatedUser(req, res, next)
 {
   if(req.session.userDetails && req.session.userDetails.cnic){
     //user is authenticated proceed with the request
@@ -37,7 +37,7 @@ function isAuthenticated(req, res, next)
   else 
   {
      //redirect an error page
-    console.log('Forbidden: access denied because of authentication bypass!');
+    //console.log('Forbidden: access denied because of authentication bypass!');
     res.redirect('/errorOfSession');
   }
 }
@@ -46,13 +46,13 @@ function isAuthenticated(req, res, next)
 function isAuthenticatedAdmin(req, res, next)
 {
   if(req.session.AdminDetails && req.session.AdminDetails.cnic){
-    //user is authenticated proceed with the request
+    //admin is authenticated proceed with the request
     next();
   }
   else 
   {
      //redirect an error page
-    console.log('Forbidden: access denied because of authentication bypass!');
+    //console.log('Forbidden: access denied because of authentication bypass!');
     res.redirect('/errorOfSession');
   }
 }
@@ -63,6 +63,7 @@ const signupRouter = require('./routes/userSignup')
 const loginRouter = require('./routes/userLogin')
 const adminLoginRouter = require('./routes/adminLogin')
 const adminSignupRouter = require('./routes/adminSignup')
+const passwordResetRouter = require('./routes/passwordReset')
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const SearchTrainRouter = require('./routes/SearchTrain');
@@ -75,16 +76,27 @@ const passwordChangeRouter = require('./routes/passwordChange');
 
 const { Console, dirxml } = require('console');
 const { render } = require('ejs');
-const log = console.log;
+const log = console.log;   //for ease of use in future ( have used in email code)
+
+// also before deployment we should comment out all console.log statements because it also 
+// affect the performance of the website but for debugging and testing we should write or uncomment console.log
 
 //configuring a connection pool for MSSQL using the mssql module and connecting to the database
 const sqlConfig = {
   
-  //UNDER CONSTRUCTION
-  user:'maazkhan75_RailSyncDB',
+  user:'maazkhan75_RailSync_DB',
   password:'railsyncpass',
-  database:'maazkhan75_RailSyncDB',
-  server: 'sql.bsite.net\\MSSQL2016',
+  database:'maazkhan75_RailSync_DB',
+  server: 'sql.bsite.net\\MSSQL2016',   
+  // Here while configuring sql obj we have to write sql.bsite.net\\MSSQL2016 with double back slash 
+  // but for connection in both vs code and in ssms we will have to write sql.bsite.net\MSSQL2016
+  // with single back slash ( otherwise connection for sql login can never established!)
+
+  // BECAUSE....
+  // In JavaScript (and other programming environments that use escape sequences like \n is a newline, \t is a tab, and so on.), a single backslash needs to be escaped with another backslash, hence \\. to write it as backslash
+  // In environments like SSMS and VS Code, you can directly use the single backslash without escaping it.
+
+
   pool: {
     max: 10,
     min: 0,
@@ -165,7 +177,7 @@ res.render('home.ejs');
 });
 
 app.get("/",function(req, res){
-  console.log(__dirname);
+  //console.log(__dirname);
   res.sendFile(__dirname + "/views/home.ejs");
 });
 
@@ -185,7 +197,7 @@ app.get('/adminLoginForm',(req,res)=>{
   res.render('adminLogin.ejs');
 });
 
-app.get('/adminSignupForm',(req,res)=>{
+app.get('/adminSignupForm', isAuthenticatedAdmin,(req,res)=>{
   res.render('adminSignup.ejs');
 });
 
@@ -195,25 +207,14 @@ app.get('/errorOfSession',(req,res)=>{
 });
 
 
-app.get('/SearchTrainform', (req, res) => {
-  pool.query('SELECT StationName FROM Station')
-      .then(result => {
-          const StationNames = result.recordset;
-          var isSubmitted=false;
-          res.render("tripForm.ejs", { StationNames ,isSubmitted});
-      })
-      .catch(err => {
-          console.error(err);
-          res.status(500).send('Internal Server Error');
-      });
-});
 
+//ADMIN PAGES
 
-app.get('/adminDash', (req, res) => {
+app.get('/adminDash', isAuthenticatedAdmin, (req, res) => {
   res.render('./ADMIN/dashboard.ejs');
 });
 
-app.get('/trainsData', (req, res) => {
+app.get('/trainsData', isAuthenticatedAdmin, (req, res) => {
   pool.query('SELECT * FROM Train')
       .then(result => {
           const Trains = result.recordset;
@@ -225,21 +226,51 @@ app.get('/trainsData', (req, res) => {
       });
 });
 
-app.get('/ticketsData', (req, res) => {
-  pool.query('SELECT * FROM Ticket ')
-      .then(result => {
-          const Tickets = result.recordset;
-          console.log(Tickets);
-          res.render("./ADMIN/ticketsData.ejs", { Tickets });
-      })
-      .catch(err => {
-          console.error(err);
-          res.status(500).send('Internal Server Error');
+
+app.get('/ticketsData', isAuthenticatedAdmin, async (req, res) => {
+  try {
+    const result = await pool.request()
+    .execute('ShowTickets');
+  
+    if (result.returnValue === 0) 
+    {
+      const Tickets = result.recordset; 
+      //console.log(Tickets);
+      const ticketsUpcoming = [];
+      const ticketsPrevious = [];
+      const currentTime = new Date();
+      // console.log(currentTime);
+      Tickets.forEach((ticket) => {
+
+        const deptTime=new Date(ticket.DeptTime);
+        if(deptTime >= currentTime)
+        {
+          ticketsUpcoming.push(ticket);
+        }
+        else
+        {
+          ticketsPrevious.push(ticket);
+        }
       });
+
+      // Assuming this is how your ticket data is structured
+      res.render('./ADMIN/ticketsData.ejs',{ticketsPrevious,ticketsUpcoming}); 
+      // Send ticket data as JSON response
+    } 
+    else
+    {
+      throw new Error('Failed to retrieve tickets');
+    } 
+    } 
+    catch (error)
+    {
+    console.error('Error retrieving tickets:', error);
+    res.status(500).send('Failed to retrieve tickets');
+    }
 });
 
 
-app.get('/usersAndAdminsData', (req, res) => {
+app.get('/usersAndAdminsData', isAuthenticatedAdmin, (req, res) => {
   
   Promise.all([
      
@@ -261,7 +292,7 @@ app.get('/usersAndAdminsData', (req, res) => {
 
 
 
-app.get('/stationsAndTracksData', (req, res) => {
+app.get('/stationsAndTracksData', isAuthenticatedAdmin, (req, res) => {
   const requestStation = new sql.Request(pool);
   const requestTrack = new sql.Request(pool);
 
@@ -281,13 +312,13 @@ app.get('/stationsAndTracksData', (req, res) => {
   });
 });
 
-app.get('/routesData', (req, res) => {
+app.get('/routesData', isAuthenticatedAdmin, (req, res) => {
      
   pool.query('SELECT * FROM Route as R join Tracks as T on R.TrackId=T.TrackId')
   .then(result => {
  
       const Route =result.recordset;
-      console.log(Route);
+      //console.log(Route);
       res.render("./ADMIN/routesData.ejs", { Route });
   })
   .catch(err => {
@@ -298,7 +329,7 @@ app.get('/routesData', (req, res) => {
 
 
 
-app.get('/crewData', (req, res) => {
+app.get('/crewData', isAuthenticatedAdmin, (req, res) => {
   
   Promise.all([
      
@@ -318,7 +349,7 @@ app.get('/crewData', (req, res) => {
 });
 
 
-app.get('/addTrain', (req, res) => {
+app.get('/addTrain', isAuthenticatedAdmin, (req, res) => {
   pool.query('SELECT * FROM Station')
       .then(result => {
           const Station = result.recordset;
@@ -336,7 +367,7 @@ app.get('/addTrain', (req, res) => {
 
 
 
-app.get('/addCarriage', (req, res) => {
+app.get('/addCarriage', isAuthenticatedAdmin, (req, res) => {
      
   pool.query('SELECT * FROM Train ')
   .then(result => {
@@ -353,7 +384,7 @@ app.get('/addCarriage', (req, res) => {
 
 
 
-app.get('/addRoute', (req, res) => {
+app.get('/addRoute', isAuthenticatedAdmin, (req, res) => {
   
   Promise.all([
      
@@ -372,11 +403,11 @@ app.get('/addRoute', (req, res) => {
   });
 });
 
-app.get('/addStation', (req, res) => {
+app.get('/addStation', isAuthenticatedAdmin, (req, res) => {
   res.render('./ADMIN/addStation.ejs');
 });
 
-app.get('/addTrack', (req, res) => {
+app.get('/addTrack', isAuthenticatedAdmin, (req, res) => {
   pool.query('SELECT * FROM Station')
   .then(result => {
       const Station = result.recordset;
@@ -389,7 +420,7 @@ app.get('/addTrack', (req, res) => {
   });
 });
 
-app.get('/addCrew', (req, res) => {
+app.get('/addCrew', isAuthenticatedAdmin, (req, res) => {
   const stationQuery = pool.query('SELECT * FROM Station');
   const trainQuery = pool.query('SELECT * FROM Train');
 
@@ -410,32 +441,8 @@ app.get('/addCrew', (req, res) => {
 });
 
 
-app.post('/UnbookTicket', (req, res) => {
-  console.log(req.body);
-  const TrainId = req.body.TrainID;
-  const CarriageId = req.body.CarriageID;
-  const SeatNo = req.body.SeatNo;
-  const TicketId = req.body.TicketId;
-  const request = new sql.Request(pool);
-  request.input('CarriageId', sql.NVarChar(255), CarriageId);
-  request.input('SeatNo', sql.Int, SeatNo);
-  request.input('TicketId', sql.Int, TicketId);
-  request.input('TrainId', sql.NVarChar(255), TrainId);
 
-  request.execute('CancelTicket', (err, result) => {
-      if (err) {
-          console.error(err);
-          res.status(500).send('Internal Server Error');
-      } else {
-          console.log(result.recordset);
-          Message=result.recordset;
-          res.json({ Message });
-      }
-  });
-});
-
-
-app.get('/editTrain', (req, res) => {
+app.get('/editTrain', isAuthenticatedAdmin, (req, res) => {
   const TrainId = req.query.TrainID;
   pool.query('SELECT * FROM Station')
       .then(result => {
@@ -450,7 +457,7 @@ app.get('/editTrain', (req, res) => {
   
 });
 
-app.get('/editRoute', (req, res) => {
+app.get('/editRoute', isAuthenticatedAdmin, (req, res) => {
   const TrainID = req.query.TrainID;
   const TrackID=req.query.TrackID;
   res.render('./ADMIN/editRoute.ejs', {TrainID,TrackID });
@@ -460,7 +467,7 @@ app.get('/editSecurity', (req, res) => {
   const CrewId = req.query.CrewId;
   const CrewName = req.query.CrewName;
   const Address = req.query.Address;
-  console.log(CrewId,CrewName,Address);
+  //console.log(CrewId,CrewName,Address);
   pool.query('SELECT * FROM Station')
   .then(result => {
       const Station = result.recordset;
@@ -473,7 +480,7 @@ app.get('/editSecurity', (req, res) => {
   
 });
 
-app.get('/editPilot', (req, res) => {
+app.get('/editPilot', isAuthenticatedAdmin, (req, res) => {
   const CrewId = req.query.CrewId;
   const CrewName = req.query.CrewName;
   const Address = req.query.Address;
@@ -488,7 +495,28 @@ app.get('/editPilot', (req, res) => {
   });
 });
 
-app.get('/editTrack', (req, res) => {
+app.get('/editUser', isAuthenticatedAdmin, (req, res) => {
+  const CNIC = req.query.CNIC;
+  const UserName = req.query.UserName;
+  const Password = req.query.Password;
+  const PhoneNo = req.query.PhoneNo;
+
+  //console.log(CNIC,UserName,Password,PhoneNo);
+  res.render('./ADMIN/editUser.ejs', {CNIC,UserName,Password,PhoneNo });
+});
+
+app.get('/editAdmin', (req, res) => {
+  const CNIC = req.query.CNIC;
+  const AdminName = req.query.AdminName;
+  const Pin = req.query.Pin;
+  const PhoneNo = req.query.PhoneNo;
+
+  //console.log(CNIC,UserName,Password,PhoneNo);
+  res.render('./ADMIN/editAdmin.ejs', {CNIC,AdminName,Pin,PhoneNo });
+});
+
+
+app.get('/editTrack', isAuthenticatedAdmin, (req, res) => {
 
   const TrackID=req.query.TrackID;
   const Economy=req.query.Economy;
@@ -497,7 +525,40 @@ app.get('/editTrack', (req, res) => {
   res.render('./ADMIN/editTrack.ejs', {TrackID,Economy,Business,FirstClass });
 });
 
-app.get('/profile', isAuthenticated, async(req,res)=>{
+
+app.get('/editStation', isAuthenticatedAdmin, (req, res) => {
+
+  const StationId=req.query.StationId;
+  const StationName=req.query.StationName;
+  const Address=req.query.Address;
+  res.render('./ADMIN/editStation.ejs', {StationId,StationName,Address });
+});
+
+app.get('/editCarriage', isAuthenticatedAdmin, (req, res) => {
+
+  const CarriageId=req.query.CarriageId;
+  const TrainId=req.query.TrainId;
+  
+  res.render('./ADMIN/editCarriage.ejs', {CarriageId, TrainId });
+});
+
+
+
+
+
+
+
+
+//USER PAGES
+
+
+app.get('/userDash', isAuthenticatedUser, (req,res)=>{
+  const userData = req.session.userDetails;
+  res.render('./USER/dashboard.ejs',{userData});
+  })
+
+
+app.get('/profile', isAuthenticatedUser, async(req,res)=>{
   const cnic=req.session.userDetails.cnic;
   try{
     const result = await pool.request()
@@ -530,16 +591,19 @@ app.get('/profile', isAuthenticated, async(req,res)=>{
 
 
 
-
-
-
-app.get('/userDash', isAuthenticated, (req,res)=>{
-  const userData = req.session.userDetails;
-  res.render('./USER/dashboard.ejs',{userData});
-  })
-
-
-
+  app.get('/SearchTrainform', isAuthenticatedUser, (req, res) => {
+    pool.query('SELECT StationName FROM Station')
+        .then(result => {
+            const StationNames = result.recordset;
+            var isSubmitted=false;
+            res.render("USER/tripForm.ejs", { StationNames ,isSubmitted});
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        });
+  });
+  
   app.get('/faq', (req, res) => {  
     try
     {
@@ -551,7 +615,20 @@ app.get('/userDash', isAuthenticated, (req,res)=>{
       res.status(500).send('Internal Server Error');
     };
   });
-  
+
+  app.get('/forgetPass', (req, res) => {  
+    try
+    {
+    res.render("./passwordReset.ejs");
+    }
+    catch(error)
+    {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    };
+  });
+
+
   app.get('/logout',(req,res)=>{
   
     req.session.destroy(err => {
@@ -570,7 +647,7 @@ app.get('/userDash', isAuthenticated, (req,res)=>{
   
   
   
-  app.get('/showTicketsOfUser', isAuthenticated, async (req, res) => {
+  app.get('/showTicketsOfUser', isAuthenticatedUser, async (req, res) => {
     const cnic = req.session.userDetails.cnic;
       try {
       // Call the stored procedure to fetch booked tickets
@@ -580,9 +657,9 @@ app.get('/userDash', isAuthenticated, (req,res)=>{
     
       if (result.returnValue === 0) 
       {
-        console.log('Tickets found!');
+        //console.log('Tickets found!');
         const Tickets = result.recordset; 
-        console.log(Tickets)
+        //console.log(Tickets)
         const ticketsUpcoming = [];
         const ticketsPrevious = [];
         const currentTime = new Date();
@@ -617,9 +694,37 @@ app.get('/userDash', isAuthenticated, (req,res)=>{
   });
   
 //work to be done below to show email sent message!
-app.get('/contact', (req, res) => {
+app.get('/contact', isAuthenticatedUser, (req, res) => {
   res.render('./USER/contact.ejs');
 });
+
+
+//HERE WE HAVE WRITTION IN APP.JS INSEAD OF MAKING A SEPARATE ROUTE OR WRITING IN TD.JS
+app.post('/UnbookTicket', (req, res) => {
+  //console.log(req.body);
+  const TrainId = req.body.TrainID;
+  const CarriageId = req.body.CarriageID;
+  const SeatNo = req.body.SeatNo;
+  const TicketId = req.body.TicketId;
+  const request = new sql.Request(pool);
+  request.input('CarriageId', sql.NVarChar(255), CarriageId);
+  request.input('SeatNo', sql.Int, SeatNo);
+  request.input('TicketId', sql.Int, TicketId);
+  request.input('TrainId', sql.NVarChar(255), TrainId);
+
+  request.execute('CancelTicket', (err, result) => {
+      if (err) {
+          console.error(err);
+          res.status(500).send('Internal Server Error');
+      } else {
+          //console.log(result.recordset);
+          Message=result.recordset;
+          res.json({ Message });
+      }
+  });
+});
+
+
 
 
 // Use the routes
@@ -628,7 +733,8 @@ app.use('/users', usersRouter);
 app.use('/userSignup', signupRouter(pool));   // Pass pool object to signupRouter
 app.use('/userLogin', loginRouter(pool));     // Pass pool object to loginRouter
 app.use('/adminLogin', adminLoginRouter(pool));     // Pass pool object to loginRouter
-app.use('/adminSignup', adminSignupRouter(pool));     // Pass pool object to loginRouter
+app.use('/adminSignup', adminSignupRouter(pool));     // Pass pool object to loginRouter   //first argument contain the actual name of the js router file 
+app.use('/passwordReset', passwordResetRouter(pool));     // Pass pool object to loginRouter
 app.use('/SearchTrain', SearchTrainRouter(pool));
 app.use('/TD',SearchCarriage(pool));
 app.use('/', userSessionRouter);    //for testing session of user

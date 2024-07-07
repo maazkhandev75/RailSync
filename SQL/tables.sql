@@ -113,8 +113,8 @@ GO
 CREATE TABLE [Route] (
   [TrainId] nvarchar(255),
   [TrackId] nvarchar(255),
-  [DeptTime] time,
-  [ArrivalTime] time,
+  [DeptTime] datetime,
+  [ArrivalTime] datetime,
   PRIMARY KEY ([TrainId], [TrackId])
 )
 GO
@@ -291,7 +291,7 @@ insert into Ticket
 values('3520297089087',1,'KhiExpress','KhiExpressCarriage','1')
 go
 
-sp_help ticket
+sp_help [Route]
 
 select * from [User]
 select * from [Admin]
@@ -310,11 +310,16 @@ select * from [Seat]
 
 
 
-
 --UPDATES--
 
 --renaming column of some table syntax
 EXEC sp_rename '[Fare].BusinessClass', 'Business', 'COLUMN';
+
+
+
+update [Carriage]
+set CarriageId='BlueWaysCargE3'
+WHERE CarriageId='BlueWaysCargEE3'
 
 
 ALTER TABLE [ticket]
