@@ -32,25 +32,23 @@
 
               <!-- Multi Columns Form -->
               <form class="row g-3">  
-              <div class="col-md-6">
-                <label for="inputName5" class="form-label" style="color: #de6b00;">CarriageId</label>
-                <input type="text" class="form-control inputs" id="inputName5">
-            </div>
-            
                 <div class="col-md-6">
-                  <label for="inputName5" class="form-label" style="color: #de6b00;">TrainID</label>
-                  <input type="text" class="form-control inputs" id="inputName5">
+                  <label for="TrainId" class="form-label" style="color: #de6b00;">TrainID</label>
+                  <input type="text" class="form-control inputs" id="TrainId" readonly placeholder="<%= TrainId %>">
                 </div>
-                
                 <div class="col-md-6">
-                  <label for="inputState" class="form-label">Type</label>
-                  <select id="inputState" class="form-select inputs selector" style="color: #de6b00;">
-                    <option selected>E</option>
-                    <option>F</option>
-                    <option>B</option>
+                  <label for="CarriageId" class="form-label" style="color: #de6b00;">CarriageID</label>
+                  <input type="input" class="form-control inputs" id="CarriageId" placeholder="<%= CarriageId %>">
+                </div>
+                <div class="col-md-6">
+                  <label for="Type" class="form-label" style="color: #de6b00;">Type</label>
+                  <select id="Type" class="form-select inputs selector">
+                    <option value="E">Economy</option>
+                    <option value="B">Business</option>
+                    <option value="F">FirstClass</option>
                   </select>
                 </div>
-               
+                
                 <div class="col-12 text-left">
                   <button type="submit" id="submitButton" class="btn custom-btn">Submit</button>
                   <button type="reset" class="btn custom-btn-secondary">Reset</button>
@@ -71,6 +69,42 @@
   <%- include('./partials/footer.ejs') %>
   <%- include('./partials/script.ejs') %>
 
-</body>
 
+<script>
+  document.getElementById('submitButton').addEventListener('click', function(event) {
+      event.preventDefault();
+      const orignalCarriageId = document.getElementById('CarriageId').placeholder;
+      const newCarriageId =document.getElementById('CarriageId').value !== '' ? document.getElementById('CarriageId').value : document.getElementById('CarriageId').placeholder;
+      const Type = document.getElementById('Type').value;
+
+        
+      fetch('/TD/editCarriage', {
+      method: 'POST',
+      body: JSON.stringify({ orignalCarriageId,newCarriageId,Type }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+      const result = data.Message;
+       if(result[0].ResultMessage=='CARRIAGE UPDATED SUCCESSFULLY')
+          {window.location.href = '/trainsData';}
+        else
+        {
+          //console.log(result[0].ResultMessage);
+          alert(result[0].ResultMessage);
+        }
+
+    })
+    .catch(error => {
+       
+      console.error('Error:', error);
+    });
+      // You can perform further actions here, such as sending the data to the server via fetch() or XMLHttpRequest
+  });
+</script>
+
+
+</body>
 </html>

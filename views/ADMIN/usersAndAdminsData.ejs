@@ -4,110 +4,142 @@
 <%- include('./partials/head.ejs') %>
 
 <style>
+
+/* Existing styles */
 body {
-        font-family: Comfortaa, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #000000;
+    font-family: Comfortaa, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #000000;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #000000;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 2px solid rgb(66, 66, 66);
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #000000;
+    font-weight: bold;
+    font-family: ubuntu, sans-serif;
+    color: rgb(255, 106, 0);
+}
+
+tr:hover {
+    background-color: #1a1a1a;
+}
+
+.edit-btn, .delete-btn {
+    padding: 5px 10px;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-right:5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: background-color 0.2s ease-in;
+}
+
+.delete-btn {
+    background-color: #b40c00;
+}
+
+.edit-btn {
+    background-color: #32c700;
+}
+
+.delete-btn:hover {
+    background-color: #ec1000;
+}
+
+.edit-btn:hover {
+    background-color: #40ff00;
+}
+
+.table-header {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    flex: 1;
+    margin-right: 10px;
+    padding: 5px;
+    border-radius: 10px;
+    outline: none;
+    border: 2px solid #888888;
+    color: #ffffff;
+    background-color: #000;
+}
+
+.search-input:focus {
+    border-color: #de6b00;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.search-input:enabled {
+    background-color: #000;
+    color: white;
+    font-weight: 600;
+    letter-spacing: 1px;
+    outline: none;
+}
+
+.search-btn {
+    padding: 5px 10px;
+    background-color: #7700ff;
+    color: #000000;
+    font-weight: bold;
+    border: none;
+    font-size: 0.9em;
+    margin-left: 0.3em;
+    transition: all 0.2s ease-in;
+    cursor: pointer;
+    border-radius: 30px;
+}
+
+.search-btn:hover {
+    background-color: #9a42ff;
+}
+
+
+.table-responsive {
+    overflow-x: auto;
     }
-    .container {
-        max-width: 1200px;
-        margin: 20px auto;
-        padding: 20px;
-        background-color: #000000;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-     table {
-        width: 100%;
-        border-collapse: collapse;
-    }
+
+    @media screen and (max-width: 650px) {
     th, td {
-        border: 2px solid rgb(66, 66, 66);
-        padding: 10px;
-        text-align: left;
+        font-size: 0.8em;
     }
-     th {
-        background-color: #000000;
-        font-weight: bold;
-        font-family: ubuntu, sans-serif;
-        color: rgb(255, 106, 0);
-    }
-    tr:hover {
-        background-color: #1a1a1a;
-    } 
     .edit-btn, .delete-btn {
-        padding: 5px 10px;
-        color: rgb(0, 0, 0);
-        font-weight: bold;
-        font-size: 0.9em;
-        margin: 0 0 10px 5px;
-        border: none;
-        cursor: pointer;
-        border-radius: 30px;
-        transition: background-color 0.2s ease-in;
+        font-size: 0.8em;
     }
-    .delete-btn {
-        background-color: #b40c00;
+    .search-btn{
+        font-size: 0.8em;
     }
-    .edit-btn{
-        background-color: #32c700;
+    input{
+        font-size: 0.8em;
     }
-    .delete-btn:hover{
-        background-color: #ec1000;
-    }
-    .edit-btn:hover{
-        background-color: #40ff00;
-    }
+}
 
-    .table-header {
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-    }
-
-    .search-input {
-        flex: 1;
-        margin-right: 10px;
-        padding: 5px;
-        border-radius: 10px;
-        outline: none;
-        border: 2px solid #888888;
-        color: #ffffff;
-        background-color: #000;
-    }
-
-    .search-input:focus {
-	border-color: #de6b00;
-	-webkit-box-shadow: none;
-	box-shadow: none;
-    }
-
-    .search-input:enabled{
-	background-color: #000;
-	color:white;
-	font-weight: 600;
-	letter-spacing: 1px;
-	outline: none;
-    }
-
-
-    .search-btn {
-        padding: 5px 10px;
-        background-color: #7700ff;
-        color: #000000;
-        font-weight:bold;
-        border: none;
-        font-size: 0.9em;
-        margin-left: 0.3em;
-        transition: all 0.2s ease-in;
-        cursor: pointer;
-        border-radius: 30px;
-    }
-
-    .search-btn:hover {
-        background-color: #9a42ff;
-    }
 </style>
 <body>
 
@@ -115,9 +147,9 @@ body {
 
 <%- include('./partials/sidebar.ejs') %>
 
-    <main id="main" class="main">
+<main id="main" class="main">
 
-        <div class="pagetitle">
+    <div class="pagetitle">
         <h1>Users And Admins Data</h1>
         <nav>
             <ol class="breadcrumb">
@@ -125,13 +157,12 @@ body {
                 <li class="breadcrumb-item active">Users And Admins Data</li>
             </ol>
         </nav>
-        </div><!-- End Page Title -->
+    </div><!-- End Page Title -->
 
-        <section class="section">
-
-
-                <div class="container">
-                <h2>Users</h2>
+    <section class="section">
+        <div class="container">
+            <h2>Users</h2>
+            <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
@@ -139,26 +170,30 @@ body {
                             <th>UserName</th>
                             <th>Password</th>
                             <th>PhoneNo</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <% Users.forEach((user)=>{ %>
-                            <tr>
+                            <tr data-user-id="<%= user.CNIC %>">
                                 <td><%= user.CNIC %></td>
                                 <td><%= user.UserName %></td>
                                 <td><%= user.Password %></td>
                                 <td><%= user.PhoneNo %></td>
+                                <td>
+                                    <button class="edit-btn" onclick="editUser('<%= user.CNIC %>','<%= user.UserName %>','<%= user.Password %>','<%= user.PhoneNo %>')">edit</button>
+                                    <button class="delete-btn" onclick="confirmDeleteUser('<%= user.CNIC %>')">delete</button>
+                                </td>
                             </tr>
-                            <% }); %>
-
-
-                        <!-- More rows here -->
+                        <% }); %>
                     </tbody>
                 </table>
-                </div>
-                
-                <div class="container">
-                <h2>Admins</h2>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2>Admins</h2>
+            <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
@@ -166,31 +201,154 @@ body {
                             <th>AdminName</th>
                             <th>Pin</th>
                             <th>PhoneNo</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <% Admins.forEach((admin)=>{ %>
-                            <tr>
+                            <tr data-admin-id="<%= admin.CNIC %>">
                                 <td><%= admin.CNIC %></td>
                                 <td><%= admin.AdminName %></td>
                                 <td><%= admin.Pin %></td>
                                 <td><%= admin.PhoneNo %></td>
+                                <td>
+                                    <button class="edit-btn" onclick="editAdmin('<%= admin.CNIC %>','<%= admin.AdminName %>','<%= admin.Pin %>','<%= admin.PhoneNo %>')">edit</button>
+                                    <button class="delete-btn" onclick="confirmDeleteAdmin('<%= admin.CNIC %>')">delete</button>
+                                </td>
                             </tr>
-                            <% }); %>
-
-
-                        <!-- More rows here -->
+                        <% }); %>
                     </tbody>
                 </table>
             </div>
+        </div>
+    </section>
+</main>
 
-        </section>
-    </main>
-  <%- include('./partials/footer.ejs') %>
-  <%- include('./partials/script.ejs') %>
+<!-- Modal Structure -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <!-- <span class="close" onclick="closeModal()">&times;</span> -->
+        <p>Are you sure you want to delete?</p>
+        <div class="modal-buttons">
+            <button class="confirm-btn" id="confirmDelete">Yes</button>
+            <button class="cancel-btn" onclick="closeModal()">No</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Custom Alert Box Structure -->
+<div id="alertModal" class="alert-modal">
+    <div class="alert-content">
+        <span class="alert-close" onclick="closeAlert()">&times;</span>
+        <p id="alertMessage"></p>
+        <button class="alert-btn" onclick="closeAlert()">OK</button>
+    </div>
+</div>
+
+
+<%- include('./partials/footer.ejs') %>
+<%- include('./partials/script.ejs') %>
+
+<script>
+    let deleteFunction;  // Function to call on confirmation
+
+    function confirmDeleteUser(CNIC) {
+        deleteFunction = () => deleteUser(CNIC);  //setting to appropriate delete func not calling here...
+        openModal();
+    }
+
+    function confirmDeleteAdmin(CNIC) {
+        deleteFunction = () => deleteAdmin(CNIC);  //setting to appropriate delete func not calling here...
+        openModal();
+    }
+
+    function openModal() {
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    document.getElementById('confirmDelete').addEventListener('click', function() {
+        deleteFunction();
+        closeModal();
+    });
+
+
+//******************************************
+
+    // Function to open the custom alert box
+    function showAlert(message) {
+        document.getElementById('alertMessage').innerText = message;
+        document.getElementById('alertModal').style.display = 'flex';
+    }
+
+    // Function to close the custom alert box
+    function closeAlert() {
+        document.getElementById('alertModal').style.display = 'none';
+    }
+
+//******************************************
+
+
+    function deleteUser(CNIC) {
+        fetch(`/TD/deleteUser?CNIC=${CNIC}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                const rowToDelete = document.querySelector(`tr[data-user-id="${CNIC}"]`);
+                if (rowToDelete) {
+                    rowToDelete.remove();
+                } else {
+                    console.error('Failed to find the row to delete.');
+                }
+            } else {
+                //alert('You cannot delete Default User :)');
+                showAlert('You cannot delete Default User :)');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            //alert('An error occurred. Please try again later.');
+            showAlert('An error occurred. Please try again later.');
+        });
+    }
+
+    function deleteAdmin(CNIC) {
+        fetch(`/TD/deleteAdmin?CNIC=${CNIC}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                const rowToDelete = document.querySelector(`tr[data-admin-id="${CNIC}"]`);
+                if (rowToDelete) {
+                    rowToDelete.remove();
+                } else {
+                    console.error('Failed to find the row to delete.');
+                }
+            } else {
+                // alert('You cannot delete Default Admin :)');
+                showAlert('You cannot delete Default Admin :)');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // alert('An error occurred. Please try again later.');
+            showAlert('An error occurred. Please try again later.');
+        });
+    }
+
+    function editUser(CNIC, UserName, Password, PhoneNo) {
+        window.location.href = `/editUser?CNIC=${CNIC}&UserName=${UserName}&Password=${Password}&PhoneNo=${PhoneNo}`;
+    }
+
+    function editAdmin(CNIC, AdminName, Pin, PhoneNo) {
+        window.location.href = `/editAdmin?CNIC=${CNIC}&AdminName=${AdminName}&Pin=${Pin}&PhoneNo=${PhoneNo}`;
+    }
+</script>
 
 </body>
-<script>
-
-</script>
 </html>

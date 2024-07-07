@@ -108,6 +108,20 @@ body {
     .search-btn:hover {
         background-color: #9a42ff;
     }
+
+    .table-responsive {
+    overflow-x: auto;
+    }
+
+    @media screen and (max-width: 650px) {
+    th, td {
+        font-size: 0.8em;
+    }
+    .edit-btn, .delete-btn {
+        font-size: 0.7em;
+    }
+}
+
 </style>
 
 <body>
@@ -118,7 +132,7 @@ body {
     <main id="main" class="main">
     
         <div class="pagetitle">
-            <h1>All Tickets</h1>
+            <h1>My Bookings</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="userDash">User Dashboard</a></li>
@@ -131,6 +145,7 @@ body {
     
             <div class="container">
                 <h2>Current Bookings</h2>
+                <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
@@ -163,10 +178,12 @@ body {
                         <% }); %>
                     </tbody>
                 </table>
+              </div>
             </div>
     
             <div class="container">
                 <h2>Previous Bookings</h2>
+                <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
@@ -193,15 +210,17 @@ body {
                                     <% } %>
                                 </td>
                                 <td>
-                                    <button class="edit-btn" onclick="editTicket('<%= ticket.TicketId[0] %>', '<%= ticket.CarriageId %>', '<%= ticket.TrainId %>', '<%= ticket.SeatNo %>')">UNBOOK</button>
+                                    <button class="edit-btn" onclick="editTicket('<%= ticket.TicketId[0] %>', '<%= ticket.CarriageId %>', '<%= ticket.TrainId %>', '<%= ticket.SeatNo %>')">unbook</button>
                                 </td>
                             </tr>
                         <% }); %>
                     </tbody>
                 </table>
+              </div>
             </div>
     
         </section>
+
     </main>
     <%- include('./partials/footer.ejs') %>
     <%- include('./partials/script.ejs') %>

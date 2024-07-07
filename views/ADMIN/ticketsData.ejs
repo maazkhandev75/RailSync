@@ -4,7 +4,7 @@
 <%- include('./partials/head.ejs') %>
 
 <style>
- body {
+body {
         font-family: Comfortaa, sans-serif;
         margin: 0;
         padding: 0;
@@ -41,7 +41,7 @@
         color: rgb(0, 0, 0);
         font-weight: bold;
         font-size: 0.9em;
-        margin: 0 0 10px 5px;
+        margin-right:5px;
         border: none;
         cursor: pointer;
         border-radius: 30px;
@@ -107,70 +107,158 @@
 
     .search-btn:hover {
         background-color: #9a42ff;
-    }   
+    }
+
+    @media screen and (max-width: 650px) {
+    th, td {
+        font-size: 0.8em;
+    }
+    .edit-btn, .delete-btn {
+        font-size: 0.8em;
+    }
+    .search-btn{
+        font-size: 0.8em;
+    }
+    input{
+        font-size: 0.8em;
+    }
+}
 </style>
+
 <body>
 
-<%- include('./partials/header.ejs') %>
-
-<%- include('./partials/sidebar.ejs') %>
-
+    <%- include('./partials/header.ejs') %>
+    <%- include('./partials/sidebar.ejs') %>
+    
     <main id="main" class="main">
-
+    
         <div class="pagetitle">
-        <h1>Tickets Data</h1>
-        <nav>
-            <ol class="breadcrumb">
+            <h1>All Bookings</h1>
+            <nav>
+                <ol class="breadcrumb">
+                  
                 <li class="breadcrumb-item"><a href="adminDash">Admin Dashboard</a></li>
-                <li class="breadcrumb-item active">Tickets Data</li>
-            </ol>
-        </nav>
+                <li class="breadcrumb-item active">All Bookings</li>
+                </ol>
+            </nav>
         </div><!-- End Page Title -->
-
+    
         <section class="section">
-
-
-                <div class="container">
-                <h2>Tickets</h2>
+    
+            <div class="container">
+                <h2>Current Bookings</h2>
+                <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
-                            <th>ticketId</th>
-                            <th>cnic</th>
-                            <th>seatNo</th>
-                            <th>trainId</th>
-                            <th>carriageId</th>
-							<th>Actions</th>
+                            <th>TicketId</th>
+                            <th>SeatNo</th>
+                            <th>TotalPrice</th>
+                            <th>DeptTime</th>
+                            <th>RefundStatus</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <% Tickets.forEach((ticket)=>{ %>
+                        <% ticketsUpcoming.forEach((ticket) => { %>
                             <tr>
-                                <td><%= ticket.TicketId %></td>
-                                <td><%= ticket.CNIC %></td>
+                                <td><%= ticket.TicketId[0] %></td>  <!--[0] to get only one time ticketId because our join has given us more than one ticketId which are same as repetition-->
                                 <td><%= ticket.SeatNo %></td>
-                                <td><%= ticket.TrainId %></td>
-                                <td><%= ticket.CarriageId %></td>
+                                <td><%= ticket.TotalPrice %></td>
+                                <td><%= ticket.DeptTime %></td>
+                                <td id="refund-status-<%= ticket.TicketId[0] %>">
+                                    <% if (ticket.RefundStatus === 'R') { %>
+                                        Refunded
+                                    <% } else { %>
+                                        Not Refunded
+                                    <% } %>
+                                </td>
                                 <td>
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="delete-btn">Delete</button>
+                                    <button class="edit-btn" onclick="editTicket('<%= ticket.TicketId[0] %>', '<%= ticket.CarriageId %>', '<%= ticket.TrainId %>', '<%= ticket.SeatNo %>')">unbook</button>
                                 </td>
                             </tr>
-                            <% }); %>
-
-
-                        <!-- More rows here -->
+                        <% }); %>
                     </tbody>
                 </table>
+                </div>
             </div>
-
+    
+            <div class="container">
+                <h2>Previous Bookings</h2>
+                <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>TicketId</th>
+                            <th>SeatNo</th>
+                            <th>TotalPrice</th>
+                            <th>DeptTime</th>
+                            <th>RefundStatus</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% ticketsPrevious.forEach((ticket) => { %>
+                            <tr>
+                                <td><%= ticket.TicketId[0] %></td>
+                                <td><%= ticket.SeatNo %></td>
+                                <td><%= ticket.TotalPrice %></td>
+                                <td><%= ticket.DeptTime %></td>
+                                <td id="refund-status-<%= ticket.TicketId[0] %>">
+                                    <% if (ticket.RefundStatus === 'R') { %>
+                                        Refunded
+                                    <% } else { %>
+                                        Not Refunded
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <button class="edit-btn" onclick="editTicket('<%= ticket.TicketId[0] %>', '<%= ticket.CarriageId %>', '<%= ticket.TrainId %>', '<%= ticket.SeatNo %>')">unbook</button>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+    
         </section>
     </main>
-  <%- include('./partials/footer.ejs') %>
-  <%- include('./partials/script.ejs') %>
+    <%- include('./partials/footer.ejs') %>
+    <%- include('./partials/script.ejs') %>
+    
+    <script>
+    function editTicket(TicketId, CarriageID, TrainID, SeatNo) {
+        fetch('/UnbookTicket', {
+            method: 'POST',
+            body: JSON.stringify({ TicketId, CarriageID, TrainID, SeatNo }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const result = data.Message[0];
+    
+            if (result.ResultMessage === 'UNBOOKED SUCCESSFULLY') {
 
-</body>
-<script>
+                // const refundStatusTd = document.querySelector(`td[data-refund-status="${TicketId}"]`);
 
-</script>
-</html>
+                const refundStatusTd = document.getElementById(`refund-status-${TicketId}`);
+                if (refundStatusTd) {
+                    refundStatusTd.textContent = 'Refunded';   //basically is not not changing in the database its only frontend ui change for smooth updation
+                }
+    
+                window.location.reload(); // Reload the page after successful unbooking
+            } else {
+                alert('SOMETHING WENT WRONG');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error occurred while processing the request');
+        });
+    }
+    </script>
+    
+    </body>
+    </html>

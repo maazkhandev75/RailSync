@@ -18,20 +18,22 @@ module.exports = (pool) => {
       if (result.returnValue === 0) 
       {
          // Redirect the user to the profile page with a success message
-         console.log('password change successful!');
+         //console.log('password change successful!');
          res.redirect('profile');  
       }
       else
       {
-       // If the stored procedure did not return 0, handle the error
-       throw new Error('password change failed');
+      // If the stored procedure did not return 0, handle the error
+      throw new Error('password change failed');
       } 
 
     } 
     catch (error) {
 		 // Log and handle the error
+
      console.error('Error updating profile:', error);
-     res.status(500).send('password change failed');
+     res.render('USER/passwordChangeDenied');
+    //  res.status(500).send('password change failed');
     }
   });
 

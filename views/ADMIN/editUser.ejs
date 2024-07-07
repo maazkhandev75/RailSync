@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/head.ejs') %>
+
+<body>
+<%- include('./partials/header.ejs') %>
+<%- include('./partials/sidebar.ejs') %>
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Edit User</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="adminDash">Admin Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="usersAndAdminsData">Users And Admins Data</a></li>
+          <li class="breadcrumb-item active">Edit User</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+    <section class="section">
+      <div class="row">
+
+          <div class="card" >
+            <div class="card-body">
+              <h5 class="card-title">User Details :</h5>
+
+              <!-- Multi Columns Form -->
+
+              <form class="row g-3">
+
+                  <div class="col-md-6">
+                    <label for="CNIC" class="form-label" style="color: #de6b00;">CNIC</label>
+                    <input type="text" class="form-control inputs" id="CNIC" readonly placeholder="<%= CNIC %>">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="UserName" class="form-label" style="color: #de6b00;">UserName</label>
+                    <input type="text" class="form-control inputs" id="UserName" placeholder="<%= UserName %>" >
+                  </div>
+                 
+				  <div class="col-md-6">
+					<label for="Password" class="form-label" style="color: #de6b00;">Password</label>
+                    <input type="text" class="form-control inputs" id="Password" placeholder="<%= Password %>" >
+                  </div>
+				 
+				  <div class="col-md-6">
+                    <label for="PhoneNo" class="form-label" style="color: #de6b00;">PhoneNo</label>
+                    <input type="text" class="form-control inputs" id="PhoneNo" placeholder="<%= PhoneNo %>" >
+                  </div>
+                  
+
+                  <div class="col-12 text-left">
+                    <button type="submit" id="submitButton" class="btn custom-btn">Submit</button>
+                    <button type="reset" class="btn custom-btn-secondary">Reset</button>
+                  </div>
+
+              </form><!-- End Multi Columns Form -->
+
+            </div>
+          </div>
+
+
+        </div>
+
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- Custom Alert Box Structure -->
+<div id="alertModal" class="alert-modal">
+  <div class="alert-content">
+      <span class="alert-close" onclick="closeAlert()">&times;</span>
+      <p id="alertMessage"></p>
+      <button class="alert-btn" onclick="closeAlert()">OK</button>
+  </div>
+</div>
+
+
+
+  <%- include('./partials/footer.ejs') %>
+  <%- include('./partials/script.ejs') %>
+
+<script>
+
+  
+    // Function to open the custom alert box
+    function showAlert(message) {
+        document.getElementById('alertMessage').innerText = message;
+        document.getElementById('alertModal').style.display = 'flex';
+    }
+
+    // Function to close the custom alert box
+    function closeAlert() {
+        document.getElementById('alertModal').style.display = 'none';
+    }
+
+//******************************************
+
+
+
+  document.getElementById('submitButton').addEventListener('click', function(event) {
+      event.preventDefault();
+      const CNIC = document.getElementById('CNIC').placeholder;
+	  //same like in c++ this means that first it checks if the UserName input is not equal to empty if that condition is true then 1st option will be returned 
+	  //and in case of false condition the 2nd option will be returned..
+      const UserName = document.getElementById('UserName').value !== '' ? document.getElementById('UserName').value : document.getElementById('UserName').placeholder;  
+	    const Password = document.getElementById('Password').value !== '' ? document.getElementById('Password').value : document.getElementById('Password').placeholder;
+	    const PhoneNo = document.getElementById('PhoneNo').value !== '' ? document.getElementById('PhoneNo').value : document.getElementById('PhoneNo').placeholder;
+
+        
+      fetch('/TD/editUser', {
+      method: 'POST',
+      body: JSON.stringify({ CNIC,UserName,Password,PhoneNo }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+      const result = data.Message;
+       if(result[0].ResultMessage=='USER UPDATED SUCCESSFULLY')
+          {window.location.href = '/usersAndAdminsData';}
+        else
+        {
+          //console.log(result[0].ResultMessage);
+          showAlert(result[0].ResultMessage);
+          //alert(result[0].ResultMessage);
+        }
+
+    })
+    .catch(error => {
+       
+      console.error('Error:', error);
+    });
+      // You can perform further actions here, such as sending the data to the server via fetch() or XMLHttpRequest
+  });
+</script>
+
+</body>
+</html>

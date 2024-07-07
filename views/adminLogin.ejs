@@ -9,9 +9,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/assets/css/signup&login_styles.css">
-    <title>Admin LogIn Form</title>
+    
+    <title>RailSync</title>
+    <link href="/assets/img_and_gif/icon.png" rel="icon">
 </head>
 <body>
 	<!-- if the admin pin is correct -->
@@ -29,7 +33,7 @@
 	<% } %>
 
 
-    <div class="topHeading">
+    <div class="topHeading mt-md-1 mt-2">
         <h2 class="display-4 heading">Admin LogIn</h2>
         </div>
 
@@ -39,12 +43,12 @@
                 <form action="/adminLogin" method="POST">
                     <div class="row">
 
-                        <div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
+                        <div class="col-12 col-md-5 mb-3 ml-md-4 pl-md-4">
                             <label for="CNIC" class="form-label sub_heading">CNIC:</label>
                             <input type="text" class="form-control inputs" id="CNIC" name="cnic" placeholder="13 digits" pattern="[0-9]{13}" required>
                         </div>
 
-                        <div class="mb-3 col-md-4 col-7 ml-md-4 ml-3  pl-md-4">
+                        <div class="col-12 col-md-5 mb-3 ml-md-4 pl-md-4">
                             <label for="adminPin" class="form-label sub_heading">PIN:</label>
                             <input type="text" class="form-control inputs" id="adminPin" name="adminPin" placeholder="4 digits" pattern="[0-9]{4}" required>
                         </div>
@@ -52,14 +56,15 @@
                     </div>
 
 
-                    <div class="mb-3 mt-2 form-check">
-                        <input type="checkbox" class="form-check-input ml-3 " id="check1" required>
-                        <label class="form-check-label pl-5" for="exampleCheck1">I assure that the above information is correct!!</label>
+                    <div class="mb-3 mt-2 pl-md-4 pl-2 form-check">
+                        <input type="checkbox" class="form-check-input ml-md-4 ml-0" id="check1" required>
+                        <label class="form-check-label ml-md-5 ml-4" for="exampleCheck1">I assure that the above information is correct!!</label>
                     </div>
 
-                    <div class="pl-4">
-                        <button type="submit" class="btn-submit ml-2">Enter</button>
+                    <div class="pl-md-4">
+                        <button type="submit" class="btn-submit ml-md-2 ml-0">Enter</button>
                     </div>
+
                 </form>
             </div>
         </div>

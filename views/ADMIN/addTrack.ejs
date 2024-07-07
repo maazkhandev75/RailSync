@@ -36,31 +36,32 @@
 
                 <div class="col-md-6">
                   <label for="inputStartStation" class="form-label" style="color: #de6b00;">Starting Station</label>
-                  <select id="inputStartStation" class="form-select inputs selector">
+                  <select id="inputStartStation" class="form-select inputs selector" required>
                     <% Station.forEach((station) => { %>
                       <option value="<%= station.StationId %>"><%= station.StationName %></option>
                   <% }); %>
                   </select>
                 </div>
                 <div class="col-md-6">
-                  <label for="inputArrivalStation" class="form-label" style="color: #de6b00;">Arrival Station</label>
-                  <select id="inputArrivalStation" class="form-select inputs selector">
+                  <label for="inputEndStation" class="form-label" style="color: #de6b00;">Ending Station</label>
+                  <select id="inputEndStation" class="form-select inputs selector" required>
                   <% Station.forEach((station) => { %>
                     <option value="<%= station.StationId %>"><%= station.StationName %></option>
                 <% }); %>
               </select>
                 </div>
+
                 <div class="col-md-4">
                     <label for="Economy" class="form-label" style="color: #de6b00;">Economy Price</label>
-                    <input type="text" class="form-control inputs" id="Economy" >
+                    <input type="text" class="form-control inputs" id="Economy" required>
                   </div>
                   <div class="col-md-4">
                     <label for="Business" class="form-label" style="color: #de6b00;">Business Price</label>
-                    <input type="text" class="form-control inputs" id="Business" >
+                    <input type="text" class="form-control inputs" id="Business" required>
                   </div>
                   <div class="col-md-4">
                     <label for="FirstClass" class="form-label" style="color: #de6b00;">FirstClass Price</label>
-                    <input type="text" class="form-control inputs" id="FirstClass" >
+                    <input type="text" class="form-control inputs" id="FirstClass" required>
                   </div>
                   <div class="col-12 text-left">
                   <button type="submit" id="submitButton" class="btn custom-btn">Submit</button>
@@ -78,19 +79,57 @@
 
   </main><!-- End #main -->
 
+    <!-- Custom Alert Box Structure -->
+<div id="alertModal" class="alert-modal">
+  <div class="alert-content">
+      <span class="alert-close" onclick="closeAlert()">&times;</span>
+      <p id="alertMessage"></p>
+      <button class="alert-btn" onclick="closeAlert()">OK</button>
+  </div>
+</div>
+
 
   <%- include('./partials/footer.ejs') %>
   <%- include('./partials/script.ejs') %>
 
-</body>
+
 <script>
-  document.getElementById('submitButton').addEventListener('click', function() {
+
+  
+    // Function to open the custom alert box
+    function showAlert(message) {
+        document.getElementById('alertMessage').innerText = message;
+        document.getElementById('alertModal').style.display = 'flex';
+    }
+
+    // Function to close the custom alert box
+    function closeAlert() {
+        document.getElementById('alertModal').style.display = 'none';
+    }
+
+//******************************************
+
+
+  document.getElementById('submitButton').addEventListener('click', function(event) {
       event.preventDefault();
       const Station1Id = document.getElementById('inputStartStation').value;
-      const Station2Id = document.getElementById('inputArrivalStation').value;
+      const Station2Id = document.getElementById('inputEndStation').value;
       const Economy = document.getElementById('Economy').value;
       const Business = document.getElementById('Business').value;
       const FirstClass = document.getElementById('FirstClass').value;
+
+      
+      if (!Station1Id || !Station2Id || !Economy || !Business || !FirstClass) {
+        //alert('Please fill out all required fields.');
+        showAlert('Please fill out all required fields.');
+        return;
+      }
+
+      if (Station1Id == Station2Id) {
+        //alert('Please fill out all required fields.');
+        showAlert('Starting and Ending Stations cannot be same :)');
+        return;
+      }
   
       fetch('/TD/addTrack', {
       method: 'POST',
@@ -106,8 +145,9 @@
           {window.location.href = '/stationsAndTracksData';}
         else
         {
-          console.log(result[0].ResultMessage);
-          alert(result[0].ResultMessage);
+          //console.log(result[0].ResultMessage);
+          //alert(result[0].ResultMessage);
+          showAlert(result[0].ResultMessage);
         }
 
     })
@@ -118,5 +158,5 @@
       // You can perform further actions here, such as sending the data to the server via fetch() or XMLHttpRequest
   });
 </script>
-
+</body>
 </html>

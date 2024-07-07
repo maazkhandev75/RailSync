@@ -27,7 +27,7 @@
           <div class="card">
             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-              <img src="/assets/img_and_gif/profilePic.jpg" alt="Profile" class="rounded-circle">
+              <img src="/assets/img_and_gif/profilePic.png" alt="Profile" class="rounded-circle">
               <h2>maaz khan</h2>
               
             </div>
@@ -153,33 +153,61 @@
 
   </main><!-- End #main -->
 
+   <!-- Custom Alert Box Structure -->
+   <div id="alertModal" class="alert-modal">
+    <div class="alert-content">
+        <span class="alert-close" onclick="closeAlert()">&times;</span>
+        <p id="alertMessage"></p>
+        <button class="alert-btn" onclick="closeAlert()">OK</button>
+    </div>
+</div>
+
+
 
   <%- include('./partials/footer.ejs') %>
   <%- include('./partials/script.ejs') %>
 
   <script>
+
+    // Function to open the custom alert box
+    function showAlert(message) {
+        document.getElementById('alertMessage').innerText = message;
+        document.getElementById('alertModal').style.display = 'flex';
+    }
+
+    // Function to close the custom alert box
+    function closeAlert() {
+        document.getElementById('alertModal').style.display = 'none';
+    }
+
+//******************************************
+
     function checkNewPassword() {
       var orig_pass = document.getElementById("orignalPassword").innerText;;
       var curr_pass = document.getElementById("currentPassword").value;
       var new_pass = document.getElementById("newPassword").value;
       var renew_pass = document.getElementById("renewPassword").value;
 
-      console.log(orig_pass);
+      //console.log(orig_pass);
   
 
       //check if the entered current password is actually the orignal current password of the user
       if (curr_pass !== orig_pass) {
-        alert("the enterred password is not actual current password of the user");
+        //alert("the enterred password is not actual current password of the user");
+        showAlert("Incorrect current password of user!")
         return false;
       }
 
       // Check if old pass and new pass are not same
       if (curr_pass === new_pass) {
-        alert("old and new passwords are same, Kindly make a new password");
+        //alert("old and new passwords are same, Kindly make a new password");
+        showAlert("old and new passwords are same, Kindly make a new password");
         return false;
       }
       if (new_pass !== renew_pass) {
-        alert("new passwords donot match with each other");
+        //alert("new passwords donot match with each other");
+        showAlert("new passwords donot match with each other");
+
         return false;
       }
 
@@ -187,7 +215,8 @@
       var digitRegex = /\d/;
       var charRegex = /[a-zA-Z]/;
       if (!digitRegex.test(new_pass) || !charRegex.test(new_pass)) {
-      alert("Password must contain at least one digit and one character.");
+      //alert("Password must contain at least one digit and one character.");
+      showAlert("Password must contain at least one digit and one character.");
       return false;
     }
     

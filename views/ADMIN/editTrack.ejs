@@ -25,7 +25,7 @@
 
           <div class="card">
             <div class="card-body">
-              <h5>Edit Track</h5>
+              <h5>Track Details</h5>
 
               <!-- Multi Columns Form -->
 
@@ -65,22 +65,31 @@
 
   </main><!-- End #main -->
 
+    <!-- Custom Alert Box Structure -->
+<div id="alertModal" class="alert-modal">
+  <div class="alert-content">
+      <span class="alert-close" onclick="closeAlert()">&times;</span>
+      <p id="alertMessage"></p>
+      <button class="alert-btn" onclick="closeAlert()">OK</button>
+  </div>
+</div>
+
+
 
   <%- include('./partials/footer.ejs') %>
   <%- include('./partials/script.ejs') %>
 
-</body>
 <script>
-  document.getElementById('submitButton').addEventListener('click', function() {
+  document.getElementById('submitButton').addEventListener('click', function(event) {
       event.preventDefault();
       const TrackId = document.getElementById('TrackID').placeholder;
       const Economy = document.getElementById('Economy').value !== '' ? document.getElementById('Economy').value : document.getElementById('Economy').placeholder;
-        const Business = document.getElementById('Business').value !== '' ? document.getElementById('Business').value : document.getElementById('Business').placeholder;
-        const FirstClass = document.getElementById('FirstClass').value !== '' ? document.getElementById('FirstClass').value : document.getElementById('FirstClass').placeholder;
+      const Business = document.getElementById('Business').value !== '' ? document.getElementById('Business').value : document.getElementById('Business').placeholder;
+      const FirstClass = document.getElementById('FirstClass').value !== '' ? document.getElementById('FirstClass').value : document.getElementById('FirstClass').placeholder;
 
-    console.log(Business);
+      //console.log(Business);
         
-      fetch('/TD/editFare', {
+      fetch('/TD/editFare', {  //basically edit track is more like a editing fare so name is used here // we can also name the func as editTrack
       method: 'POST',
       body: JSON.stringify({ TrackId,Economy,Business,FirstClass }),
         headers: {
@@ -94,7 +103,7 @@
           {window.location.href = '/stationsAndTracksData';}
         else
         {
-          console.log(result[0].ResultMessage);
+          //console.log(result[0].ResultMessage);
           alert(result[0].ResultMessage);
         }
 
@@ -107,4 +116,5 @@
   });
 </script>
 
+</body>
 </html>
