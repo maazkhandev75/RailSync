@@ -1,6 +1,6 @@
 # RAILSYNC - Railway Management System
 
-RAILSYNC is a web-based railway management system that offers efficient railway ticket booking solutions with integrated database management.
+RAILSYNC is a web-based railway management system that offers efficient railway ticket booking solutions with integrated database management. The website has a minimalistic, dark-themed design and is built to be scalable and robust.
 
 ## Features
 
@@ -9,6 +9,10 @@ RAILSYNC is a web-based railway management system that offers efficient railway 
 - **Admin Panel**: Administrators have access to manage trains, stations, schedules, and user data.
 - **Database Integration**: Utilizes a Microsoft SQL Server database to store and retrieve train, station, schedule, and user information.
 - **Responsive Design**: The website is designed to be accessible and usable across different devices and screen sizes.
+- **Sessions**: Sessions are implemented for user and admin authentication. You can check the session status by:
+  - `/sessionCheckUser`
+  - `/sessionCheckAdmin`
+- **Working Contact Form**: The users can send their query and it will be recieved on your gmail after configuring nodemail obj by simply entering your email and 16-digit appPass 
 
 ## Technologies Used
 
@@ -42,3 +46,156 @@ copies or substantial portions of the Software.
 
 ```bash
 git clone https://github.com/maazkhan75/RailSync.git
+```
+
+## Testing Guide
+
+To test the website, follow these steps:
+
+1. Ensure that you have all necessary dependencies installed.
+2. Start the server and navigate to the website in your browser.
+3. Use the following test credentials to log in:
+
+   - **User**
+     - CNIC: `3520297089087`
+     - Password: `mypass123`
+
+   - **Admin**
+     - CNIC: `3520297089087`
+     - Pin: `6776`
+
+4. Test the following functionalities:
+   - User signup, login, and session persistence.
+   - Admin login and management of trains, stations, routes, and user data.
+   - Train search and ticket booking.
+   - Check the session status using the following endpoints:
+     `/sessionCheckUser`
+     `/sessionCheckAdmin`
+   
+5. Test case
+  - SEARCH TRAIN FROM LHR TO ISL ON 14 JUNE 2024
+  - LHR -> ISL  4pm-11pm train without stop
+  - LHR -> MLN 4pm-7pm and mul->isl 7:45-11:30pm train with stop
+
+6. Important Note
+
+  - (If you want to travel from station A to B)
+
+  - you should have stations A & B
+  - you should have track between A & B
+  - you should have a train
+  - you should have carriage/s in it
+  - you should have a route defined from A -> B on your trip Data
+
+      
+## Screenshots of RailSync
+
+### Home Page
+![Home Page](screenShots/1.png)
+
+### Decision Page
+![Decision Page](screenShots/2.png)
+
+### User Login Form
+![](screenShots/3.png)
+
+### User Signup Form
+![](screenShots/4.png)
+
+### Password Reset Form
+![](screenShots/5.png)
+
+### Admin Login Form
+![](screenShots/6.png)
+
+### Admin Signup Form
+![](screenShots/7.png)
+
+### User Dashboard
+![](screenShots/8.png)
+
+### Profile
+![](screenShots/9.png)
+
+### Password Change
+![](screenShots/10.png)
+
+### FAQ's
+![](screenShots/11.png)
+
+### Contact 
+![](screenShots/12.png)
+
+### Trip Form
+![](screenShots/13.png)
+
+### Available Trains
+![](screenShots/14.png)
+
+### Ticket
+![](screenShots/15.png)
+
+### My Bookings
+![](screenShots/16.png)
+
+### Admin Dashboard
+![](screenShots/17.png)
+
+### Stations and Tracks Data
+![](screenShots/18.png)
+
+### Users and Admins Data
+![](screenShots/19.png)
+
+### Crew Data
+![](screenShots/20.png)
+
+### Trains Data
+![](screenShots/21.png)
+
+### Routes Data
+![](screenShots/22.png)
+
+### Add Data
+![](screenShots/23.png)
+![](screenShots/24.png)
+![](screenShots/25.png)
+![](screenShots/26.png)
+![](screenShots/27.png)
+![](screenShots/28.png)
+
+### Edit Data
+![](screenShots/29.png)
+![](screenShots/30.png)
+![](screenShots/31.png)
+![](screenShots/32.png)
+![](screenShots/33.png)
+![](screenShots/34.png)
+![](screenShots/35.png)
+![](screenShots/36.png)
+![](screenShots/37.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
