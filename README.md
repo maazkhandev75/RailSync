@@ -78,7 +78,7 @@ To test the website, follow these steps:
   - LHR -> MLN 4pm-7pm and mul->isl 7:45-11:30pm train with stop
 
 6. Important Note
-
+  - You cannot change or update profile or password of Default User(maaz khan) even you cannot delete or edit default user and admin from admin panel.
   - (If you want to travel from station A to B)
 
   - you should have stations A & B
@@ -91,10 +91,10 @@ To test the website, follow these steps:
 ## Screenshots of RailSync
 
 ### Home Page
-![Home Page](screenShots/1.png)
+![](screenShots/1.png)
 
 ### Decision Page
-![Decision Page](screenShots/2.png)
+![](screenShots/2.png)
 
 ### User Login Form
 ![](screenShots/3.png)
@@ -117,55 +117,57 @@ To test the website, follow these steps:
 ### Profile
 ![](screenShots/9.png)
 
-### Password Change
+### Update Profile
 ![](screenShots/10.png)
 
-### FAQ's
+### Password Change
 ![](screenShots/11.png)
 
-### Contact 
+### FAQ's
 ![](screenShots/12.png)
 
-### Trip Form
+### Contact 
 ![](screenShots/13.png)
 
-### Available Trains
+### Trip Form
 ![](screenShots/14.png)
 
-### Ticket
+### Available Trains
 ![](screenShots/15.png)
 
-### My Bookings
+### Ticket
 ![](screenShots/16.png)
 
-### Admin Dashboard
+### My Bookings
 ![](screenShots/17.png)
 
-### Stations and Tracks Data
+### Admin Dashboard
 ![](screenShots/18.png)
 
-### Users and Admins Data
+### Stations and Tracks Data
 ![](screenShots/19.png)
 
-### Crew Data
+### Users and Admins Data
 ![](screenShots/20.png)
 
-### Trains Data
+### Crew Data
 ![](screenShots/21.png)
 
-### Routes Data
+### Trains Data
 ![](screenShots/22.png)
 
-### Add Data
+### Routes Data
 ![](screenShots/23.png)
+
+### Add Data
 ![](screenShots/24.png)
 ![](screenShots/25.png)
 ![](screenShots/26.png)
 ![](screenShots/27.png)
 ![](screenShots/28.png)
+![](screenShots/29.png)
 
 ### Edit Data
-![](screenShots/29.png)
 ![](screenShots/30.png)
 ![](screenShots/31.png)
 ![](screenShots/32.png)
@@ -174,6 +176,7 @@ To test the website, follow these steps:
 ![](screenShots/35.png)
 ![](screenShots/36.png)
 ![](screenShots/37.png)
+![](screenShots/38.png)
 
 
 
