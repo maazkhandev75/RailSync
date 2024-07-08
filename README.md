@@ -1,8 +1,8 @@
-# RAILSYNC - Railway Management System
+# 🚂 RAILSYNC - Railway Management System 
 
 RAILSYNC is a web-based railway management system that offers efficient railway ticket booking solutions with integrated database management. The website has a minimalistic, dark-themed design and is built to be scalable and robust.
 
-## Features
+## ✨ Features
 
 - **User Authentication**: Users can sign up, log in, and manage their accounts securely.
 - **Ticket Booking**: Users can search for trains, view schedules, and book tickets.
@@ -14,7 +14,7 @@ RAILSYNC is a web-based railway management system that offers efficient railway 
   - `/sessionCheckAdmin`
 - **Working Contact Form**: The users can send their query and it will be recieved on your gmail after configuring nodemail obj by simply entering your email and 16-digit appPass 
 
-## Technologies Used
+## 🛠 Technologies Used
 
 - **Frontend**: HTML, CSS, JavaScript, Bootstrap
 - **Backend**: EXPRESS.JS AND NODE.JS
@@ -22,7 +22,7 @@ RAILSYNC is a web-based railway management system that offers efficient railway 
 - **Authentication**: JS
 - **Deployment**: local host
 
-## License
+## 📜 License
 
 The code in this repository is licensed under the MIT License. 
 
@@ -40,7 +40,8 @@ furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
-## Installation
+## 📦 Installation
+
 
 1. Clone the repository:
 
@@ -48,7 +49,9 @@ copies or substantial portions of the Software.
 git clone https://github.com/maazkhan75/RailSync.git
 ```
 
-## Testing Guide
+2. Run the server and visit `localhost:4000/home`.
+
+## 🧪 Testing Guide
 
 To test the website, follow these steps:
 
@@ -88,7 +91,7 @@ To test the website, follow these steps:
   - you should have a route defined from A -> B on your trip Data
 
       
-## Screenshots of RailSync
+## 📸 Screenshots of RailSync
 
 ### Home Page
 ![](screenShots/1.png)
