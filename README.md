@@ -12,7 +12,7 @@ RAILSYNC is a web-based railway management system that offers efficient railway 
 - **Sessions**: Sessions are implemented for user and admin authentication. You can check the session status by:
   - `/sessionCheckUser`
   - `/sessionCheckAdmin`
-- **Working Contact Form**: The users can send their query and it will be recieved on your gmail after configuring nodemail obj by simply entering your email and 16-digit appPass 
+- **Working Contact Form**: The users can send their query and it will be recieved on your gmail after configuring nodemail obj by simply entering `your-email` and `16-digit AppPass` 
 
 ## 🛠 Technologies Used
 
@@ -20,7 +20,7 @@ RAILSYNC is a web-based railway management system that offers efficient railway 
 - **Backend**: EXPRESS.JS AND NODE.JS
 - **Database**: Microsoft SQL Server
 - **Authentication**: JS
-- **Deployment**: local host
+- **Deployment**: local host ( + ON VERCEL ALSO)
 
 ## 📜 License
 
@@ -75,20 +75,22 @@ To test the website, follow these steps:
      `/sessionCheckUser`
      `/sessionCheckAdmin`
    
-5. Test case
-  - SEARCH TRAIN FROM LHR TO ISL ON 14 JUNE 2024
-  - LHR -> ISL  4pm-11pm train without stop
-  - LHR -> MLN 4pm-7pm and mul->isl 7:45-11:30pm train with stop
+5. Test Case
+  - **SEARCH TRAIN FROM `LHR TO ISL` ON `14 JUNE 2024`**
+     - `LHR -> ISL`  4pm-11pm   (train without stop)
+     - `LHR -> MLN` 4pm-7pm and `MLN -> ISL` 7:45-11:30pm   (train with stop)
 
 6. Important Note
-  - You cannot change or update profile or password of Default User(maaz khan) even you cannot delete or edit default user and admin from admin panel.
-  - (If you want to travel from station A to B)
+  - **You cannot change or update profile or password of Default User(maaz khan) even you cannot `delete or edit` default user and admin from admin panel.**
 
-  - you should have stations A & B
-  - you should have track between A & B
-  - you should have a train
-  - you should have carriage/s in it
-  - you should have a route defined from A -> B on your trip Data
+  - **The final attributes of the database tables may be `slightly different` from the attributes of entities in `SCHEMA.pdf` So you should always see tables definition in `SQL Server`**
+
+  - **(If you want to travel from station A to B)**
+     - you should have stations `A & B`
+     - you should have track between `A & B`
+     - you should have a train
+     - you should have carriage/s in it
+     - you should have a route defined from `A -> B` on your trip Data
 
       
 ## 📸 Screenshots of RailSync
