@@ -41,7 +41,9 @@ body {
         color: rgb(0, 0, 0);
         font-weight: bold;
         font-size: 0.9em;
-        margin: 0 0 10px 5px;
+        margin-right: 5px;        
+        margin-top: 5px;
+        margin-bottom: 5px;
         border: none;
         cursor: pointer;
         border-radius: 30px;
@@ -222,10 +224,34 @@ body {
         </section>
 
     </main>
+
+     <!-- Custom Alert Box Structure -->
+     <div id="alertModal" class="alert-modal">
+        <div class="alert-content">
+            <span class="alert-close" onclick="closeAlert()">&times;</span>
+            <p id="alertMessage"></p>
+            <button class="alert-btn" onclick="closeAlert()">OK</button>
+        </div>
+    </div>
+
     <%- include('./partials/footer.ejs') %>
     <%- include('./partials/script.ejs') %>
     
     <script>
+
+     // Function to open the custom alert box
+     function showAlert(message) {
+        document.getElementById('alertMessage').innerText = message;
+        document.getElementById('alertModal').style.display = 'flex';
+    }
+
+    // Function to close the custom alert box
+    function closeAlert() {
+        document.getElementById('alertModal').style.display = 'none';
+    }
+
+//******************************************
+
     function editTicket(TicketId, CarriageID, TrainID, SeatNo) {
         fetch('/UnbookTicket', {
             method: 'POST',
@@ -249,12 +275,14 @@ body {
     
                 window.location.reload(); // Reload the page after successful unbooking
             } else {
-                alert('SOMETHING WENT WRONG');
+                //alert('SOMETHING WENT WRONG');
+                showAlert("something went wrong!");
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error occurred while processing the request');
+            //alert('Error occurred while processing the request');
+            showAlert("Error occurred while processing the request");
         });
     }
     </script>

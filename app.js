@@ -725,6 +725,11 @@ app.post('/UnbookTicket', (req, res) => {
 });
 
 
+// (difference between redirect and render)
+// render simply renders the page of that path 
+// and redirect request the server to load that page
+
+
 
 
 // Use the routes

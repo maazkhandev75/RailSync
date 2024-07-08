@@ -80,6 +80,20 @@
   <%- include('./partials/script.ejs') %>
 
 <script>
+
+    // Function to open the custom alert box
+    function showAlert(message) {
+    document.getElementById('alertMessage').innerText = message;
+    document.getElementById('alertModal').style.display = 'flex';
+    }
+
+    // Function to close the custom alert box
+    function closeAlert() {
+        document.getElementById('alertModal').style.display = 'none';
+    }
+
+//******************************************
+
   document.getElementById('submitButton').addEventListener('click', function(event) {
       event.preventDefault();
       const TrackId = document.getElementById('TrackID').placeholder;
@@ -104,7 +118,9 @@
         else
         {
           //console.log(result[0].ResultMessage);
-          alert(result[0].ResultMessage);
+          //alert(result[0].ResultMessage);
+          showAlert(result[0].ResultMessage);
+          
         }
 
     })

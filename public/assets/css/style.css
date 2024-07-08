@@ -175,7 +175,7 @@ background-color: rgb(171, 171, 171);
   
 }
 
-  /*for no seats available page*/
+  /*for not possible pg's like seats not available or password/profile update or reset denied pg's */
 .custom-alert-heading{
   font-family: 'Bebas Neue',sans-serif;
   font-size: 3.5em;

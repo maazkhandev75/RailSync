@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playwrite+DE+Grund:wght@100..400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
@@ -56,7 +57,7 @@ html, body {
   margin: 0;
 }
 body {
-  @import url('https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700');
+  @import url ('https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700');
   font-family: 'Raleway', sans-serif;
   background-color: #000000;
   height: 100%;
@@ -66,7 +67,25 @@ body {
   color: #ffffff;
   display: flex;
   justify-content: center;
-}
+  position: relative; /* Ensure overlay is positioned relative to body */
+  }
+
+  #overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: 999; /* Adjust based on your modal's z-index */
+    display: none; /* Initially hidden */
+    transition: all 0.5s ease;
+  }
+
+  /* Adjust visibility of overlay based on modal open/close */
+  .modal-open #overlay {
+    display: block;
+  }
 
 
 .ticket-system {
@@ -287,7 +306,7 @@ body {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  background-color: #1c1c1c;
+  background-color: #1a1a1a;
   padding: 20px;
   border: 2px solid #de6b00;
   border-radius: 10px;
@@ -302,18 +321,21 @@ body {
 
 #customAlert .alert-message {
   margin-bottom: 20px;
-  color: #b4b4b4;
+  font-family: 'comfortaa',sans-serif;
+  color: #cccccc;
 }
 
 #customAlert .alert-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+
 }
 
 #customAlert .alert-buttons button {
   padding: 10px 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -344,7 +366,7 @@ body {
   right: 10px;
   transition: all 0.3s ease;
   cursor: pointer;
-  color: #de6b00;
+  color: #d0d0d0;
 }
 
 #customAlert .close-btn-icon:hover {
@@ -353,6 +375,8 @@ body {
 </style>
 
 <body>
+
+  <div id="overlay"></div>
 
   <main class="ticket-system">
     <div class="top">
@@ -443,8 +467,8 @@ body {
  <!-- Custom Alert Box -->
 <div id="customAlert">
   <span class="close-btn-icon" onclick="closeCustomAlert()">✖</span>
-  <h3>Alert</h3>
-  <p class="alert-message">Your ticket is confirmed. Deposit the ticket fee at the departure station counter.</p>
+  <h3>Congrats!</h3>
+  <p class="alert-message"></p>
   <div class="alert-buttons">
     <button class="ok-btn" onclick="closeCustomAlert()">OK</button>
   </div>
@@ -485,7 +509,8 @@ body {
 
     }
     else{
-        alert("Invalid Action");
+        //alert("Invalid Action");
+        showCustomAlert("Invalid Action!");
     }
   }
 
@@ -494,11 +519,16 @@ body {
 function showCustomAlert(message) {
   document.querySelector("#customAlert .alert-message").innerText = message;
   document.getElementById("customAlert").style.display = "block";
+  document.body.classList.add('modal-open');
+
+  
 }
 
 // Close custom alert
 function closeCustomAlert() {
   document.getElementById("customAlert").style.display = "none";
+  document.body.classList.remove('modal-open');
+
 }
 
 

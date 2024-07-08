@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Style+Script&display=swap" rel="stylesheet">
+
     
     
     <title>RailSync</title>
@@ -311,6 +312,9 @@
                 <% }); %>
             </tbody>
         </table>
+
+    
+
     </div>
     <!-- Modal -->
     <div class="modal fade bd-example-modal-lg" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -347,8 +351,11 @@
             </div>
         </div>
     </div>
+    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+
         function bookTicket() {
             var NonStopForm = document.getElementById('NonStopTrainForm');
             const selectedClass = document.getElementById("NonStopsClass");
@@ -416,6 +423,7 @@
                         data.forEach(i => {
                             var newRow = table.insertRow();
                             alert(i.TrainID);
+                            showAlert(i.TrainID);
                             var TrainID = newRow.insertCell(0);
                             TrainID.innerHTML = i.TrainID;
                         });
