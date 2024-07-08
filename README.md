@@ -1,4 +1,4 @@
-# 🚊git staty RAILSYNC - Railway Management System 
+# 🚝 RAILSYNC - Railway Management System 
 
 RAILSYNC is a web-based railway management system that offers efficient railway ticket booking solutions with integrated database management. The website has a minimalistic, dark-themed design and is built to be scalable and robust.
 
