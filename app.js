@@ -99,7 +99,7 @@ function isAuthenticatedAdmin(req, res, next)
 //importing routers
 const signupRouter = require('./routes/userSignup')
 const loginRouter = require('./routes/userLogin')
-// const adminLoginRouter = require('./routes/adminLogin')
+const adminLoginRouter = require('./routes/adminLogin')
 const adminSignupRouter = require('./routes/adminSignup')
 const passwordResetRouter = require('./routes/passwordReset')
 const indexRouter = require('./routes/index');
@@ -742,42 +742,6 @@ app.post('/UnbookTicket', (req, res) => {
 });
 
 
-app.post('/adminLogin', async (req, res) => {
-  const { cnic, adminPin } = req.body;
-
-  try {
-    // Call the stored procedure to authenticate the admin through secret pin
-    const result = await pool.request()
-    .input('CNIC', sql.NVarChar(255), cnic)
-    .input('PIN', sql.NVarChar(255), adminPin)
-    .execute('AuthenticateAdmin');
-
-    if (result.returnValue === 0)
-   {
-      // admin authenitcated
-      // we are saying the credentials of the admin user for implementing the functionality of session in the adminDash page
-      
-      const AdminDetails = {
-        username: result.recordset[0].AdminName,
-        cnic: cnic
-      };
-
-       // Save user details in session
-       req.session.AdminDetails = AdminDetails;
-
-
-       //pass success message obj to adminLogin.ejs to display success mesg on top
-       res.render('adminLogin', { successMessage: 'Admin logged in successfully!' }); 
-      } 
-  } catch (error) {
-  //console.error('Error authenticating user:', error);  //for displaying on terminal ( the actual error )
-  // Send the error message to the client side for display
-  res.render('adminLogin', { errorMessage: error });
-  }
-});
-
-
-
 // (difference between redirect and render)
 // render simply renders the page of that path 
 // and redirect request the server to load that page
@@ -790,7 +754,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/userSignup', signupRouter(pool));   // Pass pool object to signupRouter
 app.use('/userLogin', loginRouter(pool));     // Pass pool object to loginRouter
-// app.use('/adminLogin', adminLoginRouter(pool));     // Pass pool object to loginRouter
+app.use('/adminLogin', adminLoginRouter(pool));     // Pass pool object to loginRouter
 app.use('/adminSignup', adminSignupRouter(pool));     // Pass pool object to loginRouter   //first argument contain the actual name of the js router file 
 app.use('/passwordReset', passwordResetRouter(pool));     // Pass pool object to loginRouter
 app.use('/SearchTrain', SearchTrainRouter(pool));
@@ -827,11 +791,7 @@ app.use(function(err, req, res, next) {
 });
 
 
-// Export the app and pool objects
-//module.exports = { app, pool };
 
-// Exporting the app for Vercel deployment
-module.exports = app;
 
 // Start the server and listen on port 4000   //write localhost:4000/home to start the website
 app.listen(port,(error)=>{
@@ -841,3 +801,10 @@ app.listen(port,(error)=>{
     console.log(`Server is listening on port - ${port}`);
   }
 })
+
+
+// Export the app and pool objects
+//module.exports = { app, pool };
+
+// Exporting the app for Vercel deployment
+module.exports = app;
