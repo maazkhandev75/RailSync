@@ -29,6 +29,40 @@ app.use(session({
   saveUninitialized: false
 }));
 
+//configuring a connection pool for MSSQL using the mssql module and connecting to the database
+const sqlConfig = {
+  
+  user:'maazkhan75_RailSync_DB',
+  password:'railsyncpass',
+  database:'maazkhan75_RailSync_DB',
+  server: 'sql.bsite.net\\MSSQL2016',   
+  // Here while configuring sql obj we have to write sql.bsite.net\\MSSQL2016 with double back slash 
+  // but for connection in both vs code and in ssms we will have to write sql.bsite.net\MSSQL2016
+  // with single back slash ( otherwise connection for sql login can never established!)
+
+  // BECAUSE....
+  // In JavaScript (and other programming environments that use escape sequences like \n is a newline, \t is a tab, and so on.), a single backslash needs to be escaped with another backslash, hence \\. to write it as backslash
+  // In environments like SSMS and VS Code, you can directly use the single backslash without escaping it.
+
+
+  pool: {
+    max: 10,
+    min: 0,
+    idleTimeoutMillis: 3000000
+  } , options: {
+    encrypt: true, // for azure
+    trustServerCertificate: true // change to true for local dev / self-signed certs
+  }
+}
+const pool = new sql.ConnectionPool(sqlConfig);
+pool.connect((err)=>{
+  if (err) {
+    console.error('Database connection failed:', err);
+  } else {
+    console.log('Database connection successful!');
+  }
+})
+
 
 
 function isAuthenticatedUser(req, res, next)
@@ -84,39 +118,7 @@ const log = console.log;   //for ease of use in future ( have used in email code
 // also before deployment we should comment out all console.log statements because it also 
 // affect the performance of the website but for debugging and testing we should write or uncomment console.log
 
-//configuring a connection pool for MSSQL using the mssql module and connecting to the database
-const sqlConfig = {
-  
-  user:'maazkhan75_RailSync_DB',
-  password:'railsyncpass',
-  database:'maazkhan75_RailSync_DB',
-  server: 'sql.bsite.net\\MSSQL2016',   
-  // Here while configuring sql obj we have to write sql.bsite.net\\MSSQL2016 with double back slash 
-  // but for connection in both vs code and in ssms we will have to write sql.bsite.net\MSSQL2016
-  // with single back slash ( otherwise connection for sql login can never established!)
 
-  // BECAUSE....
-  // In JavaScript (and other programming environments that use escape sequences like \n is a newline, \t is a tab, and so on.), a single backslash needs to be escaped with another backslash, hence \\. to write it as backslash
-  // In environments like SSMS and VS Code, you can directly use the single backslash without escaping it.
-
-
-  pool: {
-    max: 10,
-    min: 0,
-    idleTimeoutMillis: 3000000
-  } , options: {
-    encrypt: true, // for azure
-    trustServerCertificate: true // change to true for local dev / self-signed certs
-  }
-}
-const pool = new sql.ConnectionPool(sqlConfig);
-pool.connect((err)=>{
-  if (err) {
-    console.error('Database connection failed:', err);
-  } else {
-    console.log('Database connection successful!');
-  }
-})
 
 
 // view engine setup
