@@ -54,6 +54,7 @@ const sqlConfig = {
     trustServerCertificate: true // change to true for local dev / self-signed certs
   }
 }
+
 const pool = new sql.ConnectionPool(sqlConfig);
 pool.connect((err)=>{
   if (err) {
@@ -64,6 +65,16 @@ pool.connect((err)=>{
 })
 
 
+// Route to check database connection status
+app.get('/checkDatabase', (req, res) => {
+  pool.connect((err) => {
+    if (err) {
+      res.status(500).send('Database connection failed');
+    } else {
+      res.status(200).send('Database connection successful');
+    }
+  });
+});
 
 
 function isAuthenticatedUser(req, res, next)
@@ -184,20 +195,16 @@ app.post('/sendEmail', (req, res )=>{
 
 
 // Define a route to render an ejs/html page
-// app.get('/home',(req,res)=>{
-// res.render('home.ejs');
-// });
-
 app.get("/", (req, res) => {
   res.render('home.ejs');
 });
 
 
 
-app.get("/",function(req, res){
-  //console.log(__dirname);
-  res.sendFile(__dirname + "/views/home.ejs");
-});
+// app.get("/",function(req, res){
+//   //console.log(__dirname);
+//   res.sendFile(__dirname + "/views/home.ejs");
+// });
 
 app.get('/decisionPg',(req,res)=>{
 res.render('decision.ejs');
@@ -793,7 +800,7 @@ app.use(function(err, req, res, next) {
 
 
 
-// Start the server and listen on port 4000   //write localhost:4000/home to start the website
+// Start the server and listen on port 4000   //write localhost:4000/ to start the website
 app.listen(port,(error)=>{
   if(error)
       console.log("Error listening");
