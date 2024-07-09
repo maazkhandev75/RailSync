@@ -16,7 +16,7 @@ const nodemailer = require('nodemailer');
 
 // Create an instance of the Express application
 const app = express();
-const port= process.env.PORT || 4000;   //our port
+const port= process.env.PORT;   //our port
 
 
 //app.post -> to send data to server
