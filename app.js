@@ -1,3 +1,6 @@
+// Load environment variables from .env file
+require('dotenv').config();
+
 //importing necessary modules
 const createError = require('http-errors');
 const bodyParser = require('body-parser');
@@ -144,37 +147,49 @@ app.post('/sendEmail', (req, res )=>{
     
     service:'gmail',
     auth: {
-      user: 'youremail',  //enter the email address whom you want to get mails
-      pass: 'yourAppPass'      //go to your google acc and seach app passwords then create 16 digti pass and use here
+      user: process.env.EMAIL,  //enter the email address whom you want to get mails
+      pass: process.env.APP_PASSWORD      //go to your google acc and seach app passwords then create 16 digti pass and use here
       }
   });
 
   var mailOptions = {
     from: eml,    
-    to: 'youremail',    //enter your email address whom you want to get emails also note that emails'to and from will be same when revieced which is your own email
+    to: process.env.EMAIL,    //enter your email address whom you want to get emails also note that emails'to and from will be same when revieced which is your own email
     cc: 'railsyc',
     subject: 'Message from railsync user ' + nm,
-    text: 'Email :' + eml + '\n\n' + 'Subject :' + sbj + '\n\n' + 'Message :' + msg
+    text: 'Email : ' + eml + '\n\n' + 'Subject : ' + sbj + '\n\n' + 'Message : ' + msg
   };
 
-  transporter.sendMail(mailOptions, function(error, info){
-    if(error){
-      console.error(error);
-      res.status(500).send("Error submitting mail");
-    } else {
+  transporter.sendMail(mailOptions, function(error, info)
+  {
+    // different flavours are shown for learning purpose
+    if(error)
+    {
+    console.error('Error: ', error);
+    return res.status(500).render('./USER/contact.ejs', { Message: 'Message sending failed!' });  //more optimal due to immediate exit due to return
+    //res.render('./USER/contact.ejs', { Message: 'Message sending failed!' }); 
+    //res.status(500).send("Error submitting mail");
+    } 
+    else {
       log("Email sent: " + info.response);
-      res.redirect('contact');
+      return res.render('./USER/contact.ejs', { Message: 'Message sent successfully!' });
+      //res.render('./USER/contact.ejs', { Message: 'Message sent successfully!' }); 
     }
   });
-
-
 });
+
 
 
 // Define a route to render an ejs/html page
-app.get('/home',(req,res)=>{
-res.render('home.ejs');
+// app.get('/home',(req,res)=>{
+// res.render('home.ejs');
+// });
+
+app.get("/", (req, res) => {
+  res.render('home.ejs');
 });
+
+
 
 app.get("/",function(req, res){
   //console.log(__dirname);
@@ -693,7 +708,6 @@ app.get('/profile', isAuthenticatedUser, async(req,res)=>{
       }
   });
   
-//work to be done below to show email sent message!
 app.get('/contact', isAuthenticatedUser, (req, res) => {
   res.render('./USER/contact.ejs');
 });
@@ -775,7 +789,10 @@ app.use(function(err, req, res, next) {
 
 
 // Export the app and pool objects
-module.exports = { app, pool };
+//module.exports = { app, pool };
+
+// Exporting the app for Vercel deployment
+module.exports = app;
 
 // Start the server and listen on port 4000   //write localhost:4000/home to start the website
 app.listen(port,(error)=>{

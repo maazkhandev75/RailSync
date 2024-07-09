@@ -9,7 +9,6 @@
 <%- include('./partials/sidebar.ejs') %>
 
 
-
   <main id="main" class="main">
 
     <div class="pagetitle">
@@ -33,14 +32,14 @@
               <div class="info-box card">
                 <i class="bi bi-geo-alt"></i>
                 <h3>Address</h3>
-                <p>53-C BLOCK-F, JOHAR TOWN <br>LAHORE, PAKISTAN, 54600</p>
+                <p>59-N BLOCK-F, JOHAR TOWN <br>LAHORE, PAKISTAN, 54600</p>
               </div>
             </div>
             <div class="col-lg-6">
               <div class="info-box card">
                 <i class="bi bi-telephone"></i>
                 <h3>Call Us</h3>
-                <p>+92 5589 55488 55<br>+92 3203553291</p>
+                <p>023020020302<br>+92 3343534214</p>
               </div>
             </div>
             <div class="col-lg-6">
@@ -79,7 +78,7 @@
                 </div>
 
                 <div class="col-md-12">
-                  <textarea class="form-control inputs"  id="message" name="message inputs" rows="4" placeholder="Message" required></textarea>
+                  <textarea class="form-control inputs"  id="message" name="message" rows="4" placeholder="Message" required></textarea>
                 </div>
 
                 <div class="col-md-12 text-center">
@@ -102,10 +101,41 @@
 
   </main><!-- End #main -->
 
+    <!-- Custom Alert Box Structure -->
+    <div id="alertModal" class="alert-modal">
+      <div class="alert-content">
+          <span class="alert-close" onclick="closeAlert()">&times;</span>
+          <p id="alertMessage"></p>
+          <button class="alert-btn" onclick="closeAlert()">OK</button>
+      </div>
+  </div>
+
 
   <%- include('./partials/footer.ejs') %>
-  <%- include('./partials/script.ejs') %>
 
+  
+  <script>
+
+    
+    <% if (typeof Message !== 'undefined') { %>
+        showAlert("<%= Message %>");
+    <% } %>
+    
+        // Function to open the custom alert box
+    function showAlert(msg) {
+        document.getElementById('alertMessage').innerText = msg;
+        document.getElementById('alertModal').style.display = 'flex';
+    }
+
+    // Function to close the custom alert box
+    function closeAlert() {
+        document.getElementById('alertModal').style.display = 'none';
+    }
+
+//******************************************
+  </script>
+
+  <%- include('./partials/script.ejs') %>
 </body>
 
 </html>
