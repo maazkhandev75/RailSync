@@ -15,6 +15,7 @@ router.get('/sessionCheckUser', (req, res) => {
           background-color: #37b800;
           font-size:1.5em;
           font-weight: 900;
+          overflow:hidden;
           padding:5em 2em;
           *::selection{
             color:white;
@@ -41,6 +42,7 @@ router.get('/sessionCheckUser', (req, res) => {
           font-size:2.5em;
           font-weight:900;
           padding:5em 4em;
+          overflow:hidden;
           *::selection{
             color:white;
           }  

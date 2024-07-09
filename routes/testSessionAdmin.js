@@ -16,6 +16,7 @@ router.get('/sessionCheckAdmin', (req, res) => {
           font-size:1.5em;
           font-weight: 900;
           padding:5em 2em;
+          overflow:hidden;
           *::selection{
             color:white;
           }  
@@ -41,6 +42,7 @@ router.get('/sessionCheckAdmin', (req, res) => {
           font-size:2.5em;
           font-weight:900;
           padding:5em 4em;
+          overflow:hidden;
           *::selection{
             color:white;
           }  
