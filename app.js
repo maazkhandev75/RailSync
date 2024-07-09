@@ -35,7 +35,7 @@ const sqlConfig = {
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
-  server: 'sql.bsite.net\\MSSQL2016',   
+  server: process.env.SERVER,   
   // Here while configuring sql obj we have to write sql.bsite.net\\MSSQL2016 with double back slash 
   // but for connection in both vs code and in ssms we will have to write sql.bsite.net\MSSQL2016
   // with single back slash ( otherwise connection for sql login can never established!)
