@@ -653,7 +653,7 @@ app.get('/profile', isAuthenticatedUser, async(req,res)=>{
       }
       else
       {
-         res.redirect('/home');
+         res.redirect('/');
       }
     });
   
