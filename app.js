@@ -16,7 +16,7 @@ const nodemailer = require('nodemailer');
 
 // Create an instance of the Express application
 const app = express();
-const port=4000;   //our port
+const port= process.env.PORT || 4000;   //our port
 
 
 //app.post -> to send data to server
@@ -24,7 +24,7 @@ const port=4000;   //our port
 
 // Configure session middleware
 app.use(session({
-  secret: '053eb1bb21545cd881a8e15b6fab7e58be948187fddd5babd64dd2c5e77614b7',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false
 }));
@@ -32,9 +32,9 @@ app.use(session({
 //configuring a connection pool for MSSQL using the mssql module and connecting to the database
 const sqlConfig = {
   
-  user:'maazkhan75_RailSync_DB',
-  password:'railsyncpass',
-  database:'maazkhan75_RailSync_DB',
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
   server: 'sql.bsite.net\\MSSQL2016',   
   // Here while configuring sql obj we have to write sql.bsite.net\\MSSQL2016 with double back slash 
   // but for connection in both vs code and in ssms we will have to write sql.bsite.net\MSSQL2016
@@ -62,6 +62,7 @@ pool.connect((err)=>{
     console.log('Database connection successful!');
   }
 })
+
 
 
 
