@@ -4,7 +4,7 @@
 	  "DB_HOST": "sql.bsite.net\\MSSQL2016",
 	  "DB_USER": "maazkhan75_RailSync_DB",
 	  "DB_NAME": "maazkhan75_RailSync_DB",
-	  "DB_PASS": "railsyncpass6776***",
+	  "DB_PASS": "",
 	  "PORT": "4000",
 	  "SECRET_KEY": "053eb1bb21545cd881a8e15b6fab7e58be948187fddd5babd64dd2c5e77614b7",
 	  "EMAIL": "maazkhan75555@gmail.com",
