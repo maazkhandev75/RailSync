@@ -4,6 +4,10 @@
 <%- include('./partials/head.ejs') %>
 
 <body>
+<!--# -----------------preloader----------------- -->
+<!-- initially the loader will be displaying -->
+<div id="preloader"></div>  
+<div id="content">  
 
 <%- include('./partials/header.ejs') %>
 <%- include('./partials/sidebar.ejs') %>
@@ -168,7 +172,23 @@
 
 
   <%- include('./partials/footer.ejs') %>
+</div>
+
   <%- include('./partials/script.ejs') %>
+  <script>
+    window.onload = function()
+    {
+    document.getElementById("preloader").style.display='none';
+    document.getElementById("content").style.opacity = '1'; // Fade in content
+    
+    };
+    
+    
+    // setTimeout(function() {
+    //     document.getElementById("preloader").style.display = 'none';  // hide prelaoder 
+    //     document.getElementById("content").style.opacity = '1'; // Fade in content
+    // }, 2000);
+    </script>
 
 </body>
 

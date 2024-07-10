@@ -8,6 +8,19 @@
   background:#e06c00;
 }
 
+#preloader{
+	background:#000 url(/assets/img_and_gif/loader.gif) no-repeat center center;
+	background-size:2%;
+	height:100vh;
+	width:100%;
+	position:fixed;
+	z-index: 100;
+}
+#content {
+    opacity: 0; 
+    transition: opacity 1s ease-in-out;   /*Add transition for opacity  */
+}
+
 /* Hide the default scrollbar */
 ::-webkit-scrollbar {
   width: 7px;

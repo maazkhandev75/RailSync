@@ -4,12 +4,16 @@
 <%- include('./partials/head.ejs') %>
 
 <body>
-
+<!--# -----------------preloader----------------- -->
+<!-- initially the loader will be displaying -->
+<div id="preloader"></div>  
+<div id="content">
 <%- include('./partials/header.ejs') %>
 <%- include('./partials/sidebar.ejs') %>
 
-<main id="main" class="main">
 
+<main id="main" class="main">
+  
   <div class="pagetitle dash-title">
     <h1>User Dashboard</h1>
   </div><!-- End Page Title -->
@@ -93,11 +97,25 @@
   </section>
 
 
-
-
 </main><!-- End #main -->
 
 <%- include('./partials/footer.ejs') %>
+</div>
+
 <%- include('./partials/script.ejs') %>
+<script>
+window.onload = function()
+{
+document.getElementById("preloader").style.display='none';
+document.getElementById("content").style.opacity = '1'; // Fade in content
+
+};
+
+
+// setTimeout(function() {
+//     document.getElementById("preloader").style.display = 'none';  // hide prelaoder 
+//     document.getElementById("content").style.opacity = '1'; // Fade in content
+// }, 2000);
+</script>
 </body>
 </html>
