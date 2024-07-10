@@ -49,7 +49,7 @@ copies or substantial portions of the Software.
 git clone https://github.com/maazkhan75/RailSync.git
 ```
 
-2. Run the server and visit `localhost:4000/home`.
+2. Run the server and visit `localhost:4000`.
 
 ## 🧪 Testing Guide
 

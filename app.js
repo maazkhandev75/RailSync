@@ -35,7 +35,7 @@ const sqlConfig = {
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
-  server: process.env.SERVER,   
+  server: process.env.DB_HOST,   
   // Here while configuring sql obj we have to write sql.bsite.net\\MSSQL2016 with double back slash 
   // but for connection in both vs code and in ssms we will have to write sql.bsite.net\MSSQL2016
   // with single back slash ( otherwise connection for sql login can never established!)
@@ -64,15 +64,35 @@ pool.connect((err)=>{
   }
 })
 
+//******************************************************
+//actually with simple express session (in memory sesssion type) implementation the session was disconnected after few seconds in vercel (due to its serverless nature) but was working fine in localhost and should also works fine in web hosts with server memory capabilities...
+//so we made a table + express session implementation
+//also i have also tried connect-sql and sequilize sql libraries but they were not connecting with the database
+// Custom SQL session store implementation was also tried but that slowed the server
+
+//Configure session middleware (in-memory session store , doesnot work in vercel)
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
+}));
+//******************************************************
 
 // Route to check database connection status
-app.get('/checkDatabase', (req, res) => {
+// app.get('/connect', (req, res) => {
+//   pool.connect((err) => {
+//     if (err) {
+//       res.status(500).send('Database connection failed');
+//     } else {
+//       res.status(200).send('Database connection successful');
+//     }
+//   });
+// });
+
+app.get('/connect', (req, res) => {
   pool.connect((err) => {
-    if (err) {
-      res.status(500).send('Database connection failed');
-    } else {
-      res.status(200).send('Database connection successful');
-    }
+    const message = err ? 'Database connection failed' : 'Database connection successful';
+    res.render('databaseStatus', { message: message });
   });
 });
 
@@ -129,8 +149,6 @@ const log = console.log;   //for ease of use in future ( have used in email code
 
 // also before deployment we should comment out all console.log statements because it also 
 // affect the performance of the website but for debugging and testing we should write or uncomment console.log
-
-
 
 
 // view engine setup
@@ -193,18 +211,15 @@ app.post('/sendEmail', (req, res )=>{
 });
 
 
+// app.get("/",function(req, res){
+//   //console.log(__dirname);
+//   res.sendFile(__dirname + "/views/home.ejs");
+// });
 
 // Define a route to render an ejs/html page
 app.get("/", (req, res) => {
   res.render('home.ejs');
 });
-
-
-
-// app.get("/",function(req, res){
-//   //console.log(__dirname);
-//   res.sendFile(__dirname + "/views/home.ejs");
-// });
 
 app.get('/decisionPg',(req,res)=>{
 res.render('decision.ejs');
@@ -222,7 +237,7 @@ app.get('/adminLoginForm',(req,res)=>{
   res.render('adminLogin.ejs');
 });
 
-app.get('/adminSignupForm', isAuthenticatedAdmin,(req,res)=>{
+app.get('/adminSignupForm',isAuthenticatedAdmin,(req,res)=>{
   res.render('adminSignup.ejs');
 });
 
@@ -239,7 +254,7 @@ app.get('/adminDash', isAuthenticatedAdmin, (req, res) => {
   res.render('./ADMIN/dashboard.ejs');
 });
 
-app.get('/trainsData', isAuthenticatedAdmin, (req, res) => {
+app.get('/trainsData', (req, res) => {
   pool.query('SELECT * FROM Train')
       .then(result => {
           const Trains = result.recordset;
@@ -317,6 +332,7 @@ app.get('/usersAndAdminsData', isAuthenticatedAdmin, (req, res) => {
 
 
 
+
 app.get('/stationsAndTracksData', isAuthenticatedAdmin, (req, res) => {
   const requestStation = new sql.Request(pool);
   const requestTrack = new sql.Request(pool);
@@ -337,7 +353,7 @@ app.get('/stationsAndTracksData', isAuthenticatedAdmin, (req, res) => {
   });
 });
 
-app.get('/routesData', isAuthenticatedAdmin, (req, res) => {
+app.get('/routesData', isAuthenticatedAdmin,  (req, res) => {
      
   pool.query('SELECT * FROM Route as R join Tracks as T on R.TrackId=T.TrackId')
   .then(result => {
@@ -520,7 +536,7 @@ app.get('/editPilot', isAuthenticatedAdmin, (req, res) => {
   });
 });
 
-app.get('/editUser', isAuthenticatedAdmin, (req, res) => {
+app.get('/editUser', (req, res) => {
   const CNIC = req.query.CNIC;
   const UserName = req.query.UserName;
   const Password = req.query.Password;
@@ -814,4 +830,5 @@ app.listen(port,(error)=>{
 //module.exports = { app, pool };
 
 // Exporting the app for Vercel deployment
+// module.exports= pool;
 module.exports = app;

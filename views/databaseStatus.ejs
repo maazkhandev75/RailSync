@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+
+  <title>RailSync</title>
+  <link href="/assets/img_and_gif/icon.png" rel="icon">
+
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .status {
+      text-align: center;
+	  font-size: 1.5em;
+	  font-family: 'Roboto Mono',sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div class="status" id="statusMessage"></div>
+  <script>
+    document.getElementById('statusMessage').textContent = '<%= message %>';
+  </script>
+</body>
+</html>
