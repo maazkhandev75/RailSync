@@ -1,8 +1,14 @@
-body {
+  body {
 	margin: 0;
 	padding: 0;
 	background-color: black;
   }
+
+  #content {
+    opacity: 0; 
+    transition: opacity 1s ease-in-out;   /*Add transition for opacity  */
+  }
+
   
   .half-btn {
 	position: fixed;

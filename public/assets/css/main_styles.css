@@ -54,10 +54,42 @@ body {
 	position:fixed;
 	z-index: 100;
 }
+@media (max-width: 768px) {
+    #preloader {
+        background-size: 3%;
+    }
+}
+@media (max-width: 490px) {
+    #preloader {
+        background-size: 4%; 
+    }
+}
+@media (max-width: 450px) {
+    #preloader {
+        background-size: 5%; 
+    }
+}
+
+@media (max-width: 430px) {
+    #preloader {
+        background-size: 6%; 
+    }
+}
+@media (max-width: 370px) {
+    #preloader {
+        background-size: 7%; 
+    }
+}
+@media (max-width: 330px) {
+    #preloader {
+        background-size: 8%; 
+    }
+  }
 #content {
     opacity: 0; 
     transition: opacity 1s ease-in-out;   /*Add transition for opacity  */
 }
+
 
 .company-name{
     color:#e06c00;
@@ -324,6 +356,7 @@ margin: 20px;
       
     footer {
         padding: 10px 0; 
+        font-size: 0.7em;
     }    
 
    
@@ -358,7 +391,7 @@ margin: 20px;
     }
 
     .intro-paragraph {
-        font-size: 2em; 
+        font-size: 2.4em; 
     }
 
     #about-section img{
@@ -381,6 +414,7 @@ margin: 20px;
 	
         font-size: 2.7em;
     }
+
 }
 
 @media (max-width: 430px) {
@@ -390,12 +424,17 @@ margin: 20px;
     }
 
     .intro-paragraph {
-        font-size: 1.5em; 
+        font-size: 2.2em; 
     }
 
     #about-section img{
         width: 80%;
         height: 20vh;
+    }
+
+    footer {
+        padding: 10px 0; 
+        font-size: 0.65em;
     }
 }
 
@@ -407,7 +446,7 @@ margin: 20px;
     }
 
     .intro-paragraph {
-        font-size: 1.5em; 
+        font-size: 2.2em; 
     }
 
     #about-section img{
@@ -422,6 +461,9 @@ margin: 20px;
         width: 100%;
         box-sizing: border-box; /* Ensure padding is included in the width */
     }
+    .intro-paragraph {
+        font-size: 2.1em; 
+    }
 }
 
 @media (max-width: 340px) {
@@ -433,5 +475,8 @@ margin: 20px;
     header img.logo {
         height: 70px;
         cursor:none;
+    }
+    .intro-paragraph {
+        font-size: 2em; 
     }
 }

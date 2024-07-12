@@ -4,8 +4,13 @@
 }
 
 *::selection{
-  color: #000;
-  background:#e06c00;
+  color: #ff820e;
+}
+
+input::selection{
+	color:#000;
+	background-color: #d36600;
+	
 }
 
 #preloader{
@@ -16,6 +21,38 @@
 	position:fixed;
 	z-index: 100;
 }
+@media (max-width: 768px) {
+    #preloader {
+        background-size: 3%;
+    }
+}
+@media (max-width: 490px) {
+    #preloader {
+        background-size: 4%; 
+    }
+}
+@media (max-width: 450px) {
+    #preloader {
+        background-size: 5%; 
+    }
+}
+
+@media (max-width: 430px) {
+    #preloader {
+        background-size: 6%; 
+    }
+}
+@media (max-width: 370px) {
+    #preloader {
+        background-size: 7%; 
+    }
+}
+@media (max-width: 330px) {
+  #preloader {
+      background-size: 8%; 
+  }
+}
+
 #content {
     opacity: 0; 
     transition: opacity 1s ease-in-out;   /*Add transition for opacity  */
@@ -196,7 +233,7 @@ background-color: rgb(171, 171, 171);
 }
 
 .custom-alert-mesg{
-  font-family: 'Fira Sans',sans-serif;
+  font-family: 'Quicksand',sans-serif;
   font-size: 1.2em;
 }
 
@@ -205,8 +242,8 @@ background-color: rgb(171, 171, 171);
 }
 
 .highlight{
-  background-color: #e06c00;
-  color:#000;
+  background-color: #000;
+  color:#e06c00;
 }
 /*------------------*/
 
@@ -454,20 +491,24 @@ input:-webkit-autofill {
 
 
 .customBtn2{
+  margin-top: 1em;
   background-color: rgb(0, 166, 232);
   color: black;
   transition: all 0.3s ease-in;
   font-weight: 600;
-  font-family: 'Trebuchet MS', sans-serif;
-  border: 2px solid rgb(0, 0, 0);
-	border-radius: 10px;
+  font-family: 'Ubuntu', sans-serif;
+  border: none;
+	border-radius: 20px;
 	padding: 0.2em 0.5em;
 	letter-spacing: 3px;
 }
+.customBtn2::selection{
+  background-color:transparent;
+}
 .customBtn2:hover, .customBtn2:focus{
     background-color: #de6b00;
-    border: 2px solid black;
-    color:rgb(0, 0, 0);
+    border: none;
+    color:#000;
     text-decoration: none;
     outline: none;
     transform: translateY(-0.2em);
@@ -478,11 +519,9 @@ input:-webkit-autofill {
 
 .customBtn2:active{
   transition:all 100ms;
-  background-color: rgb(81, 81, 81);
-  color:#000;
-  transform:scale(1.1,1.1);
-  box-shadow: 0 0.5em 0.7em -0.4em #6e6e6e;
-  
+  background-color: #de6b00;
+  transform:scale(0.95,0.95);
+  /* box-shadow: 0 0.5em 0.7em -0.4em #6e6e6e; */
  }
 
   
@@ -1429,14 +1468,20 @@ h5{
   background-color: #0096ed;
   font-weight: 900;
   font-size: 1em;
-  transition: color 0.75s, background-color 0.75s;
+  transition: color 0.3s, background-color 0.3s;
   color: #000;
   border-radius: 20px;
   margin-right: 0.6em;
+  margin-top: 0.5em;
+  margin-bottom:0.5em;
 }
 .custom-btn:hover{
   background-color: rgb(60, 190, 255);
   color: #000;
+}
+.custom-btn:active{
+  border:2px solid #fff;
+  background-color: #000; 
 }
 
 .custom-btn-secondary{
@@ -1447,10 +1492,16 @@ h5{
   border-radius: 20px;
   font-size: 1em;
   margin-right: 0.6em;
+  margin-top: 0.5em;
+  margin-bottom:0.5em;
 }
 .custom-btn-secondary:hover{
   background-color: rgb(184, 184, 184);
   color: #000;
+}
+.custom-btn-secondary:active{
+  border:2px solid #fff;
+  background-color: #000; 
 }
 
 /*--------------------------------------------------------------

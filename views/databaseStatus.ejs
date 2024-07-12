@@ -24,15 +24,26 @@
       margin: 0;
     }
     .status {
-      text-align: center;
+    text-align: center;
 	  font-size: 1.5em;
-	  font-family: 'Roboto Mono',sans-serif;
+	  font-family: 'Roboto Mono',sans-serif;    
     }
+    #content {
+    opacity: 0; 
+    transition: opacity 1s ease-in-out;   /*Add transition for opacity  */
+}
   </style>
 </head>
 <body>
+<div id="content">
   <div class="status" id="statusMessage"></div>
+</div>
   <script>
+    window.onload = function()
+    {
+    document.getElementById("content").style.opacity = '1'; // Fade in content
+    };
+
     document.getElementById('statusMessage').textContent = '<%= message %>';
   </script>
 </body>

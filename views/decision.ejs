@@ -14,19 +14,24 @@
 </head>
 
 <body>
+
+<div id="content">
 <button id="signup-btn" class="half-btn left-half">Sign Up</button>
 <button id="login-btn" class="half-btn right-half">Log In</button>
-
+</div>
 
 <script >
-	document.getElementById('signup-btn').addEventListener('click', function() {
-	window.location.href = '/userSignupForm';
+  window.onload = function(){
+        document.getElementById("content").style.opacity = '1'; // Fade in content
+    };
+  	
+  document.getElementById('signup-btn').addEventListener('click', function() {
+  window.location.href = '/userSignupForm';
   });
   
   document.getElementById('login-btn').addEventListener('click', function() {
-	window.location.href = '/userLoginForm';
+  window.location.href = '/userLoginForm';
   });
-
 </script>
 </body>
 

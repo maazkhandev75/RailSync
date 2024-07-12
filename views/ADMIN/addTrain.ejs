@@ -3,6 +3,7 @@
 <%- include('./partials/head.ejs') %>
 
 <body>
+<div id="content">
 <%- include('./partials/header.ejs') %>
 <%- include('./partials/sidebar.ejs') %>
 
@@ -88,10 +89,16 @@
 
 
   <%- include('./partials/footer.ejs') %>
+</div>
+
   <%- include('./partials/script.ejs') %>
 
   <script>
 
+        window.onload = function()
+        {
+        document.getElementById("content").style.opacity = '1'; // Fade in content
+        };
   
     // Function to open the custom alert box
     function showAlert(message) {

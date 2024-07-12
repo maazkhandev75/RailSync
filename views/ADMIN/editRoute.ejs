@@ -4,21 +4,10 @@
 <%- include('./partials/head.ejs') %>
 
 <body>
-
+  <div id="content">
 <%- include('./partials/header.ejs') %>
-
 <%- include('./partials/sidebar.ejs') %>
-<style>
-  /* CSS */
-#inputName5 {
-    /* Style the input field to make it visually distinct */
-    color: #555; /* Example text color */
-    background-color: #f9f9f9; /* Example background color */
-    border: 1px solid #ddd; /* Example border */
-    /* Add any other styles as needed */
-}
 
-</style>
 <main id="main" class="main">
 
     <div class="pagetitle">
@@ -113,10 +102,15 @@
 
 
   <%- include('./partials/footer.ejs') %>
+</div>
   <%- include('./partials/script.ejs') %>
 
 
 <script>
+  window.onload = function()
+        {
+        document.getElementById("content").style.opacity = '1'; // Fade in content
+        };
 
   
         // Function to open the custom alert box

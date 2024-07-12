@@ -22,12 +22,7 @@ const port= process.env.PORT;   //our port
 //app.post -> to send data to server
 //app.get -> to receive data from server
 
-// Configure session middleware
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false
-}));
+
 
 //configuring a connection pool for MSSQL using the mssql module and connecting to the database
 const sqlConfig = {
@@ -79,7 +74,7 @@ app.use(session({
 //******************************************************
 
 // Route to check database connection status
-// app.get('/connect', (req, res) => {
+// app.get('/checkDatabase', (req, res) => {
 //   pool.connect((err) => {
 //     if (err) {
 //       res.status(500).send('Database connection failed');
@@ -89,9 +84,17 @@ app.use(session({
 //   });
 // });
 
-app.get('/connect', (req, res) => {
+app.get('/connectDatabase', (req, res) => {
   pool.connect((err) => {
-    const message = err ? 'Database connection failed' : 'Database connection successful';
+    const message = err ? 'Database connection failed!' : 'Database connection successful!';
+    res.render('databaseStatus', { message: message });
+  });
+});
+
+app.get('/checkDatabaseConnection', (req, res) => {
+  // Perform a simple query to check the database connection status
+  pool.request().query('SELECT 1', (err, result) => {
+    const message = err ? 'Database is not connected!' : 'Database is connected!';
     res.render('databaseStatus', { message: message });
   });
 });
@@ -827,8 +830,4 @@ app.listen(port,(error)=>{
 
 
 // Export the app and pool objects
-//module.exports = { app, pool };
-
-// Exporting the app for Vercel deployment
-// module.exports= pool;
-module.exports = app;
+module.exports = { app, pool };

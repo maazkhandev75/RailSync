@@ -5,6 +5,8 @@
 
 <body>
 
+  <div id="content">
+
 <%- include('./partials/header.ejs') %>
 <%- include('./partials/sidebar.ejs') %>
 
@@ -109,13 +111,15 @@
           <button class="alert-btn" onclick="closeAlert()">OK</button>
       </div>
   </div>
-
-
   <%- include('./partials/footer.ejs') %>
-
+</div>
   
   <script>
 
+      window.onload = function()
+        {
+        document.getElementById("content").style.opacity = '1'; // Fade in content
+        };
     
     <% if (typeof Message !== 'undefined') { %>
         showAlert("<%= Message %>");

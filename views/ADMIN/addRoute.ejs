@@ -7,9 +7,8 @@
 <%- include('./partials/head.ejs') %>
 
 <body>
-
+  <div id="content">
 <%- include('./partials/header.ejs') %>
-
 <%- include('./partials/sidebar.ejs') %>
 
 <main id="main" class="main">
@@ -64,7 +63,7 @@
                 <!--    if we want to do data-time picker with flatpickr js library             -->
                 <div class="col-md-6">
                   <label for="DepartureTime" class="form-label">DepartureTime</label>
-                  <input type="text" class="form-control inputs" id="DepartureTime" required>
+                  <input type="text" class="form-control inputs" id="DepartureTime" placeholder="Open Calendar" required>
                 </div>
                 
                 <script>
@@ -83,7 +82,7 @@
                    <!--    if we want to do data-time picker with flatpickr js library             -->
                 <div class="col-md-6">
                   <label for="ArrivalTime" class="form-label">ArrivalTime</label>
-                  <input type="text" class="form-control inputs" id="ArrivalTime" required>
+                  <input type="text" class="form-control inputs" id="ArrivalTime" placeholder="Open Calendar" required>
                 </div>
                 
                 <script>
@@ -122,10 +121,18 @@
 
 
   <%- include('./partials/footer.ejs') %>
+</div>
+
   <%- include('./partials/script.ejs') %>
 
 
 <script>
+
+    
+        window.onload = function()
+        {
+        document.getElementById("content").style.opacity = '1'; // Fade in content
+        };
 
     // Function to open the custom alert box
     function showAlert(message) {

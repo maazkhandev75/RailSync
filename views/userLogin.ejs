@@ -21,6 +21,9 @@
     <link href="/assets/img_and_gif/icon.png" rel="icon">
 </head>
 <body>
+    
+<div id="content">
+
 	<!-- if the user logged in successfully -->
     <% if (typeof successMessage !== 'undefined') { %>
     <div class="alert alert-success" role="alert">
@@ -62,10 +65,11 @@
                         <input type="checkbox" class="form-check-input ml-md-4 ml-0" id="check1" required>
                         <label class="form-check-label ml-md-5 ml-4" for="exampleCheck1">I assure that the above information is correct!</label>
                     </div>
+                    
 
                     <div class="last-inner-container ml-md-2 ml-1">
                         <a href="/forgetPass" class="forgetPass-btn-for-sm">forget password</a>
-                        <button type="submit" class="btn-submit ml-md-4">Enter</button>
+                        <button type="submit" class="btn-submit ml-md-4">Login</button>
                         <a href="/forgetPass" class="forgetPass-btn-for-lg">forget password</a>
                     </div>
                     
@@ -93,8 +97,14 @@
         </div>
     </div>
 
+</div>
     <!-- Script to redirect to the dashboard only if the success message is present -->
     <script>
+        window.onload = function()
+        {
+        document.getElementById("content").style.opacity = '1'; // Fade in content
+        };
+
         // Check if the success message is present
         <% if (typeof successMessage !== 'undefined') { %>  //if success msg appears only then redirect to dashbaord but after 2 sec delay so that msg can be read by client
             // Redirect to the dashboard after 2 seconds
@@ -102,6 +112,9 @@
                 window.location.href = '/userDash';
             }, 2000); // 2sec delay
         <% } %>
+
+
+        
     </script>
 
 </body>

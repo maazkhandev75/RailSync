@@ -316,6 +316,8 @@ select * from [Seat]
 EXEC sp_rename '[Fare].BusinessClass', 'Business', 'COLUMN';
 
 
+delete from ticket 
+where ticketid='20'
 
 update [Carriage]
 set CarriageId='BlueWaysCargE3'

@@ -21,6 +21,9 @@
     <link href="/assets/img_and_gif/icon.png" rel="icon">
 </head>
 <body>
+
+<div id="content">
+
 	<!-- if the admin signup successfully -->
     <% if (typeof successMessage !== 'undefined') { %>
     <div class="alert alert-success" role="alert">
@@ -80,7 +83,7 @@
                     </div>
 
                     <div class="pl-md-4">
-                        <button type="submit" class="btn-submit ml-md-2 ml-0">Enter</button>
+                        <button type="submit" class="btn-submit ml-md-2 ml-0">Signup</button>
                     </div>
 
 
@@ -101,8 +104,13 @@
 
 </div>
 
+</div>
 
     <script>
+    window.onload = function()
+    {
+        document.getElementById("content").style.opacity = '1'; // Fade in content
+    };
 
         
     // Function to open the custom alert box

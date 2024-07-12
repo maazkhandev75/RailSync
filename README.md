@@ -12,7 +12,11 @@ RAILSYNC is a web-based railway management system that offers efficient railway 
 - **Sessions**: Sessions are implemented for user and admin authentication. You can check the session status by:
   - `/sessionCheckUser`
   - `/sessionCheckAdmin`
-- **Working Contact Form**: The users can send their query and it will be recieved on your gmail after configuring nodemail obj by simply entering `your-email` and `16-digit AppPass` 
+- **Database Status**: Database status routes are also implemented to reconnect or check the connection with the database hosted on cloud.
+  - `/checkDatabaseConnection`
+  - `/connectDatabase`
+
+- **Working Contact Form**: The users can send their query and it will be recieved on your gmail after configuring nodemail object by simply entering `your-email` and `16-digit AppPass` 
 
 ## 🛠 Technologies Used
 
@@ -20,7 +24,8 @@ RAILSYNC is a web-based railway management system that offers efficient railway 
 - **Backend**: EXPRESS.JS AND NODE.JS
 - **Database**: Microsoft SQL Server
 - **Authentication**: JS
-- **Deployment**: local host ( + ON VERCEL ALSO)
+- **Production**: local host
+- **Deployment**: AZURE
 
 ## 📜 License
 
@@ -48,8 +53,9 @@ copies or substantial portions of the Software.
 ```bash
 git clone https://github.com/maazkhan75/RailSync.git
 ```
+2. First you should setup your database from the backup `RailSync_DB_backup.bak` file provided in the SQL directory of repo.
 
-2. Run the server and visit `localhost:4000`.
+3. Run the server and visit `localhost:4000`.
 
 ## 🧪 Testing Guide
 
@@ -74,6 +80,11 @@ To test the website, follow these steps:
    - Check the session status using the following endpoints:
      `/sessionCheckUser`
      `/sessionCheckAdmin`
+   - If you are not sure about database connection you can check through:
+     `/checkDatabaseConnection`
+   - If due to any reason database connection is lost you can reconnect using:
+     `/connectDatabase`
+
    
 5. Test Case
   - **SEARCH TRAIN FROM `LHR TO ISL` ON `14 JUNE 2024`**

@@ -4,9 +4,8 @@
 <%- include('./partials/head.ejs') %>
 
 <body>
-
+  <div id="content">
 <%- include('./partials/header.ejs') %>
-
 <%- include('./partials/sidebar.ejs') %>
 <main id="main" class="main">
 
@@ -15,7 +14,7 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="adminDash">Admin Dashboard</a></li>
-          <li class="breadcrumb-item"><a href="trainsData.ejs">Trains Data</a></li>
+          <li class="breadcrumb-item"><a href="trainsData">Trains Data</a></li>
           <li class="breadcrumb-item active">Edit Carriage</li>
         </ol>
       </nav>
@@ -76,11 +75,15 @@
 
 
   <%- include('./partials/footer.ejs') %>
+</div>
   <%- include('./partials/script.ejs') %>
 
 
 <script>
-
+  window.onload = function()
+        {
+        document.getElementById("content").style.opacity = '1'; // Fade in content
+        };
   
         // Function to open the custom alert box
         function showAlert(message) {
