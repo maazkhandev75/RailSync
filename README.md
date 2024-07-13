@@ -55,7 +55,9 @@ git clone https://github.com/maazkhan75/RailSync.git
 ```
 2. First you should setup your database from the backup `RailSync_DB_backup.bak` file provided in the SQL directory of repo.
 
-3. Run the server and visit `localhost:4000`.
+3. Plug your credentials in the .env file.
+
+4. Run the server and visit `localhost:4000`.
 
 ## 🧪 Testing Guide
 

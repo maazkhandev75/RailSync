@@ -2,6 +2,11 @@
 <html lang="en">
 
 <%- include('./partials/head.ejs') %>
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
 
 <body>
   <div id="content">
@@ -29,7 +34,7 @@
             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
               <img src="/assets/img_and_gif/profilePic.png" alt="Profile" class="rounded-circle">
-              <h2>maaz khan</h2>
+              <h2><%= userCredentials.username %></h2>
               
             </div>
           </div>

@@ -14,8 +14,9 @@ body {
 
 /* Hide the default scrollbar */
 ::-webkit-scrollbar {
-    width: 8px;
-}
+    width: 10px;
+    height:10px
+  }
 
 /* Track */
 ::-webkit-scrollbar-track {
