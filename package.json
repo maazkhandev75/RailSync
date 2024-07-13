@@ -22,7 +22,7 @@
     "nodemon": "^3.1.4"
   },
   "main": "app.js",
-  "author": "",
-  "license": "ISC",
+  "author": "maazkhan75",
+  "license": "MIT",
   "description": ""
 }
