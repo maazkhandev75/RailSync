@@ -465,7 +465,10 @@ body {
                 <h2><%= i.DeptStaion %></h2>
                 <h2><%= i.ArrivalStation %></h2> 
              </div>
+             
+           
              <div class="details">
+
                 <div class="item">
                    <span>Passanger</span>
                    <h3><%= userName %></h3>
@@ -474,6 +477,8 @@ body {
                    <span>Train </span>
                    <h3 id="TrainID"><%= i.TrainId %></h3>
                 </div>
+
+
                 <div class="item">
                    <span>Departure</span>
                    <h3><%= i.DeptTime %></h3>
@@ -557,7 +562,7 @@ function redirectToDashboad(){
   window.location.href = '/userDash';
 }
 
-
+  //just to avoid booking of same ticket multiple times resulting multiple instances of the same ticket :p
   let isConfirmed = false;
 
   function ConfirmTicket()
@@ -583,7 +588,7 @@ function redirectToDashboad(){
             body:jsonData
         }
 
-    fetch('/SearchTrain/ConfirmNonStopTicket',option)
+    fetch('/SearchTrain/ConfirmTicket',option)
         .then(response => response.json())
         .catch(err=> console.log(err))
         .then(data=>{
@@ -602,14 +607,14 @@ function redirectToDashboad(){
     }
     else{
         //alert("Invalid Action");
-        showCustomAlert("Alert!", "Invalid Action!");
+        showCustomAlert("Alert!", "Invalid Action");
     }
 
 
 
   }
   else{
-    showCustomAlert("Note!", "Ticket already confirmed!");
+    showCustomAlert("Note!", "Ticket already confirmed");
   }
   }
 

@@ -307,8 +307,9 @@ app.get('/ticketsData', isAuthenticatedAdmin, async (req, res) => {
     } 
     catch (error)
     {
-    console.error('Error retrieving tickets:', error);
-    res.status(500).send('Failed to retrieve tickets');
+    res.render('USER/noBookingsFound');
+    //console.error('Error retrieving tickets:', error);
+    //res.status(500).send('Failed to retrieve tickets');
     }
 });
 
@@ -731,9 +732,10 @@ app.get('/profile', isAuthenticatedUser, async(req,res)=>{
       } 
       } 
       catch (error)
-      {
-      console.error('Error retrieving tickets:', error);
-      res.status(500).send('Failed to retrieve tickets');
+      {  
+      res.render('USER/noBookingsFound');
+      //console.error('Error retrieving tickets:', error);
+      //res.status(500).send('Failed to retrieve tickets');
       }
   });
   

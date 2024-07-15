@@ -184,14 +184,19 @@
 
 <div id="content">
 
-    
+    <!-- basically TrainsWithoutStop and TrainsWithOneStop logic was changed to seamless travel 
+    and segmented travel due to generation of two different tickets having different seat no's of the same train if the user wants to 
+    travel in a trainWithOneStop... so i effectively changed the concept to travel options and added example scenarios to show how things are working now 
+    also in previous concept seats are not utilized throughout the journey and now in this approach everything is working as desired..
+    note that the procedures def's remain same only route train relationships I mean practical scenarios have changed the logic :) -->
+
     <h3 class="main-heading">Available Trains</h3>
 
     <div class="container mt-5">
         <table class="table" id="NonStopTrainsTable">
             <!-- <caption>Non-Stop Trains</caption> -->
             
-            <h4 class="Heading">Trains without stops</h4>
+            <h4 class="Heading">Seamless Travel</h4>
             <thead>
                 <tr>
                     <th>TrainID</th>
@@ -208,7 +213,7 @@
             <tbody>
                 <% Trains.forEach((i) => { %>
                 <tr>
-                    <form action="SearchTrain/PrintTicketNonStop" method="POST" id="NonStopTrainForm">
+                    <form action="SearchTrain/PrintTicket" method="POST" id="NonStopTrainForm">
                         <td><%= i.TrainId %></td>
                         <% if(i.UPStatus == 1) { %>
                         <td>Up</td>
@@ -255,7 +260,7 @@
         </table>
 
 
-        <h4 class="Heading">Trains with Stops</h4>
+        <h4 class="Heading">Segmented Travel</h4>
         <table id="TableTrainWithStops" class="table">
             <thead>
                 <tr>
@@ -273,7 +278,7 @@
             <tbody>
                 <% TrainsWithStops.forEach((i) => { %>
                 <tr>
-                    <form action="SearchTrain/PrintTicketNonStop" method="POST" id="<%= i.TrainId %>">
+                    <form action="SearchTrain/PrintTicket" method="POST" id="<%= i.TrainId %>">
                         <td><%= i.TrainId %></td>
                         <!-- <td><%= i.TrackId %></td> -->
                         <% if(i.UPStatus == 1) { %>
@@ -323,41 +328,7 @@
     
 
     </div>
-    <!-- Modal -->
-    <div class="modal fade bd-example-modal-lg" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <table class="table table-dark table-bordered table-hover" id="NonStopTicketsTable">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Name</th>
-                                <th>TrainID</th>
-                                <th>Dept Station</th>
-                                <th>Arrival Station</th>
-                                <th>Class</th>
-                                <th>CarriageId</th>
-                                <th>Seat No</th>
-                                <th>Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
@@ -370,82 +341,82 @@
         };
 
 
-        function bookTicket() {
-            var NonStopForm = document.getElementById('NonStopTrainForm');
-            const selectedClass = document.getElementById("NonStopsClass");
-            NonStopForm.appendChild(selectedClass);
-            NonStopForm.submit();
-        }
+        // function bookTicket() {
+        //     var NonStopForm = document.getElementById('NonStopTrainForm');
+        //     const selectedClass = document.getElementById("NonStopsClass");
+        //     NonStopForm.appendChild(selectedClass);
+        //     NonStopForm.submit();
+        // }
 
-        function fetchTableData() {
-            var rowData = [];
-            var table = document.getElementById('TableTrainWithStops');
+        // function fetchTableData() {
+        //     var rowData = [];
+        //     var table = document.getElementById('TableTrainWithStops');
 
-            if (table) {
-                for (var i = 1; i < table.rows.length; i++) {
-                    var row = table.rows[i];
-                    var rowDataItem = {};
+        //     if (table) {
+        //         for (var i = 1; i < table.rows.length; i++) {
+        //             var row = table.rows[i];
+        //             var rowDataItem = {};
 
-                    for (var j = 0; j < row.cells.length; j++) {
-                        var cell = row.cells[j];
-                        var cellData = cell.innerText.trim();
-                        var headerText = table.rows[0].cells[j].innerText.trim();
-                        rowDataItem[headerText] = cellData;
-                    }
-                    rowData.push(rowDataItem);
-                }
-            }
-            return rowData;
-        }
+        //             for (var j = 0; j < row.cells.length; j++) {
+        //                 var cell = row.cells[j];
+        //                 var cellData = cell.innerText.trim();
+        //                 var headerText = table.rows[0].cells[j].innerText.trim();
+        //                 rowDataItem[headerText] = cellData;
+        //             }
+        //             rowData.push(rowDataItem);
+        //         }
+        //     }
+        //     return rowData;
+        // }
 
-        function DisplayNonStopTicketData(Ticket) {
-            //console.log("Ticket array:", Ticket);
-            Ticket.forEach(i => {
-                var table = document.getElementById("NonStopTicketsTable");
-                var newRow = table.insertRow();
-                var TrainID = newRow.insertCell(0);
-                TrainID.innerHTML = i.TrainID;
-            });
-        }
+        // function DisplayNonStopTicketData(Ticket) {
+        //     //console.log("Ticket array:", Ticket);
+        //     Ticket.forEach(i => {
+        //         var table = document.getElementById("NonStopTicketsTable");
+        //         var newRow = table.insertRow();
+        //         var TrainID = newRow.insertCell(0);
+        //         TrainID.innerHTML = i.TrainID;
+        //     });
+        // }
 
-        function getDataAndCallApi() {
-            var jsonData = fetchTableData();
-            let selectedClass = document.getElementById("StopsClass");
-            //console.log(selectedClass.value);
-            //console.log(selectedClass.name);
-            let obj = { selectedClass: selectedClass.value };
-            jsonData.push(obj);
+        // function getDataAndCallApi() {
+        //     var jsonData = fetchTableData();
+        //     let selectedClass = document.getElementById("StopsClass");
+        //     //console.log(selectedClass.value);
+        //     //console.log(selectedClass.name);
+        //     let obj = { selectedClass: selectedClass.value };
+        //     jsonData.push(obj);
 
-            var jsonString = JSON.stringify(jsonData);
+        //     var jsonString = JSON.stringify(jsonData);
 
-            if (jsonData) {
-                let option = {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: jsonString
-                }
+        //     if (jsonData) {
+        //         let option = {
+        //             method: 'POST',
+        //             headers: { 'Content-Type': 'application/json' },
+        //             body: jsonString
+        //         }
 
-                fetch('SearchTrain/PrintTicketsWithStopsDetails', option)
-                    .then(response => response.json())
-                    .catch(err => console.log(err))
-                    .then(data => {
-                        let SeatInfo = json.parse(data);
-                        //console.log("Json got the data: ");
-                        //console.log(data);
+        //         fetch('SearchTrain/PrintTicketsWithStopsDetails', option)
+        //             .then(response => response.json())
+        //             .catch(err => console.log(err))
+        //             .then(data => {
+        //                 let SeatInfo = json.parse(data);
+        //                 //console.log("Json got the data: ");
+        //                 //console.log(data);
 
-                        var table = document.getElementById("NonStopTicketsTable");
-                        data.forEach(i => {
-                            var newRow = table.insertRow();
-                            alert(i.TrainID);
-                            showAlert(i.TrainID);
-                            var TrainID = newRow.insertCell(0);
-                            TrainID.innerHTML = i.TrainID;
-                        });
-                    });
-            } else {
-                alert("Non stop trains available");
-            }
-        }
+        //                 var table = document.getElementById("NonStopTicketsTable");
+        //                 data.forEach(i => {
+        //                     var newRow = table.insertRow();
+        //                     alert(i.TrainID);
+        //                     showAlert(i.TrainID);
+        //                     var TrainID = newRow.insertCell(0);
+        //                     TrainID.innerHTML = i.TrainID;
+        //                 });
+        //             });
+        //     } else {
+        //         alert("Non stop trains available");
+        //     }
+        // }
 
 
 

@@ -12,7 +12,8 @@ const sessionChecker = (req, res, next) => {
   }
 };
 
-module.exports = function(pool) {
+module.exports = function(pool)
+{
   
     var Trains=[];
     var TrainsWithStops=[];
@@ -28,7 +29,7 @@ module.exports = function(pool) {
     request.input('SearchDate',sql.DateTime,tripDate);
     request.input('fromStation',sql.NVarChar,St1);
     request.input('toStation',sql.NVarChar,St2);
-    request.execute('SearchForTrains',(err,result)=>{
+    request.execute('SearchTrainsForSeamlessTravel',(err,result)=>{
       if(err){
       console.error(err);
       res.status(500).send('Internal Server Error');
@@ -43,7 +44,7 @@ module.exports = function(pool) {
     CTErequest.input('SearchDate',sql.DateTime,tripDate);
     CTErequest.input('Search_from_Station',sql.NVarChar,St1);
     CTErequest.input('Search_to_Station',sql.NVarChar,St2);
-    CTErequest.execute('SearchTrainWithOneStop',(err,result)=>{
+    CTErequest.execute('SearchTrainsForSegmenetedTravel',(err,result)=>{
       if(err){
       console.error(err);
       res.status(500).send('Internal Server Error');
@@ -60,7 +61,7 @@ module.exports = function(pool) {
   });
 
 
-router.post('/PrintTicketNonStop', (req, res) => {
+router.post('/PrintTicket', (req, res) => {
   //console.log(req.body);
   const userName = req.session.userDetails.username;
   //console.log(userName);
@@ -117,7 +118,7 @@ router.post('/PrintTicketNonStop', (req, res) => {
 });
 
 
-router.post('/ConfirmNonStopTicket',(req,res)=>{
+router.post('/ConfirmTicket',(req,res)=>{
   
   //console.log(req.body);
   let AddTicket= new sql.Request(pool);

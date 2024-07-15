@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
+    <title>RailSync</title>
+    <link href="/assets/img_and_gif/icon.png" rel="icon">
+</head>
+
+<body>
+
+<div id="content">
+
+
+    <div class="container mt-5">
+        <div class="alert custom-alert-mesg text-center" role="alert">
+            <h4 class="custom-alert-heading"><span class="highlight">No Bookings Found </span></h4>
+            <p>Kindly book some tickets to show there data here.</p>
+            <hr>
+			
+            <p class="mb-0">
+                <a href="/SearchTrainform" class="btn custom-btn">Plan Trip</a>
+                <a href="/userDash" class="btn custom-btn-secondary">Go to User Dashboard</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function()
+    {
+    document.getElementById("content").style.opacity = '1'; // Fade in content
+    };
+</script>
+</body>
+</html>

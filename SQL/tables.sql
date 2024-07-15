@@ -287,11 +287,10 @@ CREATE TABLE [Ticket] (
   [TicketId] nvarchar(255) PRIMARY KEY
 )
 
-insert into Ticket
-values('3520297089087',1,'KhiExpress','KhiExpressCarriage','1')
-go
 
 sp_help [Route]
+sp_help [Ticket]
+
 
 select * from [User]
 select * from [Admin]
@@ -311,6 +310,15 @@ select * from [Seat]
 
 
 --UPDATES--
+
+
+delete from [ticket]
+where CNIC='3520297089087'
+
+
+delete from [payment]
+where CNIC='3520297089087'
+
 
 --renaming column of some table syntax
 EXEC sp_rename '[Fare].BusinessClass', 'Business', 'COLUMN';
@@ -359,40 +367,14 @@ DELETE FROM Tracks WHERE TrackId = '6A8611D0-D'
 
 DELETE FROM Tracks WHERE TrackId = '6';
 
-delete from [ticket]
-where CNIC='5555555555555'
 
-
-delete from [user]
-where cnic='5555555555555'
-
-
-delete from [payment]
-where cnic='5555555555555'
-
-
-delete from [ticket]
-where ticketId='2022'
 
 SELECT name
 FROM sys.objects
 WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT'
     AND parent_object_id = OBJECT_ID('Ticket');
  
-insert [Tracks] values ('6','QUET','LHR')
-insert [Station] values ('QUET','Quetta','Quetta Pakistan')
-insert [Train] values ('206','1','LHR','QUET')
-alter Proc insertTicket 
-@CNIC nvarchar(255),
-@Seat int,
-@CarriageId nvarchar(255),
-@TrackId nvarchar(255),
-@TrainId nvarchar(255)
-as 
-insert into Ticket(CNIC,SeatNo,TrainId,CarriageId,trackId)
-values(@CNIC,@Seat,@TrainId,@CarriageId,@TrackId)
 
-insertTicket  '3512389230239',22,'202','5','101'
 
 SELECT COLUMN_NAME, DATA_TYPE
 FROM INFORMATION_SCHEMA.COLUMNS

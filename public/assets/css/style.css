@@ -14,7 +14,7 @@ input::selection{
 }
 
 #preloader{
-	background:#000 url(/assets/img_and_gif/loader.gif) no-repeat center 42%;
+	background:#000 url(/assets/img_and_gif/loader.gif) no-repeat center 40%;
 	background-size:2%;
 	height:100vh;
 	width:100%;
@@ -102,9 +102,10 @@ body {
 }
 
 .alert-content {
-  background-color: #272727;
+  background-color: #1a1a1a;
   margin: auto;
   padding: 20px;
+  font-family: 'Comfortaa',sans-serif;
   border: 2px solid #de6b00;
   color: #ffffff;
   width: 80%;
@@ -119,7 +120,7 @@ body {
 }
 
 .alert-close {
-  color: #aaa;
+  color: #868686;
   position: absolute;
   top: 10px;
   right: 20px;
@@ -129,7 +130,7 @@ body {
 }
 
 .alert-close:hover {
-  color: #ffffff;
+  color: #c3c3c3;
 }
 
 .alert-btn {
@@ -148,7 +149,7 @@ body {
   background-color: #ff820e;
 }
 
-/* styles for the confirmation modal */
+/* styles for the confirmation modal having two buttons, for distinguishing remember that alert has single button */   
 .modal {
   display: none;
   position: fixed;
@@ -165,7 +166,7 @@ body {
 }
 
 .modal-content {
-  background-color: #272727;
+  background-color: #1a1a1a;
   margin: auto;
   padding: 20px;
   border: 2px solid #de6b00;

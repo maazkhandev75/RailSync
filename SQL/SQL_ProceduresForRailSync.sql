@@ -268,26 +268,37 @@ GO
 
 
 --**********************************************
+-- ( THIS IS THE FINAL LOGIC )
+
+-- NOTE THAT BELOW DEF'S OF PROCEDURES ARE VALID AND THEY ARE EXACTLY SAME AS BEFORE HAVING A MINOR TWEAK ONLY THAT INSTEAD OF USING ARRIVAL TIME 
+-- WE ARE NOW USING DEPARTURE TIME BECAUSE WE WANT TO SHOW OPTIONS FOR OUR TRIP DATE BUT NOW 
+-- INSTEAD OF SAYING NON STOP TRAINS WE WILL SAY SEAMLESS TRAVEL OPTIONS AND FOR TRAINS WITH ONE STOP WE WILL SAY SEGMENTED TRAVEL (so simple :)
+
+-- Basically TrainsWithoutStop and TrainsWithOneStop logic was changed to 
+-- SeamlessTravel and SegmentedTravel due to the following problem:
+-- The issue with that logic was that it generates of two different tickets having different seat no's of the same train if the user wants to 
+-- travel in a trainWithOneStop due to method of generating tickets so i effectively changed the concept to travel options and added example scenarios to show how things are working now 
+-- also in previous concept seats are not utilized throughout the journey and now in this approach everything is working as desired..
+-- note that the procedures def's remain same only route train relationships I mean practical scenarios have changed the logic :) 
+-- also note the segmented travel has only one common mid point implementation and its obvious because it was previously named as trainsWithOneStop
 
 
-exec SearchTrainWithOneStop 'Lahore','Islamabad','2024-06-14'
-
-exec SearchTrainWithOneStop 'Lahore','Islamabad','2020-01-1'
 ---- IF WE WANT TO IMPLEMENT THE LOGIC WITH SEARCHDATE MEANS THE DATE ON WHICH YOU ARRIVE ON YOUR DESTINATION 
-
  -- we will apply check of arrivalTime in  (seachTrain's both without stop and with one stop PROCEDURE )  because we have to reach the the destination on that searchDate it doesn't
  -- matter that we leave one or two day before to start our journey thats why we have written arrivaltime instead of departuretime
  -- the system may show you available trains which may start travelling one day before or even on the same day morning depending upon the route distance and time of travel
 
-
 -----IF WE WANT TO IMPLEMENT THE LOGIC WITH SEARCHDATE MEANS THE DATE ON WHICH YOU ARE SEARCHING TO TRAVEL FROM FROM YOUR DEPARTURE STATION
-
  -- we will apply check of departureTime in (seachTrain's both without stop and with one stop PROCEDURE) because now we are finding the trains which are going to our destination on the same day of search and in this case the arrival time is
  -- on the same day is also not guaranted 
 --  the system will only show you the trains which are starting their journey on that search date from your dept Station to your arrival Station
 
+-- that was the name of the previous procedures:
+drop proc SearchTrainWithOneStop
+drop proc SearchForTrains
 
-ALTER PROCEDURE [dbo].[SearchTrainWithOneStop] 
+--remember that the following procedure means one common mid point between ( breaking the journey in to two parts ) search
+CREATE PROCEDURE [dbo].[SearchTrainsForSegmenetedTravel] 
     @Search_from_Station NVARCHAR(30),
     @Search_to_Station NVARCHAR(30), 
     @SearchDate DATETIME
@@ -347,8 +358,8 @@ FinalRoute AS (
     FROM union_cte AS U1, union_cte AS U2
     WHERE U1.fromStation = U2.toStation
 )
----- This procedure finds trains with a single stop between the given departure and destination stations. 
----- It shows both tickets, meaning the user will need to book each leg of the journey separately.
+---- This procedure finds trains with a single common point between the given departure and destination stations. 
+---- It shows both legs or parts of the jounery, meaning the user will need to book each leg of the journey separately.
 ---- Each leg has a different trackId, dept and arrival time and we are here showing both tickets 
 ---- instead of showing a single ticket having depttime from the first leg and arrival time from the second leg.
 SELECT 
@@ -377,8 +388,8 @@ WHERE
 
 
 
-
-ALTER PROCEDURE [dbo].[SearchForTrains] @fromStation nvarchar(30), @toStation nvarchar(30), @SearchDate datetime
+--remember that the following procedure means direct journey search
+CREATE PROCEDURE [dbo].[SearchTrainsForSeamlessTravel] @fromStation nvarchar(30), @toStation nvarchar(30), @SearchDate datetime
 as
 select T.TrainId,Tr.TrackId as TrackId,T.UpDownStatus as UPStatus ,@fromStation as DeptStation,@toStation as ArrivalStation,DeptTime,ArrivalTime,Economy,Business,FirstClass
 from [Train] as T
@@ -393,58 +404,7 @@ AND CONVERT(date, R.DeptTime) = CONVERT(date, @SearchDate)
 
 
 
-----the following procedure functionality has been removed....
-ALTER procedure [dbo].[SearchTrainWithStops] @Search_from_Station nvarchar(30),@Search_to_Station nvarchar(30), @SearchDate datetime
-
-as
-WITH  TrainRoute AS (
-    -- Base case: 
-    SELECT
-        T.TrainId,
-        Tr.TrackId,
-        Tr.Station1Id AS fromStation,
-        Tr.Station2Id AS toStation
-    FROM
-        [Train] AS T
-    JOIN
-        [Route] AS R ON R.TrainId = T.TrainId
-    JOIN
-        [Tracks] AS Tr ON Tr.TrackId = R.TrackId
-    JOIN
-        Fare AS F ON F.TrackId = Tr.TrackId
-    WHERE
-        Tr.Station1Id = (SELECT StationId FROM Station WHERE StationName = @Search_from_Station)
-
-    UNION ALL
-
-    -- Recursive step: select the next train route
-    SELECT
-        T.TrainId,
-        Tr.TrackId,
-        Tr.Station1Id AS fromStation,
-        Tr.Station2Id AS toStation
-    FROM
-        [Train] AS T
-    JOIN
-        [Route] AS R ON R.TrainId = T.TrainId
-    JOIN
-        [Tracks] AS Tr ON Tr.TrackId = R.TrackId
-    JOIN
-        Fare AS F ON F.TrackId = Tr.TrackId
-    JOIN
-        TrainRoute AS PrevRoute ON PrevRoute.toStation = Tr.Station1Id
-    WHERE
-        Tr.Station1Id <> (SELECT StationId FROM Station WHERE StationName = @Search_to_Station)
-)
--- Select the final train route
-select T.TrainId,T.UpDownStatus as UPStatus ,CTEtable.TrackId as TrackId,(select StationName from Station where StationId=fromStation) as DeptStation,((select StationName from Station where StationId=toStation)) as ArrivalStation,DeptTime,ArrivalTime,Economy,Business,FirstClass
-FROM TrainRoute as CTEtable
-join [Train] as T on T.TrainId=CTEtable.TrainId
-join [Route] as R
-on R.TrainId=CTEtable.TrainId
-join Fare as F on F.TrackId=CTEtable.TrackId
-AND CONVERT(date, R.ArrivalTime) = CONVERT(date, @SearchDate)
-
+--***************************************
 
 
 -------------------Proceduure to getdetails about seats-----------------------------
@@ -560,6 +520,21 @@ BEGIN
         SELECT 'ID ALREADY EXISTS' AS ResultMessage; -- Return message indicating ID already exists
     END
 END
+
+ALTER Proc [dbo].[insertTicket] 
+@CNIC nvarchar(255),
+@Seat int,
+@CarriageId nvarchar(255),
+@TrackId nvarchar(255),
+@TrainId nvarchar(255)
+as 
+insert into Ticket(CNIC,SeatNo,TrainId,CarriageId,trackId)
+values(@CNIC,@Seat,@TrainId,@CarriageId,@TrackId)
+update Seat
+set BookingStatus='B'
+where Seat.TrainID=@TrainID and SeatNo=@Seat and Seat.CarriageId=@Carriageid
+print 'Seat Booked Succesfully'
+GO
 
 
 alter PROCEDURE InsertTrack
