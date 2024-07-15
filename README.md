@@ -90,9 +90,9 @@ To test the website, follow these steps:
    
 5. Test Case
   - **SEARCH TRAIN FROM `LHR TO ISL` ON `14 JUNE 2024`**
-    -*`Seamless Travel`  (journey is continuous)*
+    - *`Seamless Travel`  (journey is continuous)*
        - `LHR -> ISL`  11:00 GMT - 18:00 GMT `(BlueWays)`
-    -*`Segmented Travel` (journey divided in two parts)*
+    - *`Segmented Travel` (journey divided in two parts)*
        - `LHR -> GRW` `(VelocityExpress)` 05:00 GMT - 08:25 GMT  + `GRW -> ISL` `(EagleRide)` 09:50 GMT - 14:30 GMT  
        - `LHR -> GRW` `(VelocityExpress)` 05:00 GMT - 08:25 GMT  + `GRW -> ISL` `(NeoSpark)` 11:30 GMT - 15:50 GMT  
 
