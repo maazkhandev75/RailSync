@@ -90,11 +90,17 @@ To test the website, follow these steps:
    
 5. Test Case
   - **SEARCH TRAIN FROM `LHR TO ISL` ON `14 JUNE 2024`**
-     - `LHR -> ISL`  4pm-11pm   (train without stop)
-     - `LHR -> MLN` 4pm-7pm and `MLN -> ISL` 7:45-11:30pm   (train with stop)
+    -*`Seamless Travel`  (journey is continuous)*
+       - `LHR -> ISL`  11:00 GMT - 18:00 GMT `(BlueWays)`
+    -*`Segmented Travel` (journey divided in two parts)*
+       - `LHR -> GRW` `(VelocityExpress)` 05:00 GMT - 08:25 GMT  + `GRW -> ISL` `(EagleRide)` 09:50 GMT - 14:30 GMT  
+       - `LHR -> GRW` `(VelocityExpress)` 05:00 GMT - 08:25 GMT  + `GRW -> ISL` `(NeoSpark)` 11:30 GMT - 15:50 GMT  
+
 
 6. Important Note
   - **You cannot change or update profile or password of Default User(maaz khan) even you cannot `delete or edit` default user and admin from admin panel.**
+
+  - **In deployed version `TIME` is showing in `UTC (Universal Time Coordinated)` but if you setup the project locally it will show according to your location by adding appropriate hours as shown in ScreenShots**
 
   - **The final attributes of the database tables may be `slightly different` from the attributes of entities in `SCHEMA.pdf` So you should always see tables definition in `SQL Server`**
 
