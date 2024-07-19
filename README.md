@@ -4,19 +4,19 @@ RAILSYNC is a web-based railway management system that offers efficient railway 
 
 ## ✨ Features
 
-- **User Authentication 🔐**: Users can sign up, log in, and manage their accounts securely.
-- **Ticket Booking 🎟️**: Users can search for trains, view schedules, and book tickets.
-- **Admin Panel 🔧**: Administrators have access to manage trains, stations, schedules, and user data.
-- **Database Integration 💾**: Utilizes a Microsoft SQL Server database to store and retrieve train, station, schedule, and user information.
-- **Responsive Design 📱💻**: The website is designed to be accessible and usable across different devices and screen sizes.
-- **Sessions 🛡️**: Sessions are implemented for user and admin authentication. You can check the session status by:
+- **🔐 User Authentication**: Users can sign up, log in, and manage their accounts securely.
+- **🎟️ Ticket Booking**: Users can search for trains, view schedules, and book tickets.
+- **🔧 Admin Panel**: Administrators have access to manage trains, stations, schedules, and user data.
+- **💾 Database Integration**: Utilizes a Microsoft SQL Server database to store and retrieve train, station, schedule, and user information.
+- **📱💻 Responsive Design**: The website is designed to be accessible and usable across different devices and screen sizes.
+- **🛡️ Sessions**: Sessions are implemented for user and admin authentication. You can check the session status by:
   - `/sessionCheckUser`
   - `/sessionCheckAdmin`
-- **Database Status 🗄️**: Database status routes are also implemented to reconnect or check the connection with the database hosted on cloud.
+- **🗄️ Database Status**: Database status routes are also implemented to reconnect or check the connection with the database hosted on cloud.
   - `/checkDatabaseConnection`
   - `/connectDatabase`
 
-- **Working Contact Form ✉️**: The users can send their query and it will be recieved on your gmail after configuring nodemail object by simply entering `your-email` and `16-digit AppPass` 
+- **✉️ Working Contact Form**: The users can send their query and it will be recieved on your gmail after configuring nodemail object by simply entering `your-email` and `16-digit AppPass` 
 
 ## 🛠 Technologies Used
 
