@@ -27,9 +27,9 @@ RAILSYNC is a web-based railway management system that offers efficient railway 
 - **Production**: local host
 - **Deployment**: AZURE
 
-## 📜 License
+##  📄 License
 
-The code in this repository is licensed under the MIT License. 
+This project is licensed under the MIT License.
 
 ## 📦 Installation
 
