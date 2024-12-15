@@ -36,7 +36,7 @@ This project is licensed under the MIT License.
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/maazkhan75/RailSync.git
+git clone https://github.com/maazkhandev75/RailSync.git
 ```
 2. First you should setup your database from the backup `RailSync_DB_backup.bak` file provided in the SQL directory of repo.
 
