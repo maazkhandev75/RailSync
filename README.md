@@ -53,11 +53,11 @@ To test the website, follow these steps:
 3. Use the following test credentials to log in:
 
    - **User**
-     - CNIC: `3520297089087`
+     - CNIC: `3520200000000`
      - Password: `mypass123`
 
    - **Admin**
-     - CNIC: `3520297089087`
+     - CNIC: `3520200000000`
      - Pin: `6776`
 
 4. Test the following functionalities:
