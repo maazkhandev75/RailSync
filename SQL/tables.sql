@@ -15,9 +15,6 @@ CREATE TABLE [Admin] (
 )
 GO
 
-
-
-
 CREATE TABLE [Ticket] (
   [TicketId] nvarchar(255) PRIMARY KEY,
   [CNIC] nvarchar(255),
@@ -28,6 +25,14 @@ CREATE TABLE [Ticket] (
 )
 GO
 
+CREATE TABLE [Payment] (
+  [TicketId] nvarchar(255),
+  [CNIC] nvarchar(255),
+  [TotalPrice] nvarchar(255),
+  [RefundStatus] char,
+  PRIMARY KEY ([TicketId])
+)
+GO
 
 CREATE TABLE [Carriage] (
   [CarriageId] nvarchar(255) PRIMARY KEY,
@@ -70,14 +75,6 @@ CREATE TABLE [Train] (
 )
 GO
 
-CREATE TABLE [Payment] (
-  [TicketId] nvarchar(255),
-  [CNIC] nvarchar(255),
-  [TotalPrice] nvarchar(255),
-  [RefundStatus] char,
-  PRIMARY KEY ([TicketId])
-)
-GO
 
 CREATE TABLE [Fare] (
   [TrackId] nvarchar(255),
@@ -258,10 +255,10 @@ DROP CONSTRAINT FK__Security__CrewId__2116E6DF;
 
 
 delete from [user]
-where userName='Muhammad Hassan Javed'
+where userName='ali'
 
 insert into [User]
-values('1234567890123','Muhammad Hassan Javed','jackpot123','03200202469')
+values('1234567890123','ali','jackpot123','03200202469')
 go
 
 alter table [user] drop column id
@@ -275,17 +272,6 @@ go
 insert into [ticket]
 values('122149','1234567890123',2,'202','202-8','2')
 go
-
-
-
-CREATE TABLE [Ticket] (
-  [CNIC] nvarchar(255),
-  [SeatNo] int,
-  [TrainId] NVARCHAR(255),
-  [CarriageId] NVARCHAR(255),
-  [trackId] NVARCHAR(255),
-  [TicketId] nvarchar(255) PRIMARY KEY
-)
 
 
 sp_help [Route]
